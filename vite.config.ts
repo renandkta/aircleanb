@@ -7,4 +7,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    assetsInlineLimit: 0, // Ensures images are processed as assets
+  },
 });

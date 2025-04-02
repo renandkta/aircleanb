@@ -6,11 +6,11 @@ interface LogoProps {
   size?: number;
 }
 
-const Logo: React.FC<LogoProps> = ({ className = "", size = 40 }) => { // Aumentei o tamanho padrão para melhor visualização
+const Logo: React.FC<LogoProps> = ({ className = "", size = 40 }) => {
   return (
     <div className={`flex items-center ${className}`}>
       <LogoFallback size={size} />
-      <span className="text-2xl font-bold text-blue-900">AirCleanB</span>
+      <span className="logo-text text-2xl font-bold ml-2">AirCleanB</span>
     </div>
   );
 };

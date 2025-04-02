@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  color: #333;
+}
+
+/* Botões originais */
+button {
+  border-radius: 9999px;
+}
+
+/* Logo original */
+.logo-text {
+  color: white;
+}

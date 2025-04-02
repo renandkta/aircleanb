@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-// Try multiple import approaches
-import logoFromAssets from '../assets/logo.png';
+import React from 'react';
 
 interface LogoFallbackProps {
   size?: number;
@@ -8,32 +6,19 @@ interface LogoFallbackProps {
 }
 
 const LogoFallback: React.FC<LogoFallbackProps> = ({ size = 32, className = "" }) => {
-  const [logoSrc, setLogoSrc] = useState<string>(logoFromAssets);
-  const [fallbackIndex, setFallbackIndex] = useState<number>(0);
-  
-  // List of possible logo sources to try
-  const fallbackSources = [
-    logoFromAssets,
-    '/logo.png',
-    '/images/logo.png',
-    'https://raw.githubusercontent.com/renandkta/aircleanb/main/src/ChatGPT%20Image%20Apr%201%2C%202025%20at%2010_38_34%20PM.png'
-  ];
-  
-  // Handle image load error by trying the next fallback source
-  const handleError = () => {
-    if (fallbackIndex < fallbackSources.length - 1) {
-      setFallbackIndex(fallbackIndex + 1);
-      setLogoSrc(fallbackSources[fallbackIndex + 1]);
-    }
-  };
+  // Use a URL direta do GitHub para o logo
+  const logoUrl = "https://raw.githubusercontent.com/renandkta/aircleanb/main/src/ChatGPT%20Image%20Apr%201%2C%202025%20at%2010_38_34%20PM.png";
   
   return (
     <img 
-      src={logoSrc}
+      src={logoUrl}
       alt="AirCleanB Logo" 
       className={`mr-2 ${className}`}
-      style={{ height: `${size}px`, width: `${size}px` }}
-      onError={handleError}
+      style={{ 
+        height: `${size}px`, 
+        width: `${size}px`,
+        objectFit: 'contain'
+      }}
     />
   );
 };

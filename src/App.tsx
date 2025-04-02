@@ -7,6 +7,15 @@ function App() {
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
 
+  // Function to scroll to the scheduling section
+  const scrollToScheduling = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const schedulingSection = document.getElementById('agendamento');
+    if (schedulingSection) {
+      schedulingSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -34,7 +43,10 @@ function App() {
                   <option value="es">Español</option>
                 </select>
               </div>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
+              <button 
+                className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
+                onClick={scrollToScheduling}
+              >
                 {t.hero.scheduleDemo}
               </button>
             </div>
@@ -51,7 +63,10 @@ function App() {
                 {t.hero.subtitle}
               </p>
               <div className="flex space-x-4">
-                <button className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition flex items-center">
+                <button 
+                  className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition flex items-center"
+                  onClick={scrollToScheduling}
+                >
                   {t.hero.scheduleDemo} <ArrowRight className="ml-2 h-5 w-5" />
                 </button>
               </div>
@@ -112,7 +127,10 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <button className="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition">
+              <button 
+                className="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition"
+                onClick={scrollToScheduling}
+              >
                 {t.services.button}
               </button>
             </div>
@@ -129,7 +147,10 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <button className="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition">
+              <button 
+                className="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition"
+                onClick={scrollToScheduling}
+              >
                 {t.services.button}
               </button>
             </div>
@@ -143,7 +164,10 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <button className="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition">
+              <button 
+                className="w-full bg-blue-600 text-white py-2 rounded-full hover:bg-blue-700 transition"
+                onClick={scrollToScheduling}
+              >
                 {t.services.button}
               </button>
             </div>
@@ -256,7 +280,10 @@ function App() {
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-4">{t.cta.title}</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">{t.cta.subtitle}</p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-full hover:bg-gray-100 transition">
+          <button 
+            className="bg-white text-blue-600 px-8 py-3 rounded-full hover:bg-gray-100 transition"
+            onClick={scrollToScheduling}
+          >
             {t.cta.button}
           </button>
         </div>

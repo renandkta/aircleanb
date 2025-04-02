@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImage from '../assets/logo.png';
+import LogoFallback from './LogoFallback';
 
 interface LogoProps {
   className?: string;
@@ -9,12 +9,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ className = "", size = 32 }) => {
   return (
     <div className={`flex items-center ${className}`}>
-      <img 
-        src={logoImage} 
-        alt="AirCleanB Logo" 
-        className="h-8 w-8 mr-2" 
-        style={{ height: `${size}px`, width: `${size}px` }}
-      />
+      <LogoFallback size={size} />
       <span className="text-2xl font-bold text-blue-900">AirCleanB</span>
     </div>
   );

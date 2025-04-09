@@ -15,6 +15,14 @@ function App() {
     }
   };
 
+  const scrollToServices = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const servicesSection = document.getElementById('servicos');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -56,17 +64,29 @@ function App() {
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                {t.hero.title}
+                Expert cleaning that turns your Airbnb into a 5-star experience — Guaranteed!
               </h1>
-              <p className="text-xl text-white mb-8">
-                {t.hero.subtitle}
+              <p className="text-xl text-white mb-4">
+                Your space, always guest-ready and sparkling clean.
               </p>
-              <div className="flex space-x-4">
+              <p className="text-xl text-white mb-4">
+                📍 Fast, flexible scheduling — we're available anytime you need.
+              </p>
+              <p className="text-xl text-white mb-8">
+                ✨ First cleaning 50% off so you can try us with confidence.
+              </p>
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <button 
-                  className="bg-white text-[#008CBA] px-8 py-3 rounded-full hover:bg-blue-50 transition flex items-center"
+                  className="bg-white text-[#008CBA] px-8 py-3 rounded-full hover:bg-blue-50 transition flex items-center justify-center"
                   onClick={scrollToScheduling}
                 >
-                  {t.hero.scheduleDemo} <ArrowRight className="ml-2 h-5 w-5" />
+                  👉 Book Now
+                </button>
+                <button 
+                  className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:bg-opacity-10 transition flex items-center justify-center"
+                  onClick={scrollToServices}
+                >
+                  🔍 See Our Services
                 </button>
               </div>
             </div>

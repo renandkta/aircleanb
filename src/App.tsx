@@ -330,8 +330,8 @@ function App() {
             <div>
               <h4 className="text-lg font-semibold mb-4">{t.nav.contact}</h4>
               <ul className="space-y-2">
-                <li>contact@aircleanb.com</li>
-                <li>+1 (555) 123-4567</li>
+                <li>aircleanb.dc@gmail.com</li>
+                <li>+1 (720) 352-9810</li>
               </ul>
             </div>
           </div>

@@ -213,79 +213,117 @@ function App() {
       </section>
 
       {/* Scheduling Section */}
-      <section id="agendamento" className="py-20">
+      <section id="agendamento" className="py-20 bg-gradient-to-r from-blue-50 to-blue-100">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-16">{t.scheduling.title}</h2>
-          <div className="max-w-2xl mx-auto">
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t.scheduling.form.name}
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t.scheduling.form.email}
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t.scheduling.form.date}
-                  </label>
-                  <input
-                    type="date"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {t.scheduling.form.time}
-                  </label>
-                  <select className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="morning">{t.scheduling.timeOptions.morning}</option>
-                    <option value="afternoon">{t.scheduling.timeOptions.afternoon}</option>
-                    <option value="evening">{t.scheduling.timeOptions.evening}</option>
-                  </select>
+          <h2 className="text-3xl font-bold text-center mb-6">{t.scheduling.title}</h2>
+          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+            Schedule a free assessment to see how AirCleanB can help improve your property's cleanliness and guest satisfaction.
+          </p>
+          <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+            <div className="md:flex">
+              <div className="md:w-1/3 bg-[#008CBA] p-8 text-white flex flex-col justify-center">
+                <h3 className="text-2xl font-bold mb-4">Contact Us</h3>
+                <p className="mb-6">Our team is ready to help you get started with AirCleanB.</p>
+                <div className="space-y-4">
+                  <div className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-3" />
+                    <span>Quick response time</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 mr-3" />
+                    <span>Free consultation</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Shield className="h-5 w-5 mr-3" />
+                    <span>Privacy guaranteed</span>
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.scheduling.form.propertyType}
-                </label>
-                <select className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                  <option value="apartment">{t.scheduling.propertyOptions.apartment}</option>
-                  <option value="house">{t.scheduling.propertyOptions.house}</option>
-                  <option value="flat">{t.scheduling.propertyOptions.flat}</option>
-                  <option value="other">{t.scheduling.propertyOptions.other}</option>
-                </select>
+              <div className="md:w-2/3 p-8">
+                <form className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t.scheduling.form.name}
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t.scheduling.form.email}
+                      </label>
+                      <input
+                        type="email"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="john@example.com"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t.scheduling.form.phone}
+                    </label>
+                    <input
+                      type="tel"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="+1 (555) 123-4567"
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t.scheduling.form.date}
+                      </label>
+                      <input
+                        type="date"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        {t.scheduling.form.time}
+                      </label>
+                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="morning">{t.scheduling.timeOptions.morning}</option>
+                        <option value="afternoon">{t.scheduling.timeOptions.afternoon}</option>
+                        <option value="evening">{t.scheduling.timeOptions.evening}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t.scheduling.form.propertyType}
+                    </label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                      <option value="apartment">{t.scheduling.propertyOptions.apartment}</option>
+                      <option value="house">{t.scheduling.propertyOptions.house}</option>
+                      <option value="flat">{t.scheduling.propertyOptions.flat}</option>
+                      <option value="other">{t.scheduling.propertyOptions.other}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {t.scheduling.form.notes}
+                    </label>
+                    <textarea
+                      rows={4}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Tell us about your property and specific needs..."
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-[#008CBA] text-white px-6 py-3 rounded-full hover:bg-blue-600 transition font-medium"
+                  >
+                    {t.scheduling.form.button}
+                  </button>
+                </form>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.scheduling.form.notes}
-                </label>
-                <textarea
-                  rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[#008CBA] text-white px-6 py-3 rounded-full hover:bg-blue-600 transition"
-              >
-                {t.scheduling.form.button}
-              </button>
-            </form>
+            </div>
           </div>
         </div>
       </section>

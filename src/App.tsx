@@ -1,12 +1,107 @@
 import React, { useState } from 'react';
-import { Camera, CheckCircle, Shield, Star, ArrowRight, Calendar, Sparkles, Clock, Users, Globe } from 'lucide-react';
+import { Camera, CheckCircle, Shield, Star, ArrowRight, Calendar, Sparkles, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp } from 'lucide-react';
 import { translations } from './translations';
 import Logo from './components/Logo';
+import ImageCarousel from './components/ImageCarousel';
 
 function App() {
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Estado do formulário
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    date: '',
+    time: '',
+    propertyType: '',
+    notes: ''
+  });
+  
+  // Estados para feedback do formulário
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  // Array de imagens para o carrossel - portfólio de limpezas realizadas
+  const carouselImages = [
+    {
+      src: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800",
+      alt: "Limpeza profissional de cozinha",
+      title: "Impeccable Kitchens"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=800",
+      alt: "Banheiro limpo e organizado",
+      title: "Sanitized Bathrooms"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800",
+      alt: "Sala de estar limpa e arrumada",
+      title: "Perfect Living Rooms"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800",
+      alt: "Quarto limpo e organizado",
+      title: "Comfortable Bedrooms"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
+      alt: "Área de trabalho limpa",
+      title: "Organized Workspaces"
+    }
+  ];
+
+  // Função para atualizar dados do formulário
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Função para enviar formulário para Formspree
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const response = await fetch('https://formspree.io/f/xanjdbgn', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          subject: 'AirCleanB Assessment Request',
+          _language: language
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        // Limpar formulário
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          date: '',
+          time: '',
+          propertyType: '',
+          notes: ''
+        });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const scrollToScheduling = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -71,7 +166,7 @@ function App() {
                 </select>
               </div>
               <button 
-                className="bg-white text-[#008CBA] px-4 py-2 rounded-full hover:bg-blue-50 transition text-sm"
+                className="bg-white text-[#008CBA] px-4 py-2 rounded-full hover:bg-blue-50 transition text-sm md:text-base"
                 onClick={scrollToScheduling}
               >
                 {t.hero.scheduleDemo}
@@ -114,11 +209,17 @@ function App() {
         </nav>
 
         <div className="container mx-auto px-4 py-10 md:py-20">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2">
+          <div className="flex flex-col items-center text-center">
+            <div className="max-w-4xl">
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
                 Expert cleaning that turns your Airbnb into a 5-star experience — Guaranteed!
               </h1>
+              
+              {/* Carrossel centralizado e maior */}
+              <div className="w-full max-w-6xl px-4 mb-8">
+                <ImageCarousel images={carouselImages} />
+              </div>
+              
               <p className="text-lg md:text-xl text-white mb-4">
                 Your space, always guest-ready and sparkling clean.
               </p>
@@ -128,7 +229,7 @@ function App() {
               <p className="text-lg md:text-xl text-white mb-8">
                 ✨ First cleaning 50% off so you can try us with confidence.
               </p>
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
                 <button 
                   className="bg-white text-[#008CBA] px-6 py-3 rounded-full hover:bg-blue-50 transition flex items-center justify-center text-sm md:text-base"
                   onClick={scrollToScheduling}
@@ -143,13 +244,6 @@ function App() {
                 </button>
               </div>
             </div>
-            <div className="md:w-1/2 mt-10 md:mt-0 px-4">
-              <img
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800"
-                alt="Professional cleaning service"
-                className="rounded-lg shadow-2xl w-full"
-              />
-            </div>
           </div>
         </div>
       </header>
@@ -158,27 +252,75 @@ function App() {
       <section id="como-funciona" className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.howItWorks.title}</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Camera className="h-8 w-8 text-[#008CBA]" />
+          
+          {/* 5 Steps Process */}
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-5 gap-6 md:gap-8">
+              {/* Step 1: Property Registration */}
+              <div className="text-center group">
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
+                  <MapPin className="h-8 w-8 text-[#008CBA]" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.register.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.register.description}</p>
               </div>
-              <h3 className="text-xl font-semibold mb-4">{t.howItWorks.steps.record.title}</h3>
-              <p className="text-gray-600">{t.howItWorks.steps.record.description}</p>
+
+              {/* Step 2: Damage Report */}
+              <div className="text-center group">
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
+                  <AlertTriangle className="h-8 w-8 text-[#008CBA]" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.report.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.report.description}</p>
+              </div>
+
+              {/* Step 3: Cleaning & Linen Change */}
+              <div className="text-center group">
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
+                  <WashingMachine className="h-8 w-8 text-[#008CBA]" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.cleaning.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.cleaning.description}</p>
+              </div>
+
+              {/* Step 4: Cleaning Record */}
+              <div className="text-center group">
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
+                  <FileText className="h-8 w-8 text-[#008CBA]" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.record.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.record.description}</p>
+              </div>
+
+              {/* Step 5: Client Validation */}
+              <div className="text-center group">
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
+                  <ThumbsUp className="h-8 w-8 text-[#008CBA]" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.validation.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.validation.description}</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Sparkles className="h-8 w-8 text-[#008CBA]" />
+
+            {/* Connection Lines for Desktop */}
+            <div className="hidden md:block mt-8">
+              <div className="flex justify-center items-center space-x-4">
+                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
+                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
+                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
+                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
               </div>
-              <h3 className="text-xl font-semibold mb-4">{t.howItWorks.steps.analyze.title}</h3>
-              <p className="text-gray-600">{t.howItWorks.steps.analyze.description}</p>
             </div>
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="h-8 w-8 text-[#008CBA]" />
-              </div>
-              <h3 className="text-xl font-semibold mb-4">{t.howItWorks.steps.validate.title}</h3>
-              <p className="text-gray-600">{t.howItWorks.steps.validate.description}</p>
+
+            {/* CTA Button */}
+            <div className="text-center mt-12">
+              <button 
+                className="bg-[#008CBA] text-white px-8 py-3 rounded-full hover:bg-blue-600 transition flex items-center mx-auto"
+                onClick={scrollToScheduling}
+              >
+                Start Your Cleaning Process
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </button>
             </div>
           </div>
         </div>
@@ -200,7 +342,10 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <button className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base">
+              <button 
+                className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
+                onClick={scrollToScheduling}
+              >
                 {t.services.button}
               </button>
             </div>
@@ -216,7 +361,10 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <button className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base">
+              <button 
+                className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
+                onClick={scrollToScheduling}
+              >
                 {t.services.button}
               </button>
             </div>
@@ -232,7 +380,10 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <button className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base">
+              <button 
+                className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
+                onClick={scrollToScheduling}
+              >
                 {t.services.button}
               </button>
             </div>
@@ -313,7 +464,26 @@ function App() {
                 </div>
               </div>
               <div className="md:w-2/3 p-6 md:p-8">
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                  {/* Mensagens de feedback */}
+                  {submitStatus === 'success' && (
+                    <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-5 w-5 mr-2" />
+                        <span>Thank you! Your assessment request has been sent successfully. We'll contact you soon!</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {submitStatus === 'error' && (
+                    <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+                      <div className="flex items-center">
+                        <Shield className="h-5 w-5 mr-2" />
+                        <span>Sorry, there was an error sending your request. Please try again or contact us directly.</span>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -323,6 +493,9 @@ function App() {
                         type="text"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="John Doe"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div>
@@ -333,6 +506,9 @@ function App() {
                         type="email"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="john@example.com"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -344,6 +520,9 @@ function App() {
                       type="tel"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="+1 (555) 123-4567"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -354,13 +533,16 @@ function App() {
                       <input
                         type="date"
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        name="date"
+                        value={formData.date}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         {t.scheduling.form.time}
                       </label>
-                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" name="time" value={formData.time} onChange={handleInputChange}>
                         <option value="morning">{t.scheduling.timeOptions.morning}</option>
                         <option value="afternoon">{t.scheduling.timeOptions.afternoon}</option>
                         <option value="evening">{t.scheduling.timeOptions.evening}</option>
@@ -371,7 +553,7 @@ function App() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {t.scheduling.form.propertyType}
                     </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" name="propertyType" value={formData.propertyType} onChange={handleInputChange}>
                       <option value="apartment">{t.scheduling.propertyOptions.apartment}</option>
                       <option value="house">{t.scheduling.propertyOptions.house}</option>
                       <option value="flat">{t.scheduling.propertyOptions.flat}</option>
@@ -386,13 +568,17 @@ function App() {
                       rows={4}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="Tell us about your property and specific needs..."
+                      name="notes"
+                      value={formData.notes}
+                      onChange={handleInputChange}
                     ></textarea>
                   </div>
                   <button
                     type="submit"
                     className="w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition font-medium text-sm md:text-base"
+                    disabled={isSubmitting}
                   >
-                    {t.scheduling.form.button}
+                    {isSubmitting ? 'Submitting...' : t.scheduling.form.button}
                   </button>
                 </form>
               </div>
@@ -433,9 +619,11 @@ function App() {
             <div>
               <h4 className="text-lg font-semibold mb-4">{t.nav.howItWorks}</h4>
               <ul className="space-y-2 text-sm md:text-base">
+                <li>{t.howItWorks.steps.register.title}</li>
+                <li>{t.howItWorks.steps.report.title}</li>
+                <li>{t.howItWorks.steps.cleaning.title}</li>
                 <li>{t.howItWorks.steps.record.title}</li>
-                <li>{t.howItWorks.steps.analyze.title}</li>
-                <li>{t.howItWorks.steps.validate.title}</li>
+                <li>{t.howItWorks.steps.validation.title}</li>
               </ul>
             </div>
             <div>

@@ -14,15 +14,23 @@ interface Translation {
   howItWorks: {
     title: string;
     steps: {
+      register: {
+        title: string;
+        description: string;
+      };
+      report: {
+        title: string;
+        description: string;
+      };
+      cleaning: {
+        title: string;
+        description: string;
+      };
       record: {
         title: string;
         description: string;
       };
-      analyze: {
-        title: string;
-        description: string;
-      };
-      validate: {
+      validation: {
         title: string;
         description: string;
       };
@@ -119,17 +127,25 @@ export const translations: { [key: string]: Translation } = {
     howItWorks: {
       title: "How It Works",
       steps: {
+        register: {
+          title: "Property Registration",
+          description: "Register your property location and establish cleaning standards for each area.",
+        },
+        report: {
+          title: "Damage Report",
+          description: "Document any damages or issues found during the cleaning process.",
+        },
+        cleaning: {
+          title: "Cleaning & Linen Change",
+          description: "Perform thorough cleaning and replace all bed and bath linens.",
+        },
         record: {
-          title: "Record the Space",
-          description: "After cleaning, make a quick video showing all areas of the property.",
+          title: "Cleaning Record",
+          description: "Record the cleaning process with photos and videos for validation.",
         },
-        analyze: {
-          title: "AI Analysis",
-          description: "Our AI compares with the established standard and identifies potential issues.",
-        },
-        validate: {
-          title: "Instant Validation",
-          description: "Receive a detailed report and confirmation of cleaning quality.",
+        validation: {
+          title: "Client Validation",
+          description: "Receive client approval and confirmation of cleaning completion.",
         },
       },
     },
@@ -234,17 +250,25 @@ export const translations: { [key: string]: Translation } = {
     howItWorks: {
       title: "Como Funciona",
       steps: {
+        register: {
+          title: "Property Registration",
+          description: "Register your property location and establish cleaning standards for each area.",
+        },
+        report: {
+          title: "Damage Report",
+          description: "Document any damages or issues found during the cleaning process.",
+        },
+        cleaning: {
+          title: "Cleaning & Linen Change",
+          description: "Perform thorough cleaning and replace all bed and bath linens.",
+        },
         record: {
-          title: "Filme o Ambiente",
-          description: "Após a limpeza, faça um vídeo rápido mostrando todos os ambientes do imóvel.",
+          title: "Cleaning Record",
+          description: "Record the cleaning process with photos and videos for validation.",
         },
-        analyze: {
-          title: "IA Analisa",
-          description: "Nossa IA compara com o padrão estabelecido e identifica possíveis problemas.",
-        },
-        validate: {
-          title: "Validação Instantânea",
-          description: "Receba um relatório detalhado e confirmação da qualidade da limpeza.",
+        validation: {
+          title: "Client Validation",
+          description: "Receive client approval and confirmation of cleaning completion.",
         },
       },
     },
@@ -349,17 +373,25 @@ export const translations: { [key: string]: Translation } = {
     howItWorks: {
       title: "Cómo Funciona",
       steps: {
+        register: {
+          title: "Property Registration",
+          description: "Register your property location and establish cleaning standards for each area.",
+        },
+        report: {
+          title: "Damage Report",
+          description: "Document any damages or issues found during the cleaning process.",
+        },
+        cleaning: {
+          title: "Cleaning & Linen Change",
+          description: "Perform thorough cleaning and replace all bed and bath linens.",
+        },
         record: {
-          title: "Graba el Espacio",
-          description: "Después de la limpieza, haz un video rápido mostrando todas las áreas de la propiedad.",
+          title: "Cleaning Record",
+          description: "Record the cleaning process with photos and videos for validation.",
         },
-        analyze: {
-          title: "IA Analiza",
-          description: "Nuestra IA compara con el estándar establecido e identifica posibles problemas.",
-        },
-        validate: {
-          title: "Validación Instantánea",
-          description: "Recibe un informe detallado y confirmación de la calidad de limpieza.",
+        validation: {
+          title: "Client Validation",
+          description: "Receive client approval and confirmation of cleaning completion.",
         },
       },
     },

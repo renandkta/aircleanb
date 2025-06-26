@@ -18,6 +18,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   showDots = true
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
 
   // Auto-play functionality
   useEffect(() => {
@@ -42,7 +43,14 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     setCurrentIndex(index);
   };
 
-  if (!images || images.length === 0) {
+  const handleImageError = (index: number) => {
+    setImageErrors(prev => new Set(prev).add(index));
+  };
+
+  // Filtra imagens que não tiveram erro de carregamento
+  const validImages = images.filter((_, index) => !imageErrors.has(index));
+
+  if (!images || images.length === 0 || validImages.length === 0) {
     return null;
   }
 
@@ -50,7 +58,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     <div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg shadow-2xl">
       {/* Images */}
       <div className="relative w-full h-full">
-        {images.map((image, index) => (
+        {validImages.map((image, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -61,22 +69,16 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
               src={image.src}
               alt={image.alt}
               className="w-full h-full object-cover"
+              onError={() => handleImageError(index)}
             />
-            {image.title && (
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                <h3 className="text-white text-lg md:text-xl font-semibold">
-                  {image.title}
-                </h3>
-              </div>
-            )}
           </div>
         ))}
       </div>
 
       {/* Dots Indicator */}
-      {showDots && images.length > 1 && (
+      {showDots && validImages.length > 1 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {images.map((_, index) => (
+          {validImages.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}

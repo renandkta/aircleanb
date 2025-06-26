@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Camera, CheckCircle, Shield, Star, ArrowRight, Calendar, Sparkles, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp } from 'lucide-react';
 import { translations } from './translations';
 import Logo from './components/Logo';
 import ImageCarousel from './components/ImageCarousel';
+import { loadCarouselImages } from './utils/carouselLoader';
 
 function App() {
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [carouselImages, setCarouselImages] = useState<Array<{src: string, alt: string, title?: string}>>([]);
   
   // Estado do formulário
   const [formData, setFormData] = useState({
@@ -24,34 +26,19 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  // Array de imagens para o carrossel - portfólio de limpezas realizadas
-  const carouselImages = [
-    {
-      src: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800",
-      alt: "Limpeza profissional de cozinha",
-      title: "Impeccable Kitchens"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=800",
-      alt: "Banheiro limpo e organizado",
-      title: "Sanitized Bathrooms"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800",
-      alt: "Sala de estar limpa e arrumada",
-      title: "Perfect Living Rooms"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800",
-      alt: "Quarto limpo e organizado",
-      title: "Comfortable Bedrooms"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
-      alt: "Área de trabalho limpa",
-      title: "Organized Workspaces"
-    }
-  ];
+  // Função para carregar imagens dinamicamente
+  useEffect(() => {
+    const loadImages = async () => {
+      try {
+        const images = await loadCarouselImages();
+        setCarouselImages(images);
+      } catch (error) {
+        console.error('Erro ao carregar imagens do carrossel:', error);
+      }
+    };
+
+    loadImages();
+  }, []);
 
   // Função para atualizar dados do formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {

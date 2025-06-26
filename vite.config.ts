@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,11 +16,6 @@ export default defineConfig({
       },
     },
   },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
-  },
-  // Ensure base path is set correctly for production
-  base: '/',
+  // Base path for GitHub Pages
+  base: '/aircleanb/',
 });

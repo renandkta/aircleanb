@@ -16,6 +16,11 @@ export default defineConfig({
       },
     },
   },
-  // Base path for GitHub Pages
-  base: '/aircleanb/',
+  // Base path - comentado para desenvolvimento local
+  // base: '/aircleanb/',
+  server: {
+    // Configuração para desenvolvimento local
+    port: 5173,
+    host: true
+  }
 });

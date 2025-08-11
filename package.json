@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:local": "vite --base /",
     "build": "vite build",
     "custom-build": "node build.js",
     "lint": "eslint .",

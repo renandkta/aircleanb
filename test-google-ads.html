@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Google Ads Tag - AirCleanB</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17464291569">
+    </script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-17464291569');
+    </script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.3);
+            border: 1px solid #4CAF50;
+        }
+        .info {
+            background: rgba(33, 150, 243, 0.3);
+            border: 1px solid #2196F3;
+        }
+        .warning {
+            background: rgba(255, 193, 7, 0.3);
+            border: 1px solid #FFC107;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Google Ads Tag - AirCleanB</h1>
+        
+        <div class="test-section">
+            <h2>✅ Status da Implementação</h2>
+            <div class="status success">
+                ✅ Google Ads Tag implementado com sucesso!
+            </div>
+            <div class="status info">
+                ℹ️ ID de Conversão: AW-17464291569
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🔍 Como Validar</h2>
+            <div class="instructions">
+                <h3>1. Verificar no Console do Navegador:</h3>
+                <ul>
+                    <li>Abra as Ferramentas do Desenvolvedor (F12)</li>
+                    <li>Vá para a aba "Console"</li>
+                    <li>Procure por mensagens relacionadas ao "gtag"</li>
+                    <li>Deve aparecer: "gtag is not defined" (normal se não estiver logado no Google)</li>
+                </ul>
+                
+                <h3>2. Verificar na Aba Network:</h3>
+                <ul>
+                    <li>Na aba "Network" das ferramentas</li>
+                    <li>Recarregue a página</li>
+                    <li>Procure por requisições para "googletagmanager.com"</li>
+                    <li>Deve haver uma requisição para o script do Google Tag Manager</li>
+                </ul>
+                
+                <h3>3. Testar Eventos:</h3>
+                <p>Clique no botão abaixo para testar um evento de conversão:</p>
+                <button onclick="testConversion()">🧪 Testar Conversão</button>
+                <button onclick="testPageView()">📄 Testar Page View</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📋 Código Implementado</h2>
+            <div class="code">
+&lt;!-- Google tag (gtag.js) --&gt;
+&lt;script async src="https://www.googletagmanager.com/gtag/js?id=AW-17464291569"&gt;
+&lt;/script&gt;
+&lt;script&gt;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-17464291569');
+&lt;/script&gt;
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🌐 URLs de Teste</h2>
+            <div class="status info">
+                <strong>URL Local:</strong> <a href="http://localhost:5173" style="color: white;">http://localhost:5173</a>
+            </div>
+            <div class="status info">
+                <strong>Página de Teste:</strong> <a href="http://localhost:5173/test-google-ads.html" style="color: white;">http://localhost:5173/test-google-ads.html</a>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>⚠️ Observações Importantes</h2>
+            <div class="status warning">
+                <strong>Nota:</strong> Para que o tracking funcione completamente, você precisa:
+                <ul>
+                    <li>Estar logado na conta Google Ads</li>
+                    <li>Ter configurado as conversões no Google Ads</li>
+                    <li>Testar em um ambiente de produção (HTTPS)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para testar conversão
+        function testConversion() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'conversion', {
+                    'send_to': 'AW-17464291569/your-conversion-label',
+                    'value': 1.0,
+                    'currency': 'BRL'
+                });
+                alert('✅ Evento de conversão enviado! Verifique o console para detalhes.');
+            } else {
+                alert('❌ Google Ads Tag não está carregado. Verifique o console para erros.');
+            }
+        }
+
+        // Função para testar page view
+        function testPageView() {
+            if (typeof gtag !== 'undefined') {
+                gtag('config', 'AW-17464291569', {
+                    'page_title': 'Página de Teste Google Ads',
+                    'page_location': window.location.href
+                });
+                alert('✅ Page view configurado! Verifique o console para detalhes.');
+            } else {
+                alert('❌ Google Ads Tag não está carregado. Verifique o console para erros.');
+            }
+        }
+
+        // Verificar se o gtag foi carregado
+        window.addEventListener('load', function() {
+            if (typeof gtag !== 'undefined') {
+                console.log('✅ Google Ads Tag carregado com sucesso!');
+                console.log('ID da conta:', 'AW-17464291569');
+            } else {
+                console.log('❌ Google Ads Tag não foi carregado');
+            }
+        });
+    </script>
+</body>
+</html> 

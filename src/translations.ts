@@ -108,6 +108,11 @@ interface Translation {
     contact: string;
     rights: string;
   };
+  thankYou: {
+    title: string;
+    subtitle: string;
+    backToHome: string;
+  };
 }
 
 export const translations: { [key: string]: Translation } = {
@@ -233,6 +238,11 @@ export const translations: { [key: string]: Translation } = {
       contact: "Contact",
       rights: "© 2024 AirCleanB. All rights reserved.",
     },
+    thankYou: {
+      title: "Thank you for your scheduling!",
+      subtitle: "We will be in touch soon.",
+      backToHome: "Back to Home",
+    },
   },
   pt: {
     nav: {
@@ -251,24 +261,24 @@ export const translations: { [key: string]: Translation } = {
       title: "Como Funciona",
       steps: {
         register: {
-          title: "Property Registration",
-          description: "Register your property location and establish cleaning standards for each area.",
+          title: "Registro de Propriedade",
+          description: "Registre a localização da sua propriedade e estabeleça padrões de limpeza para cada área.",
         },
         report: {
-          title: "Damage Report",
-          description: "Document any damages or issues found during the cleaning process.",
+          title: "Relatório de Danos",
+          description: "Documente quaisquer danos ou problemas encontrados durante o processo de limpeza.",
         },
         cleaning: {
-          title: "Cleaning & Linen Change",
-          description: "Perform thorough cleaning and replace all bed and bath linens.",
+          title: "Limpeza e Troca de Roupa de Cama",
+          description: "Realize uma limpeza completa e troque todas as roupas de cama e banho.",
         },
         record: {
-          title: "Cleaning Record",
-          description: "Record the cleaning process with photos and videos for validation.",
+          title: "Registro de Limpeza",
+          description: "Registre o processo de limpeza com fotos e vídeos para validação.",
         },
         validation: {
-          title: "Client Validation",
-          description: "Receive client approval and confirmation of cleaning completion.",
+          title: "Validação do Cliente",
+          description: "Receba a aprovação do cliente e a confirmação da conclusão da limpeza.",
         },
       },
     },
@@ -356,6 +366,11 @@ export const translations: { [key: string]: Translation } = {
       contact: "Contato",
       rights: "© 2024 AirCleanB. Todos os direitos reservados.",
     },
+    thankYou: {
+      title: "Obrigado pelo seu agendamento!",
+      subtitle: "Entraremos em contato em breve.",
+      backToHome: "Voltar para a página inicial",
+    },
   },
   es: {
     nav: {
@@ -374,24 +389,24 @@ export const translations: { [key: string]: Translation } = {
       title: "Cómo Funciona",
       steps: {
         register: {
-          title: "Property Registration",
-          description: "Register your property location and establish cleaning standards for each area.",
+          title: "Registro de Propiedad",
+          description: "Registre la ubicación de su propiedad y establezca estándares de limpieza para cada área.",
         },
         report: {
-          title: "Damage Report",
-          description: "Document any damages or issues found during the cleaning process.",
+          title: "Informe de Daños",
+          description: "Documente cualquier daño o problema encontrado durante el proceso de limpieza.",
         },
         cleaning: {
-          title: "Cleaning & Linen Change",
-          description: "Perform thorough cleaning and replace all bed and bath linens.",
+          title: "Limpieza y Cambio de Ropa de Cama",
+          description: "Realice una limpieza a fondo y cambie toda la ropa de cama y baño.",
         },
         record: {
-          title: "Cleaning Record",
-          description: "Record the cleaning process with photos and videos for validation.",
+          title: "Registro de Limpieza",
+          description: "Registre el proceso de limpieza con fotos y videos para su validación.",
         },
         validation: {
-          title: "Client Validation",
-          description: "Receive client approval and confirmation of cleaning completion.",
+          title: "Validación del Cliente",
+          description: "Reciba la aprobación del cliente y la confirmación de la finalización de la limpieza.",
         },
       },
     },
@@ -478,6 +493,11 @@ export const translations: { [key: string]: Translation } = {
       privacy: "Privacidad",
       contact: "Contacto",
       rights: "© 2024 AirCleanB. Todos los derechos reservados.",
+    },
+    thankYou: {
+      title: "¡Gracias por tu agendamiento!",
+      subtitle: "Nos pondremos en contacto en breve.",
+      backToHome: "Volver a la página principal",
     },
   },
 };

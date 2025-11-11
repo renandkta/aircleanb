@@ -144,7 +144,7 @@ export default function MainPage() {
 
   const scrollToScheduling = (e: React.MouseEvent) => {
     e.preventDefault();
-    const schedulingSection = document.getElementById('agendamento');
+    const schedulingSection = document.getElementById('schedule');
     if (schedulingSection) {
       schedulingSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -153,7 +153,7 @@ export default function MainPage() {
 
   const scrollToServices = (e: React.MouseEvent) => {
     e.preventDefault();
-    const servicesSection = document.getElementById('servicos');
+    const servicesSection = document.getElementById('services');
     if (servicesSection) {
       servicesSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -184,11 +184,11 @@ export default function MainPage() {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-6">
-              <a href="#como-funciona" className="text-white hover:text-blue-200">{t.nav.howItWorks}</a>
-              <a href="#servicos" className="text-white hover:text-blue-200">{t.nav.services}</a>
-              <a href="#beneficios" className="text-white hover:text-blue-200">{t.nav.benefits}</a>
-              <a href="#agendamento" className="text-white hover:text-blue-200">{t.nav.scheduling}</a>
-              <a href="#direct-contact" className="text-white hover:text-blue-200">{t.nav.contact}</a>
+              <a href="#how-it-works" className="text-white hover:text-blue-200">{t.nav.howItWorks}</a>
+              <a href="#services" className="text-white hover:text-blue-200">{t.nav.services}</a>
+              <a href="#benefits" className="text-white hover:text-blue-200">{t.nav.benefits}</a>
+              <a href="#schedule" className="text-white hover:text-blue-200">{t.nav.scheduling}</a>
+              <a href="#contact" className="text-white hover:text-blue-200">{t.nav.contact}</a>
             </div>
             
             <div className="hidden md:flex items-center space-x-4">
@@ -217,11 +217,11 @@ export default function MainPage() {
           {mobileMenuOpen && (
             <div className="md:hidden mt-4 bg-[#0079a1] rounded-lg p-4">
               <div className="flex flex-col space-y-3">
-                <a href="#como-funciona" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.howItWorks}</a>
-                <a href="#servicos" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.services}</a>
-                <a href="#beneficios" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.benefits}</a>
-                <a href="#agendamento" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.scheduling}</a>
-                <a href="#direct-contact" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.contact}</a>
+                <a href="#how-it-works" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.howItWorks}</a>
+                <a href="#services" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.services}</a>
+                <a href="#benefits" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.benefits}</a>
+                <a href="#schedule" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.scheduling}</a>
+                <a href="#contact" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.contact}</a>
                 
                 <div className="flex items-center space-x-2 py-2">
                   <Globe className="h-5 w-5 text-white" />
@@ -288,7 +288,7 @@ export default function MainPage() {
       </header>
 
       {/* How It Works Section */}
-      <section id="como-funciona" className="py-16 md:py-20 bg-gray-50">
+      <section id="how-it-works" className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.howItWorks.title}</h2>
           
@@ -366,7 +366,7 @@ export default function MainPage() {
       </section>
 
       {/* Services Section */}
-      <section id="servicos" className="py-16 md:py-20">
+      <section id="services" className="py-16 md:py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.services.title}</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -431,7 +431,7 @@ export default function MainPage() {
       </section>
 
       {/* Benefits Section */}
-      <section id="beneficios" className="py-16 md:py-20 bg-gray-50">
+      <section id="benefits" className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.benefits.title}</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -476,7 +476,7 @@ export default function MainPage() {
       </section>
 
       {/* Scheduling Section */}
-      <section id="agendamento" className="py-16 md:py-20 bg-gradient-to-r from-blue-50 to-blue-100">
+      <section id="schedule" className="py-16 md:py-20 bg-gradient-to-r from-blue-50 to-blue-100">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">{t.scheduling.title}</h2>
           <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-sm md:text-base">
@@ -634,7 +634,7 @@ export default function MainPage() {
       </section>
 
       {/* Direct Contact Section */}
-      <section id="direct-contact" className="py-16 md:py-20 bg-gray-50">
+      <section id="contact" className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">{t.directContact.title}</h2>
           <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-sm md:text-base">

@@ -97,6 +97,12 @@ interface Translation {
       other: string;
     };
   };
+  directContact: {
+    title: string;
+    call: string;
+    sms: string;
+    whatsapp: string;
+  };
   cta: {
     title: string;
     subtitle: string;
@@ -227,6 +233,12 @@ export const translations: { [key: string]: Translation } = {
         other: "Other",
       },
     },
+    directContact: {
+      title: "Or Contact Us Directly",
+      call: "Call Us",
+      sms: "SMS / iMessage",
+      whatsapp: "WhatsApp",
+    },
     cta: {
       title: "Start using AirCleanB today",
       subtitle: "Transform your Airbnb cleaning management with cutting-edge technology",
@@ -355,6 +367,12 @@ export const translations: { [key: string]: Translation } = {
         other: "Outro",
       },
     },
+    directContact: {
+      title: "Ou Entre em Contato Diretamente",
+      call: "Ligar",
+      sms: "SMS / iMessage",
+      whatsapp: "WhatsApp",
+    },
     cta: {
       title: "Comece a usar AirCleanB hoje mesmo",
       subtitle: "Transforme a gestão de limpeza do seu Airbnb com tecnologia de ponta",
@@ -482,6 +500,12 @@ export const translations: { [key: string]: Translation } = {
         flat: "Flat",
         other: "Otro",
       },
+    },
+    directContact: {
+      title: "O Contáctenos Directamente",
+      call: "Llamar",
+      sms: "SMS / iMessage",
+      whatsapp: "WhatsApp",
     },
     cta: {
       title: "Empieza a usar AirCleanB hoy mismo",

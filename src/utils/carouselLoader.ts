@@ -1,38 +1,22 @@
 // Utilitário para carregar imagens do carrossel dinamicamente
 export const loadCarouselImages = async (): Promise<Array<{src: string, alt: string, title?: string}>> => {
-  // Lista de imagens suportadas (formato web)
-  const supportedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
-  
-  // Lista atual de imagens na pasta carousel
-  const imageFiles = [
-    'IMG_7406.jpg',
-    'IMG_7431-2.jpg', 
-    'IMG_7448.jpg',
-    'IMG_3619.jpeg'
-  ];
+  // Use import.meta.glob para importar dinamicamente as imagens do diretório público.
+  // Este é um recurso do Vite que cria um mapa de caminhos de imagem em tempo de compilação.
+  const imageModules = import.meta.glob('/public/images/carousel/**/*.{jpeg,jpg,png,webp}', { eager: true, as: 'url' });
 
-  // Filtra apenas imagens com extensões suportadas
-  const validImages = imageFiles.filter(filename => {
-    const ext = filename.toLowerCase().substring(filename.lastIndexOf('.'));
-    return supportedExtensions.includes(ext);
+  // imageModules é um objeto onde as chaves são os caminhos dos arquivos e os valores são as URLs públicas.
+  // Ex: { '/public/images/carousel/foto.jpg': '/images/carousel/foto.jpg' }
+
+  const images = Object.entries(imageModules).map(([path, src], index) => {
+    const filename = path.substring(path.lastIndexOf('/') + 1);
+
+    return {
+      src: src,
+      alt: `Imagem de limpeza ${filename}`,
+      title: `Serviço de Limpeza ${index + 1}`
+    };
   });
 
-  // Mapeia as imagens para o formato do carrossel
-  return validImages.map((filename, index) => ({
-    src: `/images/carousel/${filename}`,
-    alt: `Imagem de limpeza ${index + 1}`,
-    title: `Cleaning Service ${index + 1}`
-  }));
+  // A função deve retornar uma Promise para ser compatível com a forma como é chamada no MainPage.tsx
+  return Promise.resolve(images);
 };
-
-// Função para adicionar uma nova imagem ao carrossel
-export const addImageToCarousel = (filename: string): void => {
-  // Esta função pode ser expandida para adicionar imagens dinamicamente
-  console.log(`Nova imagem adicionada: ${filename}`);
-};
-
-// Função para remover uma imagem do carrossel
-export const removeImageFromCarousel = (filename: string): void => {
-  // Esta função pode ser expandida para remover imagens dinamicamente
-  console.log(`Imagem removida: ${filename}`);
-}; 

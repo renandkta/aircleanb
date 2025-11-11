@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, CheckCircle, Shield, Star, ArrowRight, Calendar, Sparkles, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp } from 'lucide-react';
+import { IMaskInput } from 'react-imask';
+import { Camera, CheckCircle, Shield, Star, ArrowRight, Calendar, Sparkles, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp, Mail, Phone, MessageSquare } from 'lucide-react';
 import { translations } from '../translations';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
@@ -42,12 +43,60 @@ export default function MainPage() {
     loadImages();
   }, []);
 
+  const [isFormValid, setIsFormValid] = useState(false);
+  const phoneMaskRef = useRef<any>(null);
+
+  // Função para validar email
+  const validateEmail = (email: string) => {
+    if (!email || email.trim() === '') return false;
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email.trim()).toLowerCase());
+  };
+
+  // Função para validar telefone - valida diretamente do valor formatado ou não mascarado
+  const validatePhone = (phone: string, unmaskedValue?: string) => {
+    // Se temos o valor não mascarado, usa diretamente
+    if (unmaskedValue !== undefined) {
+      return unmaskedValue.length === 10;
+    }
+    
+    // Caso contrário, extrai do valor formatado
+    if (!phone || phone.trim() === '') return false;
+    // Remove todos os caracteres não numéricos
+    const digitsOnly = phone.replace(/\D/g, '');
+    // Para a máscara "+1 (000) 000-0000", pode ter 10 ou 11 dígitos (com código do país)
+    // Aceitamos se tiver pelo menos 10 dígitos (removendo o código do país se presente)
+    const phoneDigits = digitsOnly.length === 11 && digitsOnly.startsWith('1') 
+      ? digitsOnly.substring(1) 
+      : digitsOnly;
+    // Precisamos de exatamente 10 dígitos
+    return phoneDigits.length === 10;
+  };
+
+  useEffect(() => {
+    const nameValid = formData.name.trim() !== '';
+    const emailValid = validateEmail(formData.email);
+    const phoneValid = validatePhone(formData.phone);
+
+    const isValid = nameValid && emailValid && phoneValid;
+
+    setIsFormValid(isValid);
+  }, [formData]);
+
   // Função para atualizar dados do formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handlePhoneChange = (value: string, maskRef?: any) => {
+    // Atualiza o estado com o valor formatado
+    setFormData(prev => ({
+      ...prev,
+      phone: value
     }));
   };
 
@@ -139,7 +188,7 @@ export default function MainPage() {
               <a href="#servicos" className="text-white hover:text-blue-200">{t.nav.services}</a>
               <a href="#beneficios" className="text-white hover:text-blue-200">{t.nav.benefits}</a>
               <a href="#agendamento" className="text-white hover:text-blue-200">{t.nav.scheduling}</a>
-              <a href="#contato" className="text-white hover:text-blue-200">{t.nav.contact}</a>
+              <a href="#direct-contact" className="text-white hover:text-blue-200">{t.nav.contact}</a>
             </div>
             
             <div className="hidden md:flex items-center space-x-4">
@@ -172,7 +221,7 @@ export default function MainPage() {
                 <a href="#servicos" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.services}</a>
                 <a href="#beneficios" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.benefits}</a>
                 <a href="#agendamento" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.scheduling}</a>
-                <a href="#contato" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.contact}</a>
+                <a href="#direct-contact" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.contact}</a>
                 
                 <div className="flex items-center space-x-2 py-2">
                   <Globe className="h-5 w-5 text-white" />
@@ -477,7 +526,7 @@ export default function MainPage() {
                   <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t.scheduling.form.name}
+                        {t.scheduling.form.name}*
                       </label>
                       <input
                         type="text"
@@ -486,11 +535,12 @@ export default function MainPage() {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t.scheduling.form.email}
+                        {t.scheduling.form.email}*
                       </label>
                       <input
                         type="email"
@@ -499,20 +549,26 @@ export default function MainPage() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
+                        required
                       />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.scheduling.form.phone}
+                      {t.scheduling.form.phone}*
                     </label>
-                    <input
+                    <IMaskInput
+                      ref={phoneMaskRef}
+                      mask="+1 (000) 000-0000"
                       type="tel"
+                      name="phone"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="+1 (555) 123-4567"
-                      name="phone"
                       value={formData.phone}
-                      onChange={handleInputChange}
+                      onAccept={(value: string, maskRef: any) => {
+                        handlePhoneChange(value, maskRef);
+                      }}
+                      required
                     />
                   </div>
                   <div className="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -565,12 +621,55 @@ export default function MainPage() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition font-medium text-sm md:text-base"
-                    disabled={isSubmitting}
+                    className="w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition font-medium text-sm md:text-base disabled:bg-gray-400"
+                    disabled={!isFormValid || isSubmitting}
                   >
                     {isSubmitting ? 'Submitting...' : t.scheduling.form.button}
                   </button>
                 </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Direct Contact Section */}
+      <section id="direct-contact" className="py-16 md:py-20 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">{t.directContact.title}</h2>
+          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-sm md:text-base">
+            Prefer to get in touch directly? Here's how you can reach us.
+          </p>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              {/* Email */}
+              <div className="text-left">
+                <h3 className="text-xl font-semibold mb-4 text-gray-700">Via Email</h3>
+                <a href="mailto:aircleanb.dc@gmail.com" className="inline-flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition w-full">
+                  <Mail className="h-6 w-6 text-[#008CBA] mr-3" />
+                  <span className="text-lg text-gray-800">aircleanb.dc@gmail.com</span>
+                </a>
+              </div>
+
+              {/* Phone Actions */}
+              <div className="text-left">
+                <h3 className="text-xl font-semibold mb-4 text-gray-700">Via Phone</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <a href="tel:+17203529810" className="flex items-center justify-center p-3 bg-[#008CBA] text-white rounded-lg hover:bg-blue-700 transition">
+                    <Phone className="h-5 w-5 mr-2" />
+                    <span>{t.directContact.call}</span>
+                  </a>
+                  <a href="sms:+17203529810" className="flex items-center justify-center p-3 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition">
+                    <MessageSquare className="h-5 w-5 mr-2" />
+                    <span>{t.directContact.sms}</span>
+                  </a>
+                  {/* Using a green color for WhatsApp to differentiate. Lucide doesn't have a WhatsApp icon. */}
+                  <a href="https://wa.me/17203529810" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+                    <MessageSquare className="h-5 w-5 mr-2" />
+                    <span>{t.directContact.whatsapp}</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

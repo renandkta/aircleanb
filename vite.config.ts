@@ -16,8 +16,10 @@ export default defineConfig({
       },
     },
   },
-  // Base path - comentado para desenvolvimento local
-  // base: '/aircleanb/',
+  // Base path - configurado para produção (GitHub Pages)
+  // Se o site estiver em renandkta.github.io/aircleanb, use: base: '/aircleanb/'
+  // Se o site estiver em um domínio customizado ou subdomínio, use: base: '/'
+  base: process.env.NODE_ENV === 'production' ? '/aircleanb/' : '/',
   server: {
     // Configuração para desenvolvimento local
     port: 5173,

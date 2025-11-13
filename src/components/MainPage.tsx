@@ -6,6 +6,7 @@ import { translations } from '../translations';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
 import { loadCarouselImages } from '../utils/carouselLoader';
+import PromotionalModal from './PromotionalModal';
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -13,7 +14,11 @@ export default function MainPage() {
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [carouselImages, setCarouselImages] = useState<Array<{src: string, alt: string, title?: string}>>([]);
-  
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
+
+  const openPromoModal = () => setIsPromoModalOpen(true);
+  const closePromoModal = () => setIsPromoModalOpen(false);
+
   // Estado do formulário
   const [formData, setFormData] = useState({
     name: '',
@@ -23,8 +28,7 @@ export default function MainPage() {
     time: '',
     propertyType: '',
     notes: ''
-  });
-  
+  });  
   // Estados para feedback do formulário
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -262,33 +266,32 @@ export default function MainPage() {
               <p className="text-lg md:text-xl text-white mb-4">
                 Your space, always guest-ready and sparkling clean.
               </p>
-              <p className="text-lg md:text-xl text-white mb-4">
-                📍 Fast, flexible scheduling — we're available anytime you need.
-              </p>
-              <p className="text-lg md:text-xl text-white mb-8">
-                ✨ First cleaning 50% off so you can try us with confidence.
-              </p>
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
-                <button 
-                  className="bg-white text-[#008CBA] px-6 py-3 rounded-full hover:bg-blue-50 transition flex items-center justify-center text-sm md:text-base"
-                  onClick={scrollToScheduling}
-                >
-                  👉 Book Now
-                </button>
-                <button 
-                  className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:bg-opacity-10 transition flex items-center justify-center text-sm md:text-base"
-                  onClick={scrollToServices}
-                >
-                  🔍 See Our Services
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-16 md:py-20 bg-gray-50">
+                            <p className="text-lg md:text-xl text-white mb-4">
+                              📍 Fast, flexible scheduling — we're available anytime you need.
+                            </p>
+                                          <div className="bg-blue-950 text-white rounded-lg p-4 my-8 shadow-lg transform hover:scale-105 transition-transform duration-300">
+                                            <h3 className="text-2xl font-bold">✨ Get 50% OFF Your First Turnover! ✨</h3>
+                                            <p className="text-lg">Unlock this deal by booking an initial Deep Clean to reset your property standards.</p>
+                                          </div>
+                                          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                                            <button
+                                              className="bg-green-500 text-white px-8 py-4 rounded-full hover:bg-green-600 transition flex items-center justify-center text-lg font-bold shadow-lg animate-pulse"
+                                              onClick={openPromoModal}
+                                            >
+                                              Claim My Offer
+                                            </button>                              <button
+                                className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:bg-opacity-10 transition flex items-center justify-center text-sm md:text-base"
+                                onClick={scrollToServices}
+                              >
+                                🔍 See Our Services
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </header>
+              
+                    {/* How It Works Section */}      <section id="how-it-works" className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.howItWorks.title}</h2>
           
@@ -733,6 +736,7 @@ export default function MainPage() {
           </div>
         </div>
       </footer>
+      <PromotionalModal isOpen={isPromoModalOpen} onClose={closePromoModal} />
     </div>
   );
 }

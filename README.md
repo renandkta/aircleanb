@@ -1,157 +1,69 @@
-# Annapinkerman.com - Site de Aniversário de 15 Anos
+# AirCleanB - Airbnb Cleaning Service Website
 
-Este é o repositório oficial para o site de 15 anos da Anna Pinkerman, um convite digital e uma plataforma interativa para os convidados da festa.
+This is the official repository for the AirCleanB website, a platform for an Airbnb cleaning service.
 
-## 🎉 Sobre o Projeto
-
-O site segue o tema **"Paris Floral"**, combinando a elegância e o romance de Paris com a delicadeza e a beleza das flores. A experiência do usuário deve ser sofisticada, limpa e imersiva.
-
-**Data da Festa:** 06 de Setembro de 2025, às 18:00
-
----
-
-## 🎨 Design System
-
-### Paleta de Cores
-
-- **Primária (Fundo):** Branco (`#FFFFFF` ou `#FFF8F8` para um tom levemente aquecido)
-- **Secundária (Destaques):** Rosa Claro (`#FADADD` ou um tom similar)
-- **Texto Principal:** Cinza Escuro (`#333333`) para legibilidade
-- **Texto de Destaque/Caligrafia:** Um tom de rosa mais forte ou cinza
-
-### Tipografia
-
-- **Fonte de Títulos e Nomes (Ex: "Anna Pinkerman"):**
-  - **Estilo:** Script / Caligrafia Formal
-  - **Fonte Sugerida (Google Fonts):** `Great Vibes`
-  - **Peso:** Regular (400)
-- **Fonte de Corpo de Texto (Parágrafos, menus):**
-  - **Estilo:** Sans-serif, limpa e moderna
-  - **Fonte Sugerida (Google Fonts):** `Inter` ou `Montserrat`
-  - **Peso:** Regular (400) e Medium (500)
-
----
-
-## 🏗️ Estrutura do Site
-
-O site será uma Single Page Application (SPA) com seções bem definidas, navegáveis através do menu superior.
-
-### Menu de Navegação
-
-- **Home:** Aterrissagem inicial com contagem regressiva e vídeo
-- **About Me:** Uma pequena biografia ou mensagem da Anna
-- **Party:** Detalhes da festa (local, mapa, dress code)
-- **Messages:** Mural de depoimentos enviados pelos convidados
-- **Photos:** Galeria de fotos do ensaio pré-aniversário
-- **Real Time Photos:** Galeria especial que será atualizada em tempo real durante a festa
-
-### Estrutura da Página Principal (Home)
-
-1. **Header:** Menu de navegação fixo no topo
-2. **Nome da Aniversariante:** "Anna Pinkerman" em destaque com a fonte `Great Vibes`
-3. **Contagem Regressiva:** Um relógio dinâmico contando os dias, horas, minutos e segundos até **06 de Setembro de 2025, às 18:00**
-4. **Vídeo de Apresentação:** Seção com um vídeo vertical da Anna
-
----
-
-## 🚀 Stack de Tecnologias
+## 🚀 Project Stack
 
 - **Frontend:** React 18 + TypeScript
 - **Build Tool:** Vite
-- **Estilização:** Tailwind CSS
-- **Ícones:** Lucide React
-- **Backend & Armazenamento:** Supabase (planejado)
-- **Hospedagem:** Vercel (planejado)
-- **Editor IA:** Cursor
-- **Assistente IA:** Gemini CLI
+- **Styling:** Tailwind CSS
+- **Icons:** Lucide React
+- **Deployment:** GitHub Pages
 
 ---
 
-## 🏁 Como Iniciar o Projeto Localmente
+## 🏁 Getting Started Locally
 
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/dkapture1/Annapinkerman-site.git
-   cd Annapinkerman-site
-   ```
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/renandkta/aircleanb.git
+    cd aircleanb
+    ```
 
-2. **Instale as dependências:**
-   ```bash
-   npm install
-   ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-3. **Rode o servidor de desenvolvimento:**
-   ```bash
-   npm run dev
-   ```
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
 
-4. **Abra [http://localhost:5173](http://localhost:5173) no seu navegador**
-
----
-
-## 🔧 Scripts Disponíveis
-
-- `npm run dev` - Servidor de desenvolvimento
-- `npm run build` - Build para produção
-- `npm run preview` - Preview do build
-- `npm run lint` - Verificação de código
+4.  **Open [http://localhost:5173](http://localhost:5173) in your browser.**
 
 ---
 
-## 📁 Estrutura do Projeto
+## 🔧 Available Scripts
 
-```
-Annapinkerman-site/
-├── public/
-│   └── images/              # Imagens do site
-├── src/
-│   ├── components/          # Componentes React
-│   ├── utils/              # Utilitários
-│   ├── App.tsx             # Componente principal
-│   └── main.tsx            # Ponto de entrada
-├── tailwind.config.js       # Configuração do Tailwind
-└── vite.config.ts          # Configuração do Vite
-```
+-   `npm run dev` - Development server
+-   `npm run build` - Production build
+-   `npm run preview` - Preview build
+-   `npm run lint` - Code linting
 
 ---
 
-## 🎯 Próximos Passos
+## ✨ Recent Changes
 
-1. **Configuração do Design System**
-   - Implementar paleta de cores
-   - Configurar fontes Google Fonts
-   - Criar componentes base
+### Promotional Section Overhaul (Growth Hacking Focus)
 
-2. **Desenvolvimento das Seções**
-   - Header com navegação
-   - Hero com contagem regressiva
-   - Seção "About Me"
-   - Detalhes da festa
-   - Sistema de mensagens
-   - Galerias de fotos
+To boost conversions for the "50% OFF" campaign, the following improvements were implemented:
 
-3. **Integração com Backend**
-   - Configurar Supabase
-   - Sistema de mensagens em tempo real
-   - Upload de fotos durante a festa
+#### 1. Enhanced Promotional Banner
+- **New Headline & Copy:** Updated to "✨ Get 50% OFF Your First Turnover! ✨" with a clearer value proposition.
+- **Visual Redesign:** Changed the background to a high-contrast dark navy blue to grab user attention.
 
-4. **Deploy e Hospedagem**
-   - Configurar Vercel
-   - Domínio personalizado
-   - SSL e otimizações
+#### 2. New "Special Offer" Modal
+- A new modal was created to capture leads directly from the promotional offer.
+- **Urgency & Scarcity:** Includes a countdown timer to encourage immediate action.
+- **Clear Offer Details:** The modal now clearly explains the new pricing strategy: book a "Deep Clean Reset" to unlock 50% off the next turnover.
+- **Social Proof:** A scrollable list of client testimonials was added to build trust and credibility.
 
----
+#### 3. Conversion-Optimized Form
+- The lead capture form inside the modal was updated with a clear CTA ("Book Deep Clean & Save").
+- The form includes fields for Name, Email, Phone, Zip Code, and Property Type.
 
-## 📝 Licença
-
-Este projeto está sob a licença MIT.
-
----
-
-## 👥 Contribuição
-
-Este é um projeto pessoal para o aniversário de 15 anos da Anna Pinkerman. Para contribuições ou sugestões, entre em contato através do repositório.
-
----
-
-**✨ Que a magia de Paris e a beleza das flores inspirem este site especial! ✨**
+#### 4. Technical Enhancements
+- **Component-Based Architecture:** The new features were built using modular React components (`PromotionalModal`, `LeadForm`).
+- **Styling:** Tailwind CSS was used for a responsive and consistent design.
+- **Custom Scrollbar:** The testimonials section now features a custom-styled scrollbar for a better user experience.

@@ -72,17 +72,17 @@ const LeadForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name <span className="text-red-500">*</span></label>
         <input type="text" name="name" id="name" value={formData.name} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`} />
         {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
       </div>
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className="text-red-500">*</span></label>
         <input type="email" name="email" id="email" value={formData.email} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`} />
         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
       </div>
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
+        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone <span className="text-red-500">*</span></label>
         <IMaskInput
           ref={phoneMaskRef}
           mask="+1 (000) 000-0000"
@@ -96,7 +96,7 @@ const LeadForm: React.FC = () => {
         {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
       </div>
       <div>
-        <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">Zip Code</label>
+        <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">Zip Code <span className="text-red-500">*</span></label>
         <input type="text" name="zipCode" id="zipCode" value={formData.zipCode} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.zipCode ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`} />
         {errors.zipCode && <p className="text-red-500 text-xs mt-1">{errors.zipCode}</p>}
       </div>
@@ -126,7 +126,7 @@ const LeadForm: React.FC = () => {
           <input id="consent" name="consent" type="checkbox" checked={formData.consent} onChange={handleInputChange} className={`focus:ring-blue-500 h-4 w-4 text-blue-600 ${errors.consent ? 'border-red-500' : 'border-gray-300'} rounded`} />
         </div>
         <div className="ml-3 text-sm">
-          <label htmlFor="consent" className="font-medium text-gray-700">I accept the terms and conditions</label>
+          <label htmlFor="consent" className="font-medium text-gray-700">I accept the terms and conditions <span className="text-red-500">*</span></label>
           {errors.consent && <p className="text-red-500 text-xs mt-1">{errors.consent}</p>}
         </div>
       </div>

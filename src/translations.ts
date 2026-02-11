@@ -131,8 +131,8 @@ export const translations: { [key: string]: Translation } = {
       contact: "Contact",
     },
     hero: {
-      title: "Smart Cleaning Validation for your Airbnb",
-      subtitle: "Use artificial intelligence to ensure your property is spotless for the next guest.",
+      title: "Airbnb Turnover Cleaning in DC, MD & VA",
+      subtitle: "Fast, reliable turnovers and deep cleans for Airbnb and short-term rentals across the DMV.",
       scheduleDemo: "Schedule Demo",
     },
     howItWorks: {

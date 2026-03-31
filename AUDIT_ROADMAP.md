@@ -12,6 +12,7 @@ Ele foi escrito para ser lido por outros AIs (Claude, Gemini, etc.) e por desenv
 - **Formulário principal:** dentro de `MainPage.tsx` (seção "Schedule an Assessment")
 - **Formulário de oferta 50% OFF:** dentro de `PromotionalModal.tsx` + `LeadForm.tsx`
 - **Tracking:** `gtag.js` no `index.html` + eventos de conversão no `ThankYou.tsx` e nos callbacks de sucesso dos formulários.
+- **Manutenção do site (GitHub Pages):** ver [MAINTENANCE.md](MAINTENANCE.md) — workflow manual que publica `maintenance-static/` e como voltar ao deploy normal em `main`.
 
 ---
 

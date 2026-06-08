@@ -18,7 +18,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  check-maintenance:
+    runs-on: ubuntu-latest
+    outputs:
+      maintenance: ${{ steps.flag.outputs.active }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: flag
+        run: |
+          if [ -f MAINTENANCE_ACTIVE ]; then
+            echo "active=true" >> $GITHUB_OUTPUT
+          else
+            echo "active=false" >> $GITHUB_OUTPUT
+          fi
+
   build-and-deploy:
+    needs: check-maintenance
+    if: needs.check-maintenance.outputs.maintenance != 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -50,4 +66,4 @@ jobs:
         
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4 
+      uses: actions/deploy-pages@v4

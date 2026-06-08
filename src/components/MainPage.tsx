@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IMaskInput } from 'react-imask';
-import { Camera, CheckCircle, Shield, Star, ArrowRight, Calendar, Sparkles, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp, Mail, Phone, MessageSquare } from 'lucide-react';
+import { useForm } from '@formspree/react';
+import { CheckCircle, Shield, Star, ArrowRight, Calendar, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp, Mail, Phone, MessageSquare } from 'lucide-react';
 import { translations } from '../translations';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
@@ -13,7 +14,7 @@ export default function MainPage() {
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [carouselImages, setCarouselImages] = useState<Array<{src: string, alt: string, title?: string}>>([]);
+  const [carouselImages, setCarouselImages] = useState<Array<{ src: string, alt: string, title?: string }>>([]);
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
 
   const openPromoModal = () => setIsPromoModalOpen(true);
@@ -28,10 +29,11 @@ export default function MainPage() {
     time: '',
     propertyType: '',
     notes: ''
-  });  
-  // Estados para feedback do formulário
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  });
+  // Formspree useForm hook
+  const [state, handleSubmit] = useForm("xanjdbgn");
+
+
 
   // Função para carregar imagens dinamicamente
   useEffect(() => {
@@ -47,8 +49,50 @@ export default function MainPage() {
     loadImages();
   }, []);
 
+  // Estados para feedback do formulário
+  // isSubmitting is now state.submitting
+  // submitStatus is derived from state
+
   const [isFormValid, setIsFormValid] = useState(false);
-  const phoneMaskRef = useRef<any>(null);
+  const phoneMaskRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (state.succeeded) {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/57506d10-07bc-4603-9bc4-e9627cd018b7', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: `log_${Date.now()}_main_form_conversion`,
+          timestamp: Date.now(),
+          location: 'src/components/MainPage.tsx:60',
+          message: 'Main scheduling form succeeded, firing conversion and navigating to thank-you.',
+          data: { source: 'main_form' },
+          runId: 'sprint1',
+          hypothesisId: 'H1'
+        })
+      }).catch(() => {});
+      // #endregion agent log
+
+      if (window.gtag) {
+        window.gtag('event', 'conversion', {
+          send_to: 'AW-17464291569/lBYMCJ-s3b8bEPHhz4dB'
+        });
+      }
+
+      // Limpar formulário
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        date: '',
+        time: '',
+        propertyType: '',
+        notes: ''
+      });
+      navigate('/thank-you');
+    }
+  }, [state.succeeded, navigate]);
 
   // Função para validar email
   const validateEmail = (email: string) => {
@@ -63,15 +107,15 @@ export default function MainPage() {
     if (unmaskedValue !== undefined) {
       return unmaskedValue.length === 10;
     }
-    
+
     // Caso contrário, extrai do valor formatado
     if (!phone || phone.trim() === '') return false;
     // Remove todos os caracteres não numéricos
     const digitsOnly = phone.replace(/\D/g, '');
     // Para a máscara "+1 (000) 000-0000", pode ter 10 ou 11 dígitos (com código do país)
     // Aceitamos se tiver pelo menos 10 dígitos (removendo o código do país se presente)
-    const phoneDigits = digitsOnly.length === 11 && digitsOnly.startsWith('1') 
-      ? digitsOnly.substring(1) 
+    const phoneDigits = digitsOnly.length === 11 && digitsOnly.startsWith('1')
+      ? digitsOnly.substring(1)
       : digitsOnly;
     // Precisamos de exatamente 10 dígitos
     return phoneDigits.length === 10;
@@ -96,7 +140,7 @@ export default function MainPage() {
     }));
   };
 
-  const handlePhoneChange = (value: string, maskRef?: any) => {
+  const handlePhoneChange = (value: string) => {
     // Atualiza o estado com o valor formatado
     setFormData(prev => ({
       ...prev,
@@ -105,45 +149,13 @@ export default function MainPage() {
   };
 
   // Função para enviar formulário para Formspree
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus('idle');
-
-    try {
-      const response = await fetch('https://formspree.io/f/xanjdbgn', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          subject: 'AirCleanB Assessment Request',
-          _language: language
-        }),
-      });
-
-      if (response.ok) {
-        setSubmitStatus('success');
-        // Limpar formulário
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          date: '',
-          time: '',
-          propertyType: '',
-          notes: ''
-        });
-        navigate('/thank-you');
-      } else {
-        setSubmitStatus('error');
-      }
-    } catch (error) {
-      setSubmitStatus('error');
-    } finally {
-      setIsSubmitting(false);
-    }
+    handleSubmit({
+      ...formData,
+      subject: 'AirCleanB Assessment Request',
+      _language: language
+    });
   };
 
   const scrollToScheduling = (e: React.MouseEvent) => {
@@ -175,9 +187,9 @@ export default function MainPage() {
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Logo size={32} />
-            
+
             {/* Mobile menu button */}
-            <button 
+            <button
               className="md:hidden text-white focus:outline-none"
               onClick={toggleMobileMenu}
             >
@@ -185,7 +197,7 @@ export default function MainPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
               </svg>
             </button>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-6">
               <a href="#how-it-works" className="text-white hover:text-blue-200">{t.nav.howItWorks}</a>
@@ -194,7 +206,7 @@ export default function MainPage() {
               <a href="#schedule" className="text-white hover:text-blue-200">{t.nav.scheduling}</a>
               <a href="#contact" className="text-white hover:text-blue-200">{t.nav.contact}</a>
             </div>
-            
+
             <div className="hidden md:flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Globe className="h-5 w-5 text-white" />
@@ -208,7 +220,7 @@ export default function MainPage() {
                   <option value="es">Español</option>
                 </select>
               </div>
-              <button 
+              <button
                 className="bg-white text-[#008CBA] px-4 py-2 rounded-full hover:bg-blue-50 transition text-sm md:text-base"
                 onClick={scrollToScheduling}
               >
@@ -216,7 +228,7 @@ export default function MainPage() {
               </button>
             </div>
           </div>
-          
+
           {/* Mobile Menu */}
           {mobileMenuOpen && (
             <div className="md:hidden mt-4 bg-[#0079a1] rounded-lg p-4">
@@ -226,7 +238,7 @@ export default function MainPage() {
                 <a href="#benefits" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.benefits}</a>
                 <a href="#schedule" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.scheduling}</a>
                 <a href="#contact" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.contact}</a>
-                
+
                 <div className="flex items-center space-x-2 py-2">
                   <Globe className="h-5 w-5 text-white" />
                   <select
@@ -239,8 +251,8 @@ export default function MainPage() {
                     <option value="es">Español</option>
                   </select>
                 </div>
-                
-                <button 
+
+                <button
                   className="bg-white text-[#008CBA] px-4 py-2 rounded-full hover:bg-blue-50 transition w-full"
                   onClick={scrollToScheduling}
                 >
@@ -257,44 +269,44 @@ export default function MainPage() {
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
                 Expert cleaning that turns your Airbnb into a 5-star experience — Guaranteed!
               </h1>
-              
+
               {/* Carrossel centralizado e maior */}
               <div className="w-full max-w-6xl px-4 mb-8">
                 <ImageCarousel images={carouselImages} />
               </div>
-              
+
               <p className="text-lg md:text-xl text-white mb-4">
                 Your space, always guest-ready and sparkling clean.
               </p>
-                            <p className="text-lg md:text-xl text-white mb-4">
-                              📍 Fast, flexible scheduling — we're available anytime you need.
-                            </p>
-                                          <div className="bg-blue-950 text-white rounded-lg p-4 my-8 shadow-lg transform hover:scale-105 transition-transform duration-300">
-                                            <h3 className="text-2xl font-bold">✨ Get 50% OFF Your First Turnover! ✨</h3>
-                                            <p className="text-lg">Unlock this deal by booking an initial Deep Clean to reset your property standards.</p>
-                                          </div>
-                                          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
-                                            <button
-                                              className="bg-green-500 text-white px-8 py-4 rounded-full hover:bg-green-600 transition flex items-center justify-center text-lg font-bold shadow-lg animate-pulse"
-                                              onClick={openPromoModal}
-                                            >
-                                              Claim My Offer
-                                            </button>                              <button
-                                className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:bg-opacity-10 transition flex items-center justify-center text-sm md:text-base"
-                                onClick={scrollToServices}
-                              >
-                                🔍 See Our Services
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </header>
-              
-                    {/* How It Works Section */}      <section id="how-it-works" className="py-16 md:py-20 bg-gray-50">
+              <p className="text-lg md:text-xl text-white mb-4">
+                📍 Serving Washington DC, Maryland &amp; Virginia (DMV area) with expert Airbnb turnover cleaning.
+              </p>
+              <div className="bg-blue-950 text-white rounded-lg p-4 my-8 shadow-lg transform hover:scale-105 transition-transform duration-300">
+                <h3 className="text-2xl font-bold">✨ Get 50% OFF Your First Turnover! ✨</h3>
+                <p className="text-lg">Unlock this deal by booking an initial Deep Clean to reset your property standards.</p>
+              </div>
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                <button
+                  className="bg-green-500 text-white px-8 py-4 rounded-full hover:bg-green-600 transition flex items-center justify-center text-lg font-bold shadow-lg animate-pulse"
+                  onClick={openPromoModal}
+                >
+                  Claim My Offer
+                </button>                              <button
+                  className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:bg-opacity-10 transition flex items-center justify-center text-sm md:text-base"
+                  onClick={scrollToServices}
+                >
+                  🔍 See Our Services
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* How It Works Section */}      <section id="how-it-works" className="py-16 md:py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.howItWorks.title}</h2>
-          
+
           {/* 5 Steps Process */}
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-5 gap-6 md:gap-8">
@@ -356,7 +368,7 @@ export default function MainPage() {
 
             {/* CTA Button */}
             <div className="text-center mt-12">
-              <button 
+              <button
                 className="bg-[#008CBA] text-white px-8 py-3 rounded-full hover:bg-blue-600 transition flex items-center mx-auto"
                 onClick={scrollToScheduling}
               >
@@ -384,7 +396,7 @@ export default function MainPage() {
                   </li>
                 ))}
               </ul>
-              <button 
+              <button
                 className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
                 onClick={scrollToScheduling}
               >
@@ -403,7 +415,7 @@ export default function MainPage() {
                   </li>
                 ))}
               </ul>
-              <button 
+              <button
                 className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
                 onClick={scrollToScheduling}
               >
@@ -422,7 +434,7 @@ export default function MainPage() {
                   </li>
                 ))}
               </ul>
-              <button 
+              <button
                 className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
                 onClick={scrollToScheduling}
               >
@@ -478,6 +490,67 @@ export default function MainPage() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-16 md:py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">What Airbnb Hosts Say</h2>
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-5 w-5 text-yellow-500" />
+                ))}
+              </div>
+              <p className="text-gray-700 italic mb-4">
+                "The Deep Clean Reset was worth every penny. My place looked brand new and my guest ratings went up immediately."
+              </p>
+              <p className="text-right text-sm font-semibold">
+                <span className="font-bold">Mark T.</span> — Arlington, VA
+              </p>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-5 w-5 text-yellow-500" />
+                ))}
+              </div>
+              <p className="text-gray-700 italic mb-4">
+                "Finally, a reliable team in DC! They handle the turnover seamlessly, and the photo reports give me total peace of mind."
+              </p>
+              <p className="text-right text-sm font-semibold">
+                <span className="font-bold">Emily R.</span> — Capitol Hill, Washington DC
+              </p>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-5 w-5 text-yellow-500" />
+                ))}
+              </div>
+              <p className="text-gray-700 italic mb-4">
+                "I manage 3 units in Baltimore and AirCleanB is the only partner I trust. Consistent quality every single time."
+              </p>
+              <p className="text-right text-sm font-semibold">
+                <span className="font-bold">David K.</span> — Fells Point, Baltimore
+              </p>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-5 w-5 text-yellow-500" />
+                ))}
+              </div>
+              <p className="text-gray-700 italic mb-4">
+                "Super professional service. They arrived on time in Silver Spring and the cleaning was spotless. Highly recommend!"
+              </p>
+              <p className="text-right text-sm font-semibold">
+                <span className="font-bold">Sarah L.</span> — Silver Spring, MD
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Scheduling Section */}
       <section id="schedule" className="py-16 md:py-20 bg-gradient-to-r from-blue-50 to-blue-100">
         <div className="container mx-auto px-4">
@@ -506,9 +579,9 @@ export default function MainPage() {
                 </div>
               </div>
               <div className="md:w-2/3 p-6 md:p-8">
-                <form className="space-y-6" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleFormSubmit}>
                   {/* Mensagens de feedback */}
-                  {submitStatus === 'success' && (
+                  {state.succeeded && (
                     <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
                       <div className="flex items-center">
                         <CheckCircle className="h-5 w-5 mr-2" />
@@ -516,12 +589,22 @@ export default function MainPage() {
                       </div>
                     </div>
                   )}
-                  
-                  {submitStatus === 'error' && (
+
+                  {state.errors && (
                     <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-                      <div className="flex items-center">
-                        <Shield className="h-5 w-5 mr-2" />
-                        <span>Sorry, there was an error sending your request. Please try again or contact us directly.</span>
+                      <div className="flex flex-col">
+                        <div className="flex items-center mb-1">
+                          <Shield className="h-5 w-5 mr-2" />
+                          <span className="font-bold">Error sending request:</span>
+                        </div>
+                        <ul className="list-disc pl-9 text-sm">
+                          {state.errors.getAllFieldErrors().map((error, index) => (
+                            <li key={`field-${index}`}>{error[0]}: {error[1].map(e => e.message).join(', ')}</li>
+                          ))}
+                          {state.errors.getFormErrors().map((error, index) => (
+                            <li key={`form-${index}`}>{error.message}</li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   )}
@@ -568,47 +651,14 @@ export default function MainPage() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="+1 (555) 123-4567"
                       value={formData.phone}
-                      onAccept={(value: string, maskRef: any) => {
-                        handlePhoneChange(value, maskRef);
+                      onAccept={(value: string) => {
+                        handlePhoneChange(value);
                       }}
                       required
                     />
                   </div>
-                  <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t.scheduling.form.date}
-                      </label>
-                      <input
-                        type="date"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t.scheduling.form.time}
-                      </label>
-                      <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" name="time" value={formData.time} onChange={handleInputChange}>
-                        <option value="morning">{t.scheduling.timeOptions.morning}</option>
-                        <option value="afternoon">{t.scheduling.timeOptions.afternoon}</option>
-                        <option value="evening">{t.scheduling.timeOptions.evening}</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.scheduling.form.propertyType}
-                    </label>
-                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" name="propertyType" value={formData.propertyType} onChange={handleInputChange}>
-                      <option value="apartment">{t.scheduling.propertyOptions.apartment}</option>
-                      <option value="house">{t.scheduling.propertyOptions.house}</option>
-                      <option value="flat">{t.scheduling.propertyOptions.flat}</option>
-                      <option value="other">{t.scheduling.propertyOptions.other}</option>
-                    </select>
-                  </div>
+                  {/* Campos opcionais (data, horário, tipo de imóvel) removidos da UI para deixar o formulário mais leve no mobile.
+                      Permanecem disponíveis para uso futuro via follow-up manual, se necessário. */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {t.scheduling.form.notes}
@@ -625,9 +675,9 @@ export default function MainPage() {
                   <button
                     type="submit"
                     className="w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition font-medium text-sm md:text-base disabled:bg-gray-400"
-                    disabled={!isFormValid || isSubmitting}
+                    disabled={!isFormValid || state.submitting}
                   >
-                    {isSubmitting ? 'Submitting...' : t.scheduling.form.button}
+                    {state.submitting ? 'Submitting...' : t.scheduling.form.button}
                   </button>
                 </form>
               </div>
@@ -643,7 +693,7 @@ export default function MainPage() {
           <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-sm md:text-base">
             Prefer to get in touch directly? Here's how you can reach us.
           </p>
-          
+
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               {/* Email */}
@@ -725,12 +775,20 @@ export default function MainPage() {
                 <li>+1 (720) 352-9810</li>
               </ul>
             </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-sm md:text-base">
+                <li><a href="/about" className="hover:text-blue-400">About</a></li>
+                <li><a href="/services" className="hover:text-blue-400">Services</a></li>
+                <li><a href="/pricing" className="hover:text-blue-400">Pricing</a></li>
+              </ul>
+            </div>
           </div>
           <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 mb-4 md:mb-0">
               <a href="#" className="hover:text-blue-400 text-sm md:text-base">{t.footer.terms}</a>
-              <a href="#" className="hover:text-blue-400 text-sm md:text-base">{t.footer.privacy}</a>
-              <a href="#" className="hover:text-blue-400 text-sm md:text-base">{t.footer.contact}</a>
+              <a href="/privacy" className="hover:text-blue-400 text-sm md:text-base">{t.footer.privacy}</a>
+              <a href="#contact" className="hover:text-blue-400 text-sm md:text-base">{t.footer.contact}</a>
             </div>
             <p className="text-gray-400 text-sm md:text-base text-center md:text-right">{t.footer.rights}</p>
           </div>

@@ -15,7 +15,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   images,
   autoPlayInterval = 5000,
   showArrows = false,
-  showDots = true
+  showDots = true,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
@@ -30,7 +30,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   }, [images.length, autoPlayInterval]);
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex: number) => 
+    setCurrentIndex((prevIndex: number) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
@@ -74,6 +74,28 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           </div>
         ))}
       </div>
+
+      {/* Arrow controls */}
+      {showArrows && validImages.length > 1 && (
+        <>
+          <button
+            type="button"
+            onClick={goToPrevious}
+            className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-black/60"
+            aria-label="Previous image"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={goToNext}
+            className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-black/60"
+            aria-label="Next image"
+          >
+            ›
+          </button>
+        </>
+      )}
 
       {/* Dots Indicator */}
       {showDots && validImages.length > 1 && (

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import MainPage from './components/MainPage';
 import ThankYou from './components/ThankYou';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -34,6 +34,7 @@ function App() {
       <Route path="/about" element={<About />} />
       <Route path="/services" element={<ServicesPage />} />
       <Route path="/pricing" element={<PricingPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -44,7 +44,6 @@ const ServicesPage: React.FC = () => {
               <li>Detailed scrubbing of high–touch areas</li>
               <li>Baseboards, grout and inside appliances</li>
               <li>Decluttering and organizing common areas</li>
-              <li>Ideal to unlock the 50% OFF turnover offer</li>
             </ul>
           </div>
 

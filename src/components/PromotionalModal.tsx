@@ -64,8 +64,8 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
             {/* Left Column: Offer Details */}
             <div>
               <div className="text-center bg-blue-50 rounded-lg p-6 mb-6">
-                <h1 className="text-4xl font-extrabold text-blue-600 mb-2">50% OFF Your First Turnover</h1>
-                <p className="text-md font-semibold text-gray-700">When you start with a Deep Clean Reset</p>
+                <h1 className="text-4xl font-extrabold text-blue-600 mb-2">15% Off Your First Turnover</h1>
+                <p className="text-md font-semibold text-gray-700">Applied automatically when you book online</p>
                 <div className="mt-4 bg-red-500 text-white rounded-full px-4 py-2 inline-flex items-center">
                   <Clock className="h-5 w-5 mr-2" />
                   <span>Offer ends in: {formatTime(timeLeft)}</span>
@@ -73,10 +73,9 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
               </div>
 
               <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-3 text-gray-800">How to Claim Your Deal:</h3>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">What You Get:</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-center"><CheckCircle className="h-5 w-5 text-green-500 mr-2" /> Step 1: Book a Deep Clean (Standard Rate) to reset standards</li>
-                  <li className="flex items-center"><CheckCircle className="h-5 w-5 text-green-500 mr-2" /> Step 2: Automatically get 50% OFF your next Turnover</li>
+                  <li className="flex items-center"><CheckCircle className="h-5 w-5 text-green-500 mr-2" /> 15% off applied automatically to your first booking</li>
                   <li className="flex items-center"><CheckCircle className="h-5 w-5 text-green-500 mr-2" /> Includes 100% Satisfaction Guarantee</li>
                   <li className="flex items-center"><CheckCircle className="h-5 w-5 text-green-500 mr-2" /> Valid for Airbnb & VRBO properties</li>
                 </ul>

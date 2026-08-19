@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Phone, MessageSquare } from 'lucide-react';
+import { Phone, MessageSquare, Check } from 'lucide-react';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
 import LeadForm from './LeadForm';
@@ -57,9 +57,18 @@ const AirbnbCleaningLanding: React.FC = () => {
                 Fast, reliable turnovers and Deep Clean Resets for Airbnb and short-term rentals across the DMV.
               </p>
               <ul className="space-y-2 text-sm md:text-base mb-6">
-                <li>✓ Guest–ready turnovers between stays</li>
-                <li>✓ Deep Clean Reset to bring units back to 5-star standard</li>
-                <li>✓ Photo proof and damage reporting after every visit</li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 flex-shrink-0" />
+                  Guest–ready turnovers between stays
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 flex-shrink-0" />
+                  Deep Clean Reset to bring units back to 5-star standard
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 flex-shrink-0" />
+                  Photo proof and damage reporting after every visit
+                </li>
               </ul>
               <button
                 onClick={scrollToForm}

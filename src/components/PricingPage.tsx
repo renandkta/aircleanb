@@ -48,9 +48,6 @@ const PricingPage: React.FC = () => {
               <li>Inside appliances and baseboards</li>
               <li>Ideal before launching ads or new listing</li>
             </ul>
-            <p className="text-xs text-gray-500">
-              Completing a Deep Clean Reset can unlock promotional offers on future turnovers.
-            </p>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col">

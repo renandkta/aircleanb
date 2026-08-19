@@ -33,12 +33,18 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
 
   if (!isOpen) return null;
 
-  const trackContactClick = () => {
+  const trackCallClick = () => {
     if (window.gtag) {
-      // TODO: substituir SUBSTITUIR_LABEL pelo label real assim que a ação de
-      // conversão "Contato direto (call/WhatsApp)" for criada no Google Ads.
       window.gtag('event', 'conversion', {
-        send_to: 'AW-17464291569/SUBSTITUIR_LABEL',
+        send_to: 'AW-17464291569/PBzFCMektOQcEPHhz4dB',
+      });
+    }
+  };
+
+  const trackWhatsAppClick = () => {
+    if (window.gtag) {
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-17464291569/nr1-CMSktOQcEPHhz4dB',
       });
     }
   };
@@ -138,7 +144,7 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
               <div className="flex flex-wrap gap-3 justify-center mb-4">
                 <a
                   href="tel:+17203529810"
-                  onClick={trackContactClick}
+                  onClick={trackCallClick}
                   className="flex items-center justify-center px-5 py-3 bg-[#008CBA] text-white rounded-full font-semibold hover:bg-blue-700 transition text-sm"
                 >
                   <Phone className="h-5 w-5 mr-2" />
@@ -148,7 +154,7 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
                   href="https://wa.me/17203529810"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={trackContactClick}
+                  onClick={trackWhatsAppClick}
                   className="flex items-center justify-center px-5 py-3 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 transition text-sm"
                 >
                   <MessageSquare className="h-5 w-5 mr-2" />

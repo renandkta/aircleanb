@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Phone, MessageSquare, Check } from 'lucide-react';
+import { Phone, MessageSquare, Check, X } from 'lucide-react';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
 import LeadForm from './LeadForm';
@@ -7,11 +7,21 @@ import { loadCarouselImages } from '../utils/carouselLoader';
 
 const AirbnbCleaningLanding: React.FC = () => {
   const [carouselImages, setCarouselImages] = useState<Array<{ src: string; alt: string; title?: string }>>([]);
+  const [showContactHint, setShowContactHint] = useState(false);
 
   useEffect(() => {
     loadCarouselImages().then(setCarouselImages).catch(() => {
       // Silencia erros de carregamento; a landing continua funcional mesmo sem carrossel.
     });
+  }, []);
+
+  useEffect(() => {
+    const showTimer = setTimeout(() => setShowContactHint(true), 1500);
+    const hideTimer = setTimeout(() => setShowContactHint(false), 7500);
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
   }, []);
 
   const scrollToForm = () => {
@@ -178,6 +188,25 @@ const AirbnbCleaningLanding: React.FC = () => {
         {/* Spacer to keep the sticky mobile contact bar from covering content */}
         <div className="h-16 md:h-0" aria-hidden="true" />
       </main>
+
+      {/* Contact hint, appears briefly above the sticky bar to draw attention to it */}
+      {showContactHint && (
+        <div className="fixed bottom-16 left-4 right-4 z-50 md:hidden transition-opacity duration-300">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 px-4 py-3 flex items-center justify-between gap-3">
+            <p className="text-sm text-gray-800">
+              Prefer to talk instead? Call or WhatsApp us directly.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowContactHint(false)}
+              aria-label="Dismiss"
+              className="text-gray-400 hover:text-gray-600 flex-shrink-0"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Sticky mobile contact bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2 gap-px bg-gray-200 md:hidden">

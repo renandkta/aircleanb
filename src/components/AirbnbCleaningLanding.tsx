@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Phone, MessageSquare } from 'lucide-react';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
 import LeadForm from './LeadForm';
@@ -17,6 +18,16 @@ const AirbnbCleaningLanding: React.FC = () => {
     const el = document.getElementById('airbnb-cleaning-form');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const trackContactClick = () => {
+    if (window.gtag) {
+      // TODO: substituir SUBSTITUIR_LABEL pelo label real assim que a ação de
+      // conversão "Contato direto (call/WhatsApp)" for criada no Google Ads.
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-17464291569/SUBSTITUIR_LABEL',
+      });
     }
   };
 
@@ -56,6 +67,26 @@ const AirbnbCleaningLanding: React.FC = () => {
               >
                 Get my cleaning quote
               </button>
+              <div className="flex flex-wrap gap-3 mt-4">
+                <a
+                  href="tel:+17203529810"
+                  onClick={trackContactClick}
+                  className="flex items-center justify-center px-5 py-3 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#008CBA] transition text-sm md:text-base"
+                >
+                  <Phone className="h-5 w-5 mr-2" />
+                  Call Now
+                </a>
+                <a
+                  href="https://wa.me/17203529810"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={trackContactClick}
+                  className="flex items-center justify-center px-5 py-3 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 transition text-sm md:text-base"
+                >
+                  <MessageSquare className="h-5 w-5 mr-2" />
+                  WhatsApp
+                </a>
+              </div>
             </div>
             <div className="hidden md:block">
               <ImageCarousel images={carouselImages} />
@@ -134,7 +165,32 @@ const AirbnbCleaningLanding: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* Spacer to keep the sticky mobile contact bar from covering content */}
+        <div className="h-16 md:h-0" aria-hidden="true" />
       </main>
+
+      {/* Sticky mobile contact bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2 gap-px bg-gray-200 md:hidden">
+        <a
+          href="tel:+17203529810"
+          onClick={trackContactClick}
+          className="flex items-center justify-center py-4 bg-[#008CBA] text-white font-semibold"
+        >
+          <Phone className="h-5 w-5 mr-2" />
+          Call Now
+        </a>
+        <a
+          href="https://wa.me/17203529810"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={trackContactClick}
+          className="flex items-center justify-center py-4 bg-green-500 text-white font-semibold"
+        >
+          <MessageSquare className="h-5 w-5 mr-2" />
+          WhatsApp
+        </a>
+      </div>
     </div>
   );
 };

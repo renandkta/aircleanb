@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Shield, Star, Clock, CheckCircle, Users, Lock } from 'lucide-react';
+import { X, Shield, Star, Clock, CheckCircle, Users, Lock, Phone, MessageSquare } from 'lucide-react';
 import LeadForm from './LeadForm';
 
 interface PromotionalModalProps {
@@ -32,6 +32,16 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
   }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const trackContactClick = () => {
+    if (window.gtag) {
+      // TODO: substituir SUBSTITUIR_LABEL pelo label real assim que a ação de
+      // conversão "Contato direto (call/WhatsApp)" for criada no Google Ads.
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-17464291569/SUBSTITUIR_LABEL',
+      });
+    }
+  };
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -125,6 +135,34 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
             {/* Right Column: Form */}
             <div className="bg-gray-50 p-6 rounded-lg shadow-inner">
               <h2 className="text-2xl font-bold text-center mb-4">Claim Your Discount</h2>
+
+              <div className="flex flex-wrap gap-3 justify-center mb-4">
+                <a
+                  href="tel:+17203529810"
+                  onClick={trackContactClick}
+                  className="flex items-center justify-center px-5 py-3 bg-[#008CBA] text-white rounded-full font-semibold hover:bg-blue-700 transition text-sm"
+                >
+                  <Phone className="h-5 w-5 mr-2" />
+                  Call Now
+                </a>
+                <a
+                  href="https://wa.me/17203529810"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={trackContactClick}
+                  className="flex items-center justify-center px-5 py-3 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 transition text-sm"
+                >
+                  <MessageSquare className="h-5 w-5 mr-2" />
+                  WhatsApp
+                </a>
+              </div>
+
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex-1 h-px bg-gray-300" />
+                <span className="text-xs text-gray-500 uppercase">or fill the form</span>
+                <div className="flex-1 h-px bg-gray-300" />
+              </div>
+
               <LeadForm />
               <div className="text-center text-xs text-gray-500 mt-4 flex items-center justify-center">
                 <Lock className="h-4 w-4 mr-1" />

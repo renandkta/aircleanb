@@ -148,6 +148,16 @@ export default function MainPage() {
     }));
   };
 
+  const trackContactClick = () => {
+    if (window.gtag) {
+      // TODO: substituir SUBSTITUIR_LABEL pelo label real assim que a ação de
+      // conversão "Contato direto (call/WhatsApp)" for criada no Google Ads.
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-17464291569/SUBSTITUIR_LABEL',
+      });
+    }
+  };
+
   // Função para enviar formulário para Formspree
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -709,7 +719,7 @@ export default function MainPage() {
               <div className="text-left">
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">Via Phone</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <a href="tel:+17203529810" className="flex items-center justify-center p-3 bg-[#008CBA] text-white rounded-lg hover:bg-blue-700 transition">
+                  <a href="tel:+17203529810" onClick={trackContactClick} className="flex items-center justify-center p-3 bg-[#008CBA] text-white rounded-lg hover:bg-blue-700 transition">
                     <Phone className="h-5 w-5 mr-2" />
                     <span>{t.directContact.call}</span>
                   </a>
@@ -718,7 +728,7 @@ export default function MainPage() {
                     <span>{t.directContact.sms}</span>
                   </a>
                   {/* Using a green color for WhatsApp to differentiate. Lucide doesn't have a WhatsApp icon. */}
-                  <a href="https://wa.me/17203529810" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+                  <a href="https://wa.me/17203529810" target="_blank" rel="noopener noreferrer" onClick={trackContactClick} className="flex items-center justify-center p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
                     <MessageSquare className="h-5 w-5 mr-2" />
                     <span>{t.directContact.whatsapp}</span>
                   </a>

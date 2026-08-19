@@ -32,12 +32,18 @@ const AirbnbCleaningLanding: React.FC = () => {
     }
   };
 
-  const trackContactClick = () => {
+  const trackCallClick = () => {
     if (window.gtag) {
-      // TODO: substituir SUBSTITUIR_LABEL pelo label real assim que a ação de
-      // conversão "Contato direto (call/WhatsApp)" for criada no Google Ads.
       window.gtag('event', 'conversion', {
-        send_to: 'AW-17464291569/SUBSTITUIR_LABEL',
+        send_to: 'AW-17464291569/PBzFCMektOQcEPHhz4dB',
+      });
+    }
+  };
+
+  const trackWhatsAppClick = () => {
+    if (window.gtag) {
+      window.gtag('event', 'conversion', {
+        send_to: 'AW-17464291569/nr1-CMSktOQcEPHhz4dB',
       });
     }
   };
@@ -92,7 +98,7 @@ const AirbnbCleaningLanding: React.FC = () => {
               <div className="flex flex-wrap gap-3 mt-4">
                 <a
                   href="tel:+17203529810"
-                  onClick={trackContactClick}
+                  onClick={trackCallClick}
                   className="flex items-center justify-center px-5 py-3 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#008CBA] transition text-sm md:text-base"
                 >
                   <Phone className="h-5 w-5 mr-2" />
@@ -102,7 +108,7 @@ const AirbnbCleaningLanding: React.FC = () => {
                   href="https://wa.me/17203529810"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={trackContactClick}
+                  onClick={trackWhatsAppClick}
                   className="flex items-center justify-center px-5 py-3 bg-green-500 text-white rounded-full font-semibold hover:bg-green-600 transition text-sm md:text-base"
                 >
                   <MessageSquare className="h-5 w-5 mr-2" />
@@ -228,7 +234,7 @@ const AirbnbCleaningLanding: React.FC = () => {
       <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2 gap-px bg-gray-200 md:hidden">
         <a
           href="tel:+17203529810"
-          onClick={trackContactClick}
+          onClick={trackCallClick}
           className="flex items-center justify-center py-4 bg-[#008CBA] text-white font-semibold"
         >
           <Phone className="h-5 w-5 mr-2" />
@@ -238,7 +244,7 @@ const AirbnbCleaningLanding: React.FC = () => {
           href="https://wa.me/17203529810"
           target="_blank"
           rel="noopener noreferrer"
-          onClick={trackContactClick}
+          onClick={trackWhatsAppClick}
           className="flex items-center justify-center py-4 bg-green-500 text-white font-semibold"
         >
           <MessageSquare className="h-5 w-5 mr-2" />

@@ -86,7 +86,7 @@ const LeadForm: React.FC = () => {
       // Pass the formData and the extra subject field to Formspree
       handleSubmit({
         ...formData,
-        subject: 'New 50% Off Lead!'
+        subject: 'New Lead - First Turnover Discount'
       });
     }
   };

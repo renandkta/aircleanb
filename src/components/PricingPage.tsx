@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 const PricingPage: React.FC = () => {
@@ -6,7 +7,9 @@ const PricingPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-[#008CBA] text-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
           <span className="text-sm md:text-base font-semibold">
             Transparent pricing for Airbnb hosts
           </span>

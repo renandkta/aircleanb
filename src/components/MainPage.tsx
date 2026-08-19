@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IMaskInput } from 'react-imask';
 import { useForm } from '@formspree/react';
 import { CheckCircle, Shield, Star, ArrowRight, Calendar, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp, Mail, Phone, MessageSquare } from 'lucide-react';
@@ -196,7 +196,9 @@ export default function MainPage() {
       <header className="bg-[#008CBA]">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Logo size={32} />
+            <Link to="/">
+              <Logo size={32} />
+            </Link>
 
             {/* Mobile menu button */}
             <button
@@ -759,7 +761,9 @@ export default function MainPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
-              <Logo />
+              <Link to="/">
+                <Logo />
+              </Link>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-4">{t.nav.services}</h4>

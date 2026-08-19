@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Phone, MessageSquare, Check, X } from 'lucide-react';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
@@ -46,7 +47,9 @@ const AirbnbCleaningLanding: React.FC = () => {
       {/* Header */}
       <header className="bg-[#008CBA] text-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
           <nav className="hidden md:flex space-x-6 text-sm md:text-base">
             <a href="#how-it-works" className="hover:text-blue-200">How it works</a>
             <a href="#benefits" className="hover:text-blue-200">Benefits</a>
@@ -185,9 +188,22 @@ const AirbnbCleaningLanding: React.FC = () => {
           </div>
         </section>
 
-        {/* Spacer to keep the sticky mobile contact bar from covering content */}
-        <div className="h-16 md:h-0" aria-hidden="true" />
       </main>
+
+      {/* Minimal footer: legal links and a way back to the main site, without diluting the campaign focus */}
+      <footer className="bg-gray-900 text-white pt-6 pb-20 md:pb-6">
+        <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+          <Link to="/" className="hover:text-blue-300">
+            Back to homepage
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link to="/privacy" className="hover:text-blue-300">
+              Privacy Policy
+            </Link>
+            <span className="text-gray-500">© 2024 AirCleanB. All rights reserved.</span>
+          </div>
+        </div>
+      </footer>
 
       {/* Contact hint, appears briefly above the sticky bar to draw attention to it */}
       {showContactHint && (

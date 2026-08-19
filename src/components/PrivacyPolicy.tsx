@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Globe } from 'lucide-react';
 import { translations } from '../translations';
 import Logo from './Logo';
@@ -11,7 +12,9 @@ const PrivacyPolicy: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-[#008CBA] text-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
           <div className="flex items-center space-x-2">
             <Globe className="h-5 w-5 text-white" />
             <select

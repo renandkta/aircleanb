@@ -22,3 +22,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Business documents (client data) — never version
+/MARKETING/
+/Emails Disparos Prospect/
+/Claude outputs/
+/clientes/
+/_to_delete/
+/monitoramento/
+/AirCleanB_*.pdf
+/aircleanb_*.md
+/leads_*.md
+/reply_*.md
+/teri_coates_*.md
+/GUIA_RELANCAMENTO_DOMINIO.md
+/campanha-google-ads-search.md
+/assinatura-aircleanb.html
+/assinatura-aircleanb.png
+/aircleanb-logo.png
+
+# Local tool state
+/.claude/
+/.cursor/

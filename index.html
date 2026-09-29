@@ -6,14 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AirCleanB - Professional Airbnb Turnover Cleaning in DC, MD &amp; VA</title>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17464291569">
-    </script>
+    <!-- Google tag (gtag.js) — production domain only, so deploy previews and
+         localhost never send conversions. Off production window.gtag stays
+         undefined; every call site checks for it before calling. -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'AW-17464291569');
+      (function () {
+        var h = location.hostname;
+        if (h !== 'aircleanb.com' && !h.endsWith('.aircleanb.com')) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17464291569';
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag('js', new Date());
+        gtag('config', 'AW-17464291569');
+      })();
     </script>
   </head>
   <body>

@@ -25,22 +25,6 @@ const LeadForm: React.FC = () => {
   // Effect to handle redirection on successful submission
   useEffect(() => {
     if (state.succeeded) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/57506d10-07bc-4603-9bc4-e9627cd018b7', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: `log_${Date.now()}_lead_form_conversion`,
-          timestamp: Date.now(),
-          location: 'src/components/LeadForm.tsx:27',
-          message: 'Lead modal form succeeded, firing conversion and navigating to thank-you.',
-          data: { source: 'lead_form' },
-          runId: 'sprint1',
-          hypothesisId: 'H2'
-        })
-      }).catch(() => {});
-      // #endregion agent log
-
       if (window.gtag) {
         window.gtag('event', 'conversion', {
           send_to: 'AW-17464291569/dcJFCJeJ9OgcEPHhz4dB'

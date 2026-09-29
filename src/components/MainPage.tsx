@@ -58,22 +58,6 @@ export default function MainPage() {
 
   useEffect(() => {
     if (state.succeeded) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/57506d10-07bc-4603-9bc4-e9627cd018b7', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: `log_${Date.now()}_main_form_conversion`,
-          timestamp: Date.now(),
-          location: 'src/components/MainPage.tsx:60',
-          message: 'Main scheduling form succeeded, firing conversion and navigating to thank-you.',
-          data: { source: 'main_form' },
-          runId: 'sprint1',
-          hypothesisId: 'H1'
-        })
-      }).catch(() => {});
-      // #endregion agent log
-
       if (window.gtag) {
         window.gtag('event', 'conversion', {
           send_to: 'AW-17464291569/dcJFCJeJ9OgcEPHhz4dB'

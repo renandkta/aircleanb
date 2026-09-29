@@ -1,36 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { translations } from '../translations';
 import { Globe } from 'lucide-react';
-
-// Define the gtag function type
-declare global {
-  interface Window {
-    gtag: (
-      command: 'event',
-      action: string,
-      params: {
-        send_to: string;
-      }
-    ) => void;
-  }
-}
 
 export default function ThankYou() {
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
 
-  useEffect(() => {
-    if (window.gtag) {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-17464291569/lBYMCJ-s3b8bEPHhz4dB',
-      });
-    }
-  }, []);
+  // The lead conversion fires once in the form success callback (LeadForm /
+  // MainPage). It is intentionally NOT fired here: /thank-you would also count
+  // refreshes, back-button hits and direct visits, inflating the numbers.
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
       <div className="max-w-2xl mx-auto text-center p-8">
-        {/* Onde adicionar o rastreamento */}
         <h1 className="text-4xl font-bold text-[#008CBA] mb-4">{t.thankYou.title}</h1>
         <p className="text-lg text-gray-600 mb-8">{t.thankYou.subtitle}</p>
         <a

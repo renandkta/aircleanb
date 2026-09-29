@@ -98,6 +98,7 @@ const AirbnbCleaningLanding: React.FC = () => {
               <div className="flex flex-wrap gap-3 mt-4">
                 <a
                   href="tel:+17203529810"
+                  data-phone-link
                   onClick={trackCallClick}
                   className="flex items-center justify-center px-5 py-3 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#008CBA] transition text-sm md:text-base"
                 >
@@ -234,6 +235,7 @@ const AirbnbCleaningLanding: React.FC = () => {
       <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-2 gap-px bg-gray-200 md:hidden">
         <a
           href="tel:+17203529810"
+          data-phone-link
           onClick={trackCallClick}
           className="flex items-center justify-center py-4 bg-[#008CBA] text-white font-semibold"
         >

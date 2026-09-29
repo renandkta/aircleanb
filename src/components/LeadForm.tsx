@@ -43,7 +43,7 @@ const LeadForm: React.FC = () => {
 
       if (window.gtag) {
         window.gtag('event', 'conversion', {
-          send_to: 'AW-17464291569/lBYMCJ-s3b8bEPHhz4dB'
+          send_to: 'AW-17464291569/dcJFCJeJ9OgcEPHhz4dB'
         });
       }
 

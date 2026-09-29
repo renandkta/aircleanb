@@ -85,7 +85,12 @@ const PricingPage: React.FC = () => {
             </li>
             <li>
               Phone / SMS / WhatsApp:{' '}
-              <a href="tel:+17203529810" className="text-[#008CBA] underline">
+              <a
+                href="tel:+17203529810"
+                data-phone-link
+                data-phone-text
+                className="text-[#008CBA] underline"
+              >
                 +1 (720) 352-9810
               </a>
             </li>

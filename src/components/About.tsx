@@ -73,7 +73,12 @@ const About: React.FC = () => {
               aircleanb.dc@gmail.com
             </a>{' '}
             or call/text{' '}
-            <a href="tel:+17203529810" className="text-[#008CBA] underline">
+            <a
+              href="tel:+17203529810"
+              data-phone-link
+              data-phone-text
+              className="text-[#008CBA] underline"
+            >
               +1 (720) 352-9810
             </a>{' '}
             to discuss your property and cleaning needs.

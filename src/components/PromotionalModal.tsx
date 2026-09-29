@@ -144,6 +144,7 @@ const PromotionalModal: React.FC<PromotionalModalProps> = ({ isOpen, onClose }) 
               <div className="flex flex-wrap gap-3 justify-center mb-4">
                 <a
                   href="tel:+17203529810"
+                  data-phone-link
                   onClick={trackCallClick}
                   className="flex items-center justify-center px-5 py-3 bg-[#008CBA] text-white rounded-full font-semibold hover:bg-blue-700 transition text-sm"
                 >

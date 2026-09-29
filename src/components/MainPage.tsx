@@ -76,7 +76,7 @@ export default function MainPage() {
 
       if (window.gtag) {
         window.gtag('event', 'conversion', {
-          send_to: 'AW-17464291569/lBYMCJ-s3b8bEPHhz4dB'
+          send_to: 'AW-17464291569/dcJFCJeJ9OgcEPHhz4dB'
         });
       }
 
@@ -728,7 +728,7 @@ export default function MainPage() {
               <div className="text-left">
                 <h3 className="text-xl font-semibold mb-4 text-gray-700">Via Phone</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <a href="tel:+17203529810" onClick={trackCallClick} className="flex items-center justify-center p-3 bg-[#008CBA] text-white rounded-lg hover:bg-blue-700 transition">
+                  <a href="tel:+17203529810" data-phone-link onClick={trackCallClick} className="flex items-center justify-center p-3 bg-[#008CBA] text-white rounded-lg hover:bg-blue-700 transition">
                     <Phone className="h-5 w-5 mr-2" />
                     <span>{t.directContact.call}</span>
                   </a>
@@ -793,7 +793,7 @@ export default function MainPage() {
               <h4 className="text-lg font-semibold mb-4">{t.nav.contact}</h4>
               <ul className="space-y-2 text-sm md:text-base">
                 <li>aircleanb.dc@gmail.com</li>
-                <li>+1 (720) 352-9810</li>
+                <li data-phone-text>+1 (720) 352-9810</li>
               </ul>
             </div>
             <div>

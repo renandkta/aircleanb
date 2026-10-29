@@ -207,7 +207,7 @@ export default function MainPage() {
         {t.hero.offerTitle} <span className="font-normal">· {t.hero.offerNote}</span>
       </div>
 
-      <header className="bg-white border-b border-brand-line">
+      <header className="bg-brand-soft border-b border-brand-line">
         <nav className="container mx-auto px-4 py-3" aria-label="Main">
           <div className="flex items-center justify-between gap-4">
             <Link to="/" aria-label="AirCleanB home">

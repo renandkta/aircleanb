@@ -6,7 +6,7 @@ import { EMAIL, PHONE_DISPLAY, mailtoUrl } from '../utils/contact';
 const TermsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-brand-soft">
-      <header className="bg-white border-b border-brand-line">
+      <header className="bg-brand-soft border-b border-brand-line">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Link to="/" aria-label="AirCleanB home">
             <Logo size={28} tone="dark" />

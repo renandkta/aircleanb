@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Globe, MessageSquare } from 'lucide-react';
 import { translations } from '../translations';
-import { prefersIMessage, smsUrl, trackWhatsAppClick, whatsappUrl } from '../utils/contact';
+import { prefersIMessage, smsUrl, trackIMessageClick, trackWhatsAppClick, whatsappUrl } from '../utils/contact';
 
 export default function ThankYou() {
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
@@ -22,7 +22,7 @@ export default function ThankYou() {
           href={useIMessage ? smsUrl : whatsappUrl}
           target={useIMessage ? undefined : '_blank'}
           rel={useIMessage ? undefined : 'noopener noreferrer'}
-          onClick={useIMessage ? undefined : trackWhatsAppClick}
+          onClick={useIMessage ? trackIMessageClick : trackWhatsAppClick}
           className="inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand text-white font-bold hover:bg-brand-dark transition"
         >
           <MessageSquare className="h-5 w-5" aria-hidden="true" />

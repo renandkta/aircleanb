@@ -26,6 +26,47 @@
     <!-- First carousel photo, so the hero image starts downloading before the JS runs -->
     <link rel="preload" as="image" href="/images/carousel/bedroom-bright-800.webp" imagesrcset="/images/carousel/bedroom-bright-800.webp 800w, /images/carousel/bedroom-bright-1600.webp 1600w" imagesizes="(max-width: 768px) 100vw, 50vw" />
 
+    <!-- Business details for Google (no street address: service-area business) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://www.aircleanb.com/#business",
+        "name": "AirCleanB",
+        "description": "Airbnb turnover cleaning and office cleaning in DC, Maryland and Virginia. Photos of every room after each clean.",
+        "url": "https://www.aircleanb.com/",
+        "logo": "https://www.aircleanb.com/apple-touch-icon.png",
+        "image": "https://www.aircleanb.com/og-image.jpg",
+        "telephone": "+1-720-352-9810",
+        "email": "debora@aircleanb.com",
+        "priceRange": "$$",
+        "knowsLanguage": ["en", "pt", "es"],
+        "openingHoursSpecification": [{
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "08:00",
+          "closes": "20:00"
+        }],
+        "areaServed": [
+          { "@type": "City", "name": "Washington, DC" },
+          { "@type": "City", "name": "Arlington, VA" },
+          { "@type": "City", "name": "Alexandria, VA" },
+          { "@type": "City", "name": "Fairfax, VA" },
+          { "@type": "City", "name": "Tysons, VA" },
+          { "@type": "City", "name": "Reston, VA" },
+          { "@type": "City", "name": "Silver Spring, MD" },
+          { "@type": "City", "name": "Bethesda, MD" }
+        ],
+        "makesOffer": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Airbnb Turnover Cleaning" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Deep Clean Reset" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Office Cleaning" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Post-Renovation Cleaning" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Upholstery & Mattress Cleaning" } }
+        ]
+      }
+    </script>
+
     <!-- Google tag (gtag.js) — production domain only, so deploy previews and
          localhost never send conversions. Off production window.gtag stays
          undefined; every call site checks for it before calling. -->

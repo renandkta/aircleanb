@@ -16,6 +16,8 @@ import {
   smsUrl,
   telUrl,
   trackCallClick,
+  trackFormLead,
+  trackIMessageClick,
   trackWhatsAppClick,
   whatsappUrl,
 } from '../utils/contact';
@@ -79,11 +81,7 @@ export default function MainPage() {
 
   useEffect(() => {
     if (state.succeeded) {
-      if (window.gtag) {
-        window.gtag('event', 'conversion', {
-          send_to: 'AW-17464291569/dcJFCJeJ9OgcEPHhz4dB'
-        });
-      }
+      trackFormLead();
       navigate('/thank-you');
     }
   }, [state.succeeded, navigate]);
@@ -162,7 +160,7 @@ export default function MainPage() {
   );
 
   const imessageButton = (className: string) => (
-    <a key="imessage" href={smsUrl} className={className}>
+    <a key="imessage" href={smsUrl} onClick={trackIMessageClick} className={className}>
       <MessageSquare className="h-5 w-5" aria-hidden="true" />
       {t.directContact.sms}
     </a>

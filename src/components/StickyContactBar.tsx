@@ -5,6 +5,7 @@ import {
   smsUrl,
   telUrl,
   trackCallClick,
+  trackIMessageClick,
   trackWhatsAppClick,
   whatsappUrl,
 } from '../utils/contact';
@@ -25,7 +26,7 @@ export default function StickyContactBar({ label }: StickyContactBarProps) {
         href={useIMessage ? smsUrl : whatsappUrl}
         target={useIMessage ? undefined : '_blank'}
         rel={useIMessage ? undefined : 'noopener noreferrer'}
-        onClick={useIMessage ? undefined : trackWhatsAppClick}
+        onClick={useIMessage ? trackIMessageClick : trackWhatsAppClick}
         className="flex-1 flex items-center justify-center gap-2 min-h-[52px] rounded-full bg-brand text-white font-bold"
       >
         <MessageSquare className="h-5 w-5" aria-hidden="true" />

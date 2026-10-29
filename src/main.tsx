@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { FormspreeProvider } from '@formspree/react';
 import App from './App.tsx';
 import './index.css';
+import { initAnalytics } from './utils/analytics';
 
 // Google Ads call tracking ("Phone Call — From Website (60s+)").
 // The base gtag config lives in index.html; this follow-up config asks Google
@@ -33,6 +34,8 @@ if (isProduction && typeof window.gtag === 'function') {
     },
   });
 }
+
+initAnalytics();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

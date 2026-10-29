@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { IMaskInput } from 'react-imask';
 import { useNavigate } from 'react-router-dom';
 import { useForm, ValidationError } from '@formspree/react';
+import { trackFormLead } from '../utils/contact';
 
 const LeadForm: React.FC = () => {
   const navigate = useNavigate();
@@ -25,11 +26,7 @@ const LeadForm: React.FC = () => {
   // Effect to handle redirection on successful submission
   useEffect(() => {
     if (state.succeeded) {
-      if (window.gtag) {
-        window.gtag('event', 'conversion', {
-          send_to: 'AW-17464291569/dcJFCJeJ9OgcEPHhz4dB'
-        });
-      }
+      trackFormLead();
 
       navigate('/thank-you');
     }

@@ -266,8 +266,8 @@ export default function MainPage() {
             Desktop: text on the left, photos on the right across both rows. */}
         <div className="grid md:grid-cols-2 gap-5 md:gap-x-12 md:gap-y-4">
           <div className="flex flex-col gap-4 md:col-start-1 md:row-start-1 md:self-end">
-            <p className="text-sm font-bold uppercase tracking-wide text-brand-dark">{t.hero.eyebrow}</p>
-            <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.05] text-brand-ink">
+            <p className="text-base font-semibold text-brand-dark">{t.hero.eyebrow}</p>
+            <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight text-brand-ink">
               {t.hero.title}
             </h1>
           </div>

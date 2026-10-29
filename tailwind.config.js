@@ -16,8 +16,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Public Sans"', 'system-ui', 'sans-serif'],
-        display: ['Archivo', '"Public Sans"', 'system-ui', 'sans-serif'],
+        sans: ['Figtree', 'system-ui', 'sans-serif'],
+        display: ['Figtree', 'system-ui', 'sans-serif'],
       },
     },
   },

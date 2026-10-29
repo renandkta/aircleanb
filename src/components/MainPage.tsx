@@ -262,31 +262,38 @@ export default function MainPage() {
 
       {/* Hero */}
       <section className="container mx-auto px-4 pt-6 pb-10 md:py-16">
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div className="flex flex-col gap-4">
+        {/* Mobile: title, photos, then the rest of the text and buttons.
+            Desktop: text on the left, photos on the right across both rows. */}
+        <div className="grid md:grid-cols-2 gap-5 md:gap-x-12 md:gap-y-4">
+          <div className="flex flex-col gap-4 md:col-start-1 md:row-start-1 md:self-end">
             <p className="text-sm font-bold uppercase tracking-wide text-brand-dark">{t.hero.eyebrow}</p>
             <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.05] text-brand-ink">
               {t.hero.title}
             </h1>
+          </div>
+          <div className="md:col-start-2 md:row-start-1 md:row-span-2 md:self-center">
+            <ImageCarousel images={carouselImages} sizes="(max-width: 768px) 100vw, 50vw" />
+          </div>
+          <div className="flex flex-col gap-4 md:col-start-1 md:row-start-2 md:self-start">
             <p className="text-lg md:text-xl text-brand-muted">{t.hero.subtitle}</p>
             <p className="text-lg text-brand-ink">
               {t.hero.priceFrom} <strong>$110</strong>
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              {messageButtons}
-            </div>
+            {/* Call comes first on mobile, as the owner asked; desktop keeps messages first. */}
             <a
               href={telUrl}
               data-phone-link
               onClick={trackCallClick}
-              className="inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-white text-brand-ink font-bold hover:bg-brand-line transition"
+              className="order-1 md:order-2 inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-white text-brand-ink font-bold hover:bg-brand-line transition"
             >
               <Phone className="h-5 w-5" aria-hidden="true" />
               {t.hero.call} <span data-phone-text>{PHONE_DISPLAY}</span>
             </a>
-            <p className="text-sm text-brand-muted">{t.hero.replyTime}</p>
+            <div className="order-2 md:order-1 flex flex-row gap-3">
+              {messageButtons}
+            </div>
+            <p className="order-3 text-sm text-brand-muted">{t.hero.replyTime}</p>
           </div>
-          <ImageCarousel images={carouselImages} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
       </section>
 

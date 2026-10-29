@@ -6,6 +6,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import About from './components/About';
 import ServicesPage from './components/ServicesPage';
 import PricingPage from './components/PricingPage';
+import TermsPage from './components/TermsPage';
 import AirbnbCleaningLanding from './components/AirbnbCleaningLanding';
 
 declare global {
@@ -34,6 +35,7 @@ function App() {
       <Route path="/about" element={<About />} />
       <Route path="/services" element={<ServicesPage />} />
       <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -79,13 +79,13 @@ const LeadForm: React.FC = () => {
     <form onSubmit={handleFormSubmit} className="space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name <span className="text-red-500">*</span></label>
-        <input type="text" name="name" id="name" value={formData.name} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`} />
+        <input type="text" name="name" id="name" value={formData.name} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`} />
         {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
         <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-500 text-xs mt-1" />
       </div>
       <div>
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className="text-red-500">*</span></label>
-        <input type="email" name="email" id="email" value={formData.email} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`} />
+        <input type="email" name="email" id="email" value={formData.email} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`} />
         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-500 text-xs mt-1" />
       </div>
@@ -99,13 +99,13 @@ const LeadForm: React.FC = () => {
           id="phone"
           value={formData.phone}
           onAccept={handlePhoneChange}
-          className={`mt-1 block w-full px-3 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+          className={`mt-1 block w-full px-3 py-2 border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`}
         />
         {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
       </div>
       <div>
         <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">Zip Code <span className="text-red-500">*</span></label>
-        <input type="text" name="zipCode" id="zipCode" value={formData.zipCode} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.zipCode ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`} />
+        <input type="text" name="zipCode" id="zipCode" value={formData.zipCode} onChange={handleInputChange} className={`mt-1 block w-full px-3 py-2 border ${errors.zipCode ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500`} />
         {errors.zipCode && <p className="text-red-500 text-xs mt-1">{errors.zipCode}</p>}
       </div>
       <div>
@@ -127,14 +127,14 @@ const LeadForm: React.FC = () => {
       </div>
       <div>
         <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message (Optional)</label>
-        <textarea name="message" id="message" value={formData.message} onChange={handleInputChange} rows={3} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+        <textarea name="message" id="message" value={formData.message} onChange={handleInputChange} rows={3} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
       </div>
       <div className="flex items-start">
         <div className="flex items-center h-5">
           <input id="consent" name="consent" type="checkbox" checked={formData.consent} onChange={handleInputChange} className={`focus:ring-blue-500 h-4 w-4 text-blue-600 ${errors.consent ? 'border-red-500' : 'border-gray-300'} rounded`} />
         </div>
         <div className="ml-3 text-sm">
-          <label htmlFor="consent" className="font-medium text-gray-700">I accept the terms and conditions <span className="text-red-500">*</span></label>
+          <label htmlFor="consent" className="font-medium text-gray-700">I accept the <a href="/terms" className="underline">terms</a> and <a href="/privacy" className="underline">privacy policy</a> <span className="text-red-500">*</span></label>
           {errors.consent && <p className="text-red-500 text-xs mt-1">{errors.consent}</p>}
         </div>
       </div>
@@ -151,7 +151,7 @@ const LeadForm: React.FC = () => {
           {(state.errors.getFormErrors().length === 0 && state.errors.getAllFieldErrors().length === 0) && <p>Please try again.</p>}
         </div>
       )}
-      <button type="submit" disabled={state.submitting} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400">
+      <button type="submit" disabled={state.submitting} className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400">
         {state.submitting ? 'Submitting...' : 'Get Turnover Pricing & Availability'}
       </button>
     </form>

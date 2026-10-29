@@ -2,59 +2,80 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IMaskInput } from 'react-imask';
 import { useForm } from '@formspree/react';
-import { CheckCircle, Shield, Star, ArrowRight, Calendar, Clock, Users, Globe, MapPin, AlertTriangle, WashingMachine, FileText, ThumbsUp, Mail, Phone, MessageSquare } from 'lucide-react';
-import { translations } from '../translations';
+import { Check, CheckCircle, Users, Clock, Camera, AlertTriangle, Globe, MapPin, WashingMachine, ThumbsUp, Mail, Phone, MessageSquare, Send, ArrowRight } from 'lucide-react';
+import { translations, SERVICE_NAMES } from '../translations';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
-import { loadCarouselImages } from '../utils/carouselLoader';
-import PromotionalModal from './PromotionalModal';
+import StickyContactBar from './StickyContactBar';
+import { carouselImages } from '../utils/carouselLoader';
+import {
+  EMAIL,
+  PHONE_DISPLAY,
+  mailtoUrl,
+  prefersIMessage,
+  smsUrl,
+  telUrl,
+  trackCallClick,
+  trackWhatsAppClick,
+  whatsappUrl,
+} from '../utils/contact';
+
+type FieldErrors = Partial<Record<'name' | 'email' | 'phone', string>>;
+
+const validateEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+
+// The mask is "+1 (000) 000-0000", so a complete number has 11 digits with the
+// leading country code 1.
+const validatePhone = (phone: string) => {
+  const digits = phone.replace(/\D/g, '');
+  const local = digits.length === 11 && digits.startsWith('1') ? digits.substring(1) : digits;
+  return local.length === 10;
+};
+
+const testimonials = [
+  {
+    quote: "The Deep Clean Reset was worth every penny. My place looked brand new and my guest ratings went up immediately.",
+    name: "Mark T.",
+    place: "Arlington, VA",
+  },
+  {
+    quote: "Finally, a reliable team in DC! They handle the turnover seamlessly, and the photo reports give me total peace of mind.",
+    name: "Emily R.",
+    place: "Capitol Hill, Washington DC",
+  },
+  {
+    quote: "I manage 3 units in Baltimore and AirCleanB is the only partner I trust. Consistent quality every single time.",
+    name: "David K.",
+    place: "Fells Point, Baltimore",
+  },
+  {
+    quote: "Super professional service. They arrived on time in Silver Spring and the cleaning was spotless. Highly recommend!",
+    name: "Sarah L.",
+    place: "Silver Spring, MD",
+  },
+];
 
 export default function MainPage() {
   const navigate = useNavigate();
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [carouselImages, setCarouselImages] = useState<Array<{ src: string, alt: string, title?: string }>>([]);
-  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
+  const useIMessage = prefersIMessage();
 
-  const openPromoModal = () => setIsPromoModalOpen(true);
-  const closePromoModal = () => setIsPromoModalOpen(false);
-
-  // Estado do formulário
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    date: '',
-    time: '',
-    propertyType: '',
-    notes: ''
+    service: SERVICE_NAMES[0],
+    city: '',
+    notes: '',
   });
-  // Formspree useForm hook
+  const [errors, setErrors] = useState<FieldErrors>({});
   const [state, handleSubmit] = useForm("xanjdbgn");
-
-
-
-  // Função para carregar imagens dinamicamente
-  useEffect(() => {
-    const loadImages = async () => {
-      try {
-        const images = await loadCarouselImages();
-        setCarouselImages(images);
-      } catch (error) {
-        console.error('Erro ao carregar imagens do carrossel:', error);
-      }
-    };
-
-    loadImages();
-  }, []);
-
-  // Estados para feedback do formulário
-  // isSubmitting is now state.submitting
-  // submitStatus is derived from state
-
-  const [isFormValid, setIsFormValid] = useState(false);
-  const phoneMaskRef = useRef<HTMLInputElement | null>(null);
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const phoneRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (state.succeeded) {
@@ -63,743 +84,534 @@ export default function MainPage() {
           send_to: 'AW-17464291569/dcJFCJeJ9OgcEPHhz4dB'
         });
       }
-
-      // Limpar formulário
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        date: '',
-        time: '',
-        propertyType: '',
-        notes: ''
-      });
       navigate('/thank-you');
     }
   }, [state.succeeded, navigate]);
 
-  // Função para validar email
-  const validateEmail = (email: string) => {
-    if (!email || email.trim() === '') return false;
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email.trim()).toLowerCase());
+  const findErrors = (data: typeof formData): FieldErrors => {
+    const found: FieldErrors = {};
+    if (data.name.trim() === '') found.name = t.scheduling.form.errors.name;
+    if (!validateEmail(data.email)) found.email = t.scheduling.form.errors.email;
+    if (!validatePhone(data.phone)) found.phone = t.scheduling.form.errors.phone;
+    return found;
   };
 
-  // Função para validar telefone - valida diretamente do valor formatado ou não mascarado
-  const validatePhone = (phone: string, unmaskedValue?: string) => {
-    // Se temos o valor não mascarado, usa diretamente
-    if (unmaskedValue !== undefined) {
-      return unmaskedValue.length === 10;
+  const updateField = (name: keyof typeof formData, value: string) => {
+    const next = { ...formData, [name]: value };
+    setFormData(next);
+    // Once a field has shown an error, re-check it as the person types so the
+    // message disappears as soon as it is fixed.
+    if (name in errors) {
+      setErrors((prev) => {
+        const remaining = { ...prev };
+        const stillWrong = findErrors(next)[name as keyof FieldErrors];
+        if (stillWrong) remaining[name as keyof FieldErrors] = stillWrong;
+        else delete remaining[name as keyof FieldErrors];
+        return remaining;
+      });
     }
-
-    // Caso contrário, extrai do valor formatado
-    if (!phone || phone.trim() === '') return false;
-    // Remove todos os caracteres não numéricos
-    const digitsOnly = phone.replace(/\D/g, '');
-    // Para a máscara "+1 (000) 000-0000", pode ter 10 ou 11 dígitos (com código do país)
-    // Aceitamos se tiver pelo menos 10 dígitos (removendo o código do país se presente)
-    const phoneDigits = digitsOnly.length === 11 && digitsOnly.startsWith('1')
-      ? digitsOnly.substring(1)
-      : digitsOnly;
-    // Precisamos de exatamente 10 dígitos
-    return phoneDigits.length === 10;
   };
 
-  useEffect(() => {
-    const nameValid = formData.name.trim() !== '';
-    const emailValid = validateEmail(formData.email);
-    const phoneValid = validatePhone(formData.phone);
-
-    const isValid = nameValid && emailValid && phoneValid;
-
-    setIsFormValid(isValid);
-  }, [formData]);
-
-  // Função para atualizar dados do formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    updateField(e.target.name as keyof typeof formData, e.target.value);
   };
 
-  const handlePhoneChange = (value: string) => {
-    // Atualiza o estado com o valor formatado
-    setFormData(prev => ({
-      ...prev,
-      phone: value
-    }));
-  };
-
-  const trackCallClick = () => {
-    if (window.gtag) {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-17464291569/PBzFCMektOQcEPHhz4dB',
-      });
-    }
-  };
-
-  const trackWhatsAppClick = () => {
-    if (window.gtag) {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-17464291569/nr1-CMSktOQcEPHhz4dB',
-      });
-    }
-  };
-
-  // Função para enviar formulário para Formspree
-  const handleFormSubmit = async (e: React.FormEvent) => {
+  // The submit button is never disabled: tapping it either sends the form or
+  // marks the fields that need fixing and moves focus to the first one.
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const found = findErrors(formData);
+    setErrors(found);
+    if (found.name) return nameRef.current?.focus();
+    if (found.email) return emailRef.current?.focus();
+    if (found.phone) return phoneRef.current?.focus();
     handleSubmit({
       ...formData,
-      subject: 'AirCleanB Assessment Request',
-      _language: language
+      subject: 'AirCleanB Quote Request',
+      _language: language,
     });
   };
 
-  const scrollToScheduling = (e: React.MouseEvent) => {
+  const scrollTo = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
-    const schedulingSection = document.getElementById('schedule');
-    if (schedulingSection) {
-      schedulingSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     setMobileMenuOpen(false);
   };
 
-  const scrollToServices = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const servicesSection = document.getElementById('services');
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: 'smooth' });
-    }
-    setMobileMenuOpen(false);
-  };
+  const navLinks = [
+    { id: 'how-it-works', label: t.nav.howItWorks },
+    { id: 'services', label: t.nav.services },
+    { id: 'benefits', label: t.nav.benefits },
+    { id: 'contact', label: t.nav.contact },
+  ];
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  const languageSelect = (
+    <label className="flex items-center gap-2">
+      <Globe className="h-5 w-5 text-brand-ink" aria-hidden="true" />
+      <span className="sr-only">Language</span>
+      <select
+        value={language}
+        onChange={(e) => setLanguage(e.target.value as 'en' | 'pt' | 'es')}
+        className="bg-transparent text-brand-ink font-semibold py-2"
+      >
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+        <option value="es">Español</option>
+      </select>
+    </label>
+  );
+
+  const imessageButton = (className: string) => (
+    <a key="imessage" href={smsUrl} className={className}>
+      <MessageSquare className="h-5 w-5" aria-hidden="true" />
+      {t.directContact.sms}
+    </a>
+  );
+  const whatsappButton = (className: string) => (
+    <a key="whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppClick} className={className}>
+      <MessageSquare className="h-5 w-5" aria-hidden="true" />
+      {t.directContact.whatsapp}
+    </a>
+  );
+  const primaryBtn = "flex-1 inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand text-white font-bold hover:bg-brand-dark transition";
+  const outlineBtn = "flex-1 inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-white text-brand-dark font-bold border-2 border-brand hover:bg-brand-soft transition";
+  // Apple devices see iMessage first, everyone else WhatsApp first.
+  const messageButtons = useIMessage
+    ? [imessageButton(primaryBtn), whatsappButton(outlineBtn)]
+    : [whatsappButton(primaryBtn), imessageButton(outlineBtn)];
+
+  const inputClass = (hasError: boolean) =>
+    `w-full min-h-[48px] px-4 py-2 bg-white border rounded-lg text-base text-brand-ink ${hasError ? 'border-2 border-red-700' : 'border-gray-400'}`;
+
+  const steps = [
+    { icon: MapPin, step: t.howItWorks.steps.register },
+    { icon: AlertTriangle, step: t.howItWorks.steps.report },
+    { icon: WashingMachine, step: t.howItWorks.steps.cleaning },
+    { icon: Camera, step: t.howItWorks.steps.record },
+    { icon: ThumbsUp, step: t.howItWorks.steps.validation },
+  ];
+
+  const benefits = [
+    { icon: Users, item: t.benefits.items.quality },
+    { icon: Clock, item: t.benefits.items.time },
+    { icon: Camera, item: t.benefits.items.ratings },
+    { icon: AlertTriangle, item: t.benefits.items.history },
+  ];
+
+  const services = [t.services.standard, t.services.postEvent, t.services.express];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <header className="bg-[#008CBA]">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/">
-              <Logo size={32} />
+    <div className="min-h-screen bg-brand-soft pb-20 md:pb-0">
+      {/* Offer bar */}
+      <div className="bg-brand text-white text-center text-sm md:text-base font-bold px-4 py-2">
+        {t.hero.offerTitle} <span className="font-normal">· {t.hero.offerNote}</span>
+      </div>
+
+      <header className="bg-brand-soft border-b border-brand-line">
+        <nav className="container mx-auto px-4 py-3" aria-label="Main">
+          <div className="flex items-center justify-between gap-4">
+            <Link to="/" aria-label="AirCleanB home">
+              <Logo size={28} tone="dark" />
             </Link>
 
-            {/* Mobile menu button */}
+            <div className="hidden md:flex items-center gap-6">
+              {navLinks.map((link) => (
+                <a key={link.id} href={`#${link.id}`} onClick={scrollTo(link.id)} className="text-brand-ink font-semibold hover:text-brand py-2">
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            <div className="hidden md:flex items-center gap-4">
+              {languageSelect}
+              <a
+                href="#schedule"
+                onClick={scrollTo('schedule')}
+                className="inline-flex items-center min-h-[44px] px-5 rounded-full bg-brand text-white font-bold hover:bg-brand-dark transition"
+              >
+                {t.hero.getQuote}
+              </a>
+            </div>
+
             <button
-              className="md:hidden text-white focus:outline-none"
-              onClick={toggleMobileMenu}
+              type="button"
+              className="md:hidden w-11 h-11 flex items-center justify-center text-brand-ink"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
               </svg>
             </button>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-6">
-              <a href="#how-it-works" className="text-white hover:text-blue-200">{t.nav.howItWorks}</a>
-              <a href="#services" className="text-white hover:text-blue-200">{t.nav.services}</a>
-              <a href="#benefits" className="text-white hover:text-blue-200">{t.nav.benefits}</a>
-              <a href="#schedule" className="text-white hover:text-blue-200">{t.nav.scheduling}</a>
-              <a href="#contact" className="text-white hover:text-blue-200">{t.nav.contact}</a>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Globe className="h-5 w-5 text-white" />
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value as 'en' | 'pt' | 'es')}
-                  className="bg-transparent text-white focus:outline-none"
-                >
-                  <option value="en">English</option>
-                  <option value="pt">Português</option>
-                  <option value="es">Español</option>
-                </select>
-              </div>
-              <button
-                className="bg-white text-[#008CBA] px-4 py-2 rounded-full hover:bg-blue-50 transition text-sm md:text-base"
-                onClick={scrollToScheduling}
-              >
-                {t.hero.scheduleDemo}
-              </button>
-            </div>
           </div>
 
-          {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="md:hidden mt-4 bg-[#0079a1] rounded-lg p-4">
-              <div className="flex flex-col space-y-3">
-                <a href="#how-it-works" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.howItWorks}</a>
-                <a href="#services" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.services}</a>
-                <a href="#benefits" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.benefits}</a>
-                <a href="#schedule" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.scheduling}</a>
-                <a href="#contact" className="text-white hover:text-blue-200 py-2" onClick={() => setMobileMenuOpen(false)}>{t.nav.contact}</a>
-
-                <div className="flex items-center space-x-2 py-2">
-                  <Globe className="h-5 w-5 text-white" />
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value as 'en' | 'pt' | 'es')}
-                    className="bg-transparent text-white focus:outline-none"
-                  >
-                    <option value="en">English</option>
-                    <option value="pt">Português</option>
-                    <option value="es">Español</option>
-                  </select>
-                </div>
-
-                <button
-                  className="bg-white text-[#008CBA] px-4 py-2 rounded-full hover:bg-blue-50 transition w-full"
-                  onClick={scrollToScheduling}
-                >
-                  {t.hero.scheduleDemo}
-                </button>
-              </div>
+            <div id="mobile-menu" className="md:hidden mt-3 pb-2 flex flex-col">
+              {navLinks.map((link) => (
+                <a key={link.id} href={`#${link.id}`} onClick={scrollTo(link.id)} className="text-brand-ink font-semibold py-3 border-t border-brand-line">
+                  {link.label}
+                </a>
+              ))}
+              <div className="border-t border-brand-line pt-2">{languageSelect}</div>
             </div>
           )}
         </nav>
-
-        <div className="container mx-auto px-4 py-10 md:py-20">
-          <div className="flex flex-col items-center text-center">
-            <div className="max-w-4xl">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                Expert cleaning that turns your Airbnb into a 5-star experience — Guaranteed!
-              </h1>
-
-              {/* Carrossel centralizado e maior */}
-              <div className="w-full max-w-6xl px-4 mb-8">
-                <ImageCarousel images={carouselImages} />
-              </div>
-
-              <p className="text-lg md:text-xl text-white mb-4">
-                Your space, always guest-ready and sparkling clean.
-              </p>
-              <p className="text-lg md:text-xl text-white mb-4 flex items-center justify-center gap-2">
-                <MapPin className="h-5 w-5 flex-shrink-0" />
-                Serving Washington DC, Maryland &amp; Virginia (DMV area) with expert Airbnb turnover cleaning.
-              </p>
-              <div className="bg-blue-950 text-white rounded-lg p-4 my-8 shadow-lg transform hover:scale-105 transition-transform duration-300">
-                <h3 className="text-2xl font-bold">15% Off Your First Turnover</h3>
-                <p className="text-lg">Applied automatically when you book online.</p>
-              </div>
-              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
-                <button
-                  className="bg-green-500 text-white px-8 py-4 rounded-full hover:bg-green-600 transition flex items-center justify-center text-lg font-bold shadow-lg animate-pulse"
-                  onClick={openPromoModal}
-                >
-                  Claim My Offer
-                </button>                              <button
-                  className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:bg-opacity-10 transition flex items-center justify-center text-sm md:text-base"
-                  onClick={scrollToServices}
-                >
-                  See Our Services
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </header>
 
-      {/* How It Works Section */}      <section id="how-it-works" className="py-16 md:py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.howItWorks.title}</h2>
-
-          {/* 5 Steps Process */}
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-5 gap-6 md:gap-8">
-              {/* Step 1: Property Registration */}
-              <div className="text-center group">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
-                  <MapPin className="h-8 w-8 text-[#008CBA]" />
-                </div>
-                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.register.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.register.description}</p>
-              </div>
-
-              {/* Step 2: Damage Report */}
-              <div className="text-center group">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
-                  <AlertTriangle className="h-8 w-8 text-[#008CBA]" />
-                </div>
-                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.report.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.report.description}</p>
-              </div>
-
-              {/* Step 3: Cleaning & Linen Change */}
-              <div className="text-center group">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
-                  <WashingMachine className="h-8 w-8 text-[#008CBA]" />
-                </div>
-                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.cleaning.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.cleaning.description}</p>
-              </div>
-
-              {/* Step 4: Cleaning Record */}
-              <div className="text-center group">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
-                  <FileText className="h-8 w-8 text-[#008CBA]" />
-                </div>
-                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.record.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.record.description}</p>
-              </div>
-
-              {/* Step 5: Client Validation */}
-              <div className="text-center group">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-200 transition-colors">
-                  <ThumbsUp className="h-8 w-8 text-[#008CBA]" />
-                </div>
-                <h3 className="text-lg font-semibold mb-3 text-gray-800">{t.howItWorks.steps.validation.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{t.howItWorks.steps.validation.description}</p>
-              </div>
+      {/* Hero */}
+      <section className="container mx-auto px-4 pt-6 pb-10 md:py-16">
+        {/* Mobile: title, photos, then the rest of the text and buttons.
+            Desktop: text on the left, photos on the right across both rows. */}
+        <div className="grid md:grid-cols-2 gap-5 md:gap-x-12 md:gap-y-4">
+          <div className="flex flex-col gap-4 md:col-start-1 md:row-start-1 md:self-end">
+            <p className="text-base font-semibold text-brand-dark">{t.hero.eyebrow}</p>
+            <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight text-brand-ink">
+              {t.hero.title}
+            </h1>
+          </div>
+          <div className="md:col-start-2 md:row-start-1 md:row-span-2 md:self-center">
+            <ImageCarousel images={carouselImages} sizes="(max-width: 768px) 100vw, 50vw" />
+          </div>
+          <div className="flex flex-col gap-4 md:col-start-1 md:row-start-2 md:self-start">
+            <p className="text-lg md:text-xl text-brand-muted">{t.hero.subtitle}</p>
+            <p className="text-lg text-brand-ink">
+              {t.hero.priceFrom} <strong>$110</strong>
+            </p>
+            {/* Call comes first on mobile, as the owner asked; desktop keeps messages first. */}
+            <a
+              href={telUrl}
+              data-phone-link
+              onClick={trackCallClick}
+              className="order-1 md:order-2 inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-white text-brand-ink font-bold hover:bg-brand-line transition"
+            >
+              <Phone className="h-5 w-5" aria-hidden="true" />
+              {t.hero.call} <span data-phone-text>{PHONE_DISPLAY}</span>
+            </a>
+            <div className="order-2 md:order-1 flex flex-row gap-3">
+              {messageButtons}
             </div>
-
-            {/* Connection Lines for Desktop */}
-            <div className="hidden md:block mt-8">
-              <div className="flex justify-center items-center space-x-4">
-                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
-                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
-                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
-                <div className="w-16 h-0.5 bg-[#008CBA] opacity-30"></div>
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            <div className="text-center mt-12">
-              <button
-                className="bg-[#008CBA] text-white px-8 py-3 rounded-full hover:bg-blue-600 transition flex items-center mx-auto"
-                onClick={scrollToScheduling}
-              >
-                Start Your Cleaning Process
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </button>
-            </div>
+            <p className="order-3 text-sm text-brand-muted">{t.hero.replyTime}</p>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-16 md:py-20">
+      {/* Benefits */}
+      <section id="benefits" className="bg-brand-ink text-white py-10 md:py-14">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.services.title}</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Standard Service */}
-            <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-              <h3 className="text-xl font-semibold mb-4">{t.services.standard.title}</h3>
-              <ul className="space-y-4">
-                {t.services.standard.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm md:text-base">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
-                onClick={scrollToScheduling}
-              >
-                {t.services.button}
-              </button>
-            </div>
-
-            {/* Post-Event Service */}
-            <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-              <h3 className="text-xl font-semibold mb-4">{t.services.postEvent.title}</h3>
-              <ul className="space-y-4">
-                {t.services.postEvent.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm md:text-base">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
-                onClick={scrollToScheduling}
-              >
-                {t.services.button}
-              </button>
-            </div>
-
-            {/* Express Service */}
-            <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-              <h3 className="text-xl font-semibold mb-4">{t.services.express.title}</h3>
-              <ul className="space-y-4">
-                {t.services.express.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm md:text-base">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className="mt-8 w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition text-sm md:text-base"
-                onClick={scrollToScheduling}
-              >
-                {t.services.button}
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section id="benefits" className="py-16 md:py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 md:mb-16">{t.benefits.title}</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="flex items-start space-x-4">
-              <div className="bg-blue-100 p-3 rounded-full flex-shrink-0">
-                <Shield className="h-6 w-6 text-[#008CBA]" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">{t.benefits.items.quality.title}</h3>
-                <p className="text-gray-600 text-sm md:text-base">{t.benefits.items.quality.description}</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-4">
-              <div className="bg-blue-100 p-3 rounded-full flex-shrink-0">
-                <Clock className="h-6 w-6 text-[#008CBA]" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">{t.benefits.items.time.title}</h3>
-                <p className="text-gray-600 text-sm md:text-base">{t.benefits.items.time.description}</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-4">
-              <div className="bg-blue-100 p-3 rounded-full flex-shrink-0">
-                <Star className="h-6 w-6 text-[#008CBA]" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">{t.benefits.items.ratings.title}</h3>
-                <p className="text-gray-600 text-sm md:text-base">{t.benefits.items.ratings.description}</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-4">
-              <div className="bg-blue-100 p-3 rounded-full flex-shrink-0">
-                <Users className="h-6 w-6 text-[#008CBA]" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">{t.benefits.items.history.title}</h3>
-                <p className="text-gray-600 text-sm md:text-base">{t.benefits.items.history.description}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-16 md:py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">What Airbnb Hosts Say</h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <div className="flex items-center mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-500" />
-                ))}
-              </div>
-              <p className="text-gray-700 italic mb-4">
-                "The Deep Clean Reset was worth every penny. My place looked brand new and my guest ratings went up immediately."
-              </p>
-              <p className="text-right text-sm font-semibold">
-                <span className="font-bold">Mark T.</span> — Arlington, VA
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <div className="flex items-center mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-500" />
-                ))}
-              </div>
-              <p className="text-gray-700 italic mb-4">
-                "Finally, a reliable team in DC! They handle the turnover seamlessly, and the photo reports give me total peace of mind."
-              </p>
-              <p className="text-right text-sm font-semibold">
-                <span className="font-bold">Emily R.</span> — Capitol Hill, Washington DC
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <div className="flex items-center mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-500" />
-                ))}
-              </div>
-              <p className="text-gray-700 italic mb-4">
-                "I manage 3 units in Baltimore and AirCleanB is the only partner I trust. Consistent quality every single time."
-              </p>
-              <p className="text-right text-sm font-semibold">
-                <span className="font-bold">David K.</span> — Fells Point, Baltimore
-              </p>
-            </div>
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <div className="flex items-center mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-500" />
-                ))}
-              </div>
-              <p className="text-gray-700 italic mb-4">
-                "Super professional service. They arrived on time in Silver Spring and the cleaning was spotless. Highly recommend!"
-              </p>
-              <p className="text-right text-sm font-semibold">
-                <span className="font-bold">Sarah L.</span> — Silver Spring, MD
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Scheduling Section */}
-      <section id="schedule" className="py-16 md:py-20 bg-gradient-to-r from-blue-50 to-blue-100">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">{t.scheduling.title}</h2>
-          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-sm md:text-base">
-            Schedule a free assessment to see how AirCleanB can help improve your property's cleanliness and guest satisfaction.
-          </p>
-          <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
-            <div className="md:flex">
-              <div className="md:w-1/3 bg-[#008CBA] p-6 md:p-8 text-white flex flex-col justify-center">
-                <h3 className="text-xl md:text-2xl font-bold mb-4">Contact Us</h3>
-                <p className="mb-6 text-sm md:text-base">Our team is ready to help you get started with AirCleanB.</p>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <Calendar className="h-5 w-5 mr-3 flex-shrink-0" />
-                    <span className="text-sm md:text-base">Quick response time</span>
-                  </div>
-                  <div className="flex items-center">
-                    <CheckCircle className="h-5 w-5 mr-3 flex-shrink-0" />
-                    <span className="text-sm md:text-base">Free consultation</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Shield className="h-5 w-5 mr-3 flex-shrink-0" />
-                    <span className="text-sm md:text-base">Privacy guaranteed</span>
-                  </div>
+          <h2 className="font-display text-2xl md:text-3xl font-extrabold mb-8">{t.benefits.title}</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {benefits.map(({ icon: Icon, item }) => (
+              <div key={item.title} className="flex gap-3">
+                <span className="w-10 h-10 flex-none flex items-center justify-center rounded-full bg-brand-green">
+                  <Icon className="h-5 w-5 text-white" aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="font-bold text-lg">{item.title}</h3>
+                  <p className="text-white/85">{item.description}</p>
                 </div>
               </div>
-              <div className="md:w-2/3 p-6 md:p-8">
-                <form className="space-y-6" onSubmit={handleFormSubmit}>
-                  {/* Mensagens de feedback */}
-                  {state.succeeded && (
-                    <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
-                      <div className="flex items-center">
-                        <CheckCircle className="h-5 w-5 mr-2" />
-                        <span>Thank you! Your assessment request has been sent successfully. We'll contact you soon!</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {state.errors && (
-                    <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-                      <div className="flex flex-col">
-                        <div className="flex items-center mb-1">
-                          <Shield className="h-5 w-5 mr-2" />
-                          <span className="font-bold">Error sending request:</span>
-                        </div>
-                        <ul className="list-disc pl-9 text-sm">
-                          {state.errors.getAllFieldErrors().map((error, index) => (
-                            <li key={`field-${index}`}>{error[0]}: {error[1].map(e => e.message).join(', ')}</li>
-                          ))}
-                          {state.errors.getFormErrors().map((error, index) => (
-                            <li key={`form-${index}`}>{error.message}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="grid md:grid-cols-2 gap-4 md:gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t.scheduling.form.name}*
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="John Doe"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {t.scheduling.form.email}*
-                      </label>
-                      <input
-                        type="email"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="john@example.com"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.scheduling.form.phone}*
-                    </label>
-                    <IMaskInput
-                      ref={phoneMaskRef}
-                      mask="+1 (000) 000-0000"
-                      type="tel"
-                      name="phone"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="+1 (555) 123-4567"
-                      value={formData.phone}
-                      onAccept={(value: string) => {
-                        handlePhoneChange(value);
-                      }}
-                      required
-                    />
-                  </div>
-                  {/* Campos opcionais (data, horário, tipo de imóvel) removidos da UI para deixar o formulário mais leve no mobile.
-                      Permanecem disponíveis para uso futuro via follow-up manual, se necessário. */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t.scheduling.form.notes}
-                    </label>
-                    <textarea
-                      rows={4}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Tell us about your property and specific needs..."
-                      name="notes"
-                      value={formData.notes}
-                      onChange={handleInputChange}
-                    ></textarea>
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-[#008CBA] text-white px-4 py-3 rounded-full hover:bg-blue-600 transition font-medium text-sm md:text-base disabled:bg-gray-400"
-                    disabled={!isFormValid || state.submitting}
-                  >
-                    {state.submitting ? 'Submitting...' : t.scheduling.form.button}
-                  </button>
-                </form>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Direct Contact Section */}
-      <section id="contact" className="py-16 md:py-20 bg-gray-50">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">{t.directContact.title}</h2>
-          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-sm md:text-base">
-            Prefer to get in touch directly? Here's how you can reach us.
-          </p>
+      {/* How It Works */}
+      <section id="how-it-works" className="bg-white py-14 md:py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="font-display text-3xl md:text-4xl font-extrabold text-center mb-10 md:mb-14">{t.howItWorks.title}</h2>
+          <ol className="grid md:grid-cols-5 gap-8 max-w-6xl mx-auto">
+            {steps.map(({ icon: Icon, step }, index) => (
+              <li key={step.title} className="flex md:flex-col gap-4 md:text-center md:items-center">
+                <span className="relative w-14 h-14 flex-none flex items-center justify-center rounded-full bg-brand-soft">
+                  <Icon className="h-7 w-7 text-brand" aria-hidden="true" />
+                  <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-brand text-white text-xs font-bold flex items-center justify-center">
+                    {index + 1}
+                  </span>
+                </span>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">{step.title}</h3>
+                  <p className="text-brand-muted">{step.description}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              {/* Email */}
-              <div className="text-left">
-                <h3 className="text-xl font-semibold mb-4 text-gray-700">Via Email</h3>
-                <a href="mailto:aircleanb.dc@gmail.com" className="inline-flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition w-full">
-                  <Mail className="h-6 w-6 text-[#008CBA] mr-3" />
-                  <span className="text-lg text-gray-800">aircleanb.dc@gmail.com</span>
+      {/* Services */}
+      <section id="services" className="py-14 md:py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="font-display text-3xl md:text-4xl font-extrabold text-center mb-10 md:mb-14">{t.services.title}</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {services.map((service) => (
+              <div key={service.title} className="bg-white rounded-2xl border border-brand-line p-6 md:p-8 flex flex-col">
+                <h3 className="font-display text-xl font-extrabold mb-1">{service.title}</h3>
+                <p className="font-bold text-brand-dark mb-4">{service.price}</p>
+                <ul className="space-y-3 flex-1">
+                  {service.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-brand-green flex-shrink-0 mt-0.5" aria-hidden="true" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="#schedule"
+                  onClick={scrollTo('schedule')}
+                  className="mt-6 inline-flex items-center justify-center gap-2 min-h-[48px] rounded-full bg-brand text-white font-bold hover:bg-brand-dark transition"
+                >
+                  {t.services.button}
+                  <ArrowRight className="h-5 w-5" aria-hidden="true" />
                 </a>
               </div>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-brand-muted max-w-2xl mx-auto">
+            <strong className="text-brand-ink">{t.services.alsoAvailable}:</strong> {t.services.alsoAvailableList}
+          </p>
+        </div>
+      </section>
 
-              {/* Phone Actions */}
-              <div className="text-left">
-                <h3 className="text-xl font-semibold mb-4 text-gray-700">Via Phone</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <a href="tel:+17203529810" data-phone-link onClick={trackCallClick} className="flex items-center justify-center p-3 bg-[#008CBA] text-white rounded-lg hover:bg-blue-700 transition">
-                    <Phone className="h-5 w-5 mr-2" />
-                    <span>{t.directContact.call}</span>
-                  </a>
-                  <a href="sms:+17203529810" className="flex items-center justify-center p-3 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition">
-                    <MessageSquare className="h-5 w-5 mr-2" />
-                    <span>{t.directContact.sms}</span>
-                  </a>
-                  {/* Using a green color for WhatsApp to differentiate. Lucide doesn't have a WhatsApp icon. */}
-                  <a href="https://wa.me/17203529810" target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppClick} className="flex items-center justify-center p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                    <MessageSquare className="h-5 w-5 mr-2" />
-                    <span>{t.directContact.whatsapp}</span>
-                  </a>
-                </div>
-              </div>
-            </div>
+      {/* Testimonials */}
+      <section id="testimonials" className="bg-white py-14 md:py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="font-display text-3xl md:text-4xl font-extrabold text-center mb-10">{t.testimonials.title}</h2>
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {testimonials.map((item) => (
+              <figure key={item.name} className="bg-brand-soft rounded-2xl p-6">
+                <blockquote className="text-brand-ink text-lg mb-4">"{item.quote}"</blockquote>
+                <figcaption className="text-sm font-semibold text-brand-muted">
+                  <span className="font-bold text-brand-ink">{item.name}</span> · {item.place}
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-[#008CBA] py-12 md:py-20">
+      {/* Quote form */}
+      <section id="schedule" className="py-14 md:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto bg-white rounded-2xl border border-brand-line p-6 md:p-10">
+            <h2 className="font-display text-3xl font-extrabold mb-2">{t.scheduling.title}</h2>
+            <p className="text-brand-muted mb-6">{t.scheduling.subtitle}</p>
+
+            <form className="space-y-5" onSubmit={handleFormSubmit} noValidate>
+              {state.errors && (
+                <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg" role="alert">
+                  <p className="font-bold">We couldn't send your request. Please try again or message us.</p>
+                  <ul className="list-disc pl-6 text-sm">
+                    {state.errors.getFormErrors().map((error, index) => (
+                      <li key={`form-${index}`}>{error.message}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="grid md:grid-cols-2 gap-5">
+                <div>
+                  <label htmlFor="quote-name" className="block font-bold mb-2">{t.scheduling.form.name}</label>
+                  <input
+                    id="quote-name"
+                    ref={nameRef}
+                    type="text"
+                    name="name"
+                    autoComplete="name"
+                    className={inputClass(!!errors.name)}
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? 'quote-name-error' : undefined}
+                  />
+                  {errors.name && <p id="quote-name-error" className="mt-1 text-sm font-semibold text-red-700">{errors.name}</p>}
+                </div>
+                <div>
+                  <label htmlFor="quote-phone" className="block font-bold mb-2">{t.scheduling.form.phone}</label>
+                  <IMaskInput
+                    id="quote-phone"
+                    inputRef={phoneRef}
+                    mask="+1 (000) 000-0000"
+                    type="tel"
+                    name="phone"
+                    autoComplete="tel"
+                    className={inputClass(!!errors.phone)}
+                    placeholder="+1 (555) 123-4567"
+                    value={formData.phone}
+                    onAccept={(value: string) => updateField('phone', value)}
+                    aria-invalid={!!errors.phone}
+                    aria-describedby={errors.phone ? 'quote-phone-error' : undefined}
+                  />
+                  {errors.phone && <p id="quote-phone-error" className="mt-1 text-sm font-semibold text-red-700">{errors.phone}</p>}
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="quote-email" className="block font-bold mb-2">{t.scheduling.form.email}</label>
+                <input
+                  id="quote-email"
+                  ref={emailRef}
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  className={inputClass(!!errors.email)}
+                  placeholder="you@email.com"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'quote-email-error' : undefined}
+                />
+                {errors.email && <p id="quote-email-error" className="mt-1 text-sm font-semibold text-red-700">{errors.email}</p>}
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-5">
+                <div>
+                  <label htmlFor="quote-service" className="block font-bold mb-2">{t.scheduling.form.service}</label>
+                  <select
+                    id="quote-service"
+                    name="service"
+                    className={inputClass(false)}
+                    value={formData.service}
+                    onChange={handleInputChange}
+                  >
+                    {SERVICE_NAMES.map((name) => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="quote-city" className="block font-bold mb-2">{t.scheduling.form.city}</label>
+                  <input
+                    id="quote-city"
+                    type="text"
+                    name="city"
+                    autoComplete="address-level2"
+                    className={inputClass(false)}
+                    placeholder="Arlington, VA"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="quote-notes" className="block font-bold mb-2">{t.scheduling.form.notes}</label>
+                <textarea
+                  id="quote-notes"
+                  rows={3}
+                  name="notes"
+                  className="w-full px-4 py-3 bg-white border border-gray-400 rounded-lg text-base text-brand-ink"
+                  placeholder={t.scheduling.form.notesPlaceholder}
+                  value={formData.notes}
+                  onChange={handleInputChange}
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full inline-flex items-center justify-center gap-2 min-h-[52px] bg-brand text-white font-bold hover:bg-brand-dark transition"
+                aria-busy={state.submitting}
+              >
+                <Send className="h-5 w-5" aria-hidden="true" />
+                {state.submitting ? t.scheduling.form.sending : t.scheduling.form.button}
+              </button>
+              <p className="text-sm text-brand-muted">
+                {t.scheduling.form.consent}{' '}
+<Link to="/terms" className="underline text-brand-dark">{t.footer.terms}</Link> · <Link to="/privacy" className="underline text-brand-dark">{t.footer.privacy}</Link>
+              </p>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Direct contact */}
+      <section id="contact" className="bg-white py-14 md:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">{t.cta.title}</h2>
-          <p className="text-lg md:text-xl text-white mb-8">{t.cta.subtitle}</p>
-          <button
-            onClick={scrollToScheduling}
-            className="bg-white text-[#008CBA] px-6 py-3 rounded-full hover:bg-blue-50 transition text-sm md:text-base"
+          <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-3">{t.directContact.title}</h2>
+          <p className="text-brand-muted max-w-2xl mx-auto mb-8">{t.directContact.subtitle}</p>
+          <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {messageButtons}
+            <a
+              href={telUrl}
+              data-phone-link
+              onClick={trackCallClick}
+              className="inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand-soft text-brand-ink font-bold hover:bg-brand-line transition"
+            >
+              <Phone className="h-5 w-5" aria-hidden="true" />
+              {t.directContact.call} <span data-phone-text>{PHONE_DISPLAY}</span>
+            </a>
+            <a
+              href={mailtoUrl}
+              className="inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand-soft text-brand-ink font-bold hover:bg-brand-line transition"
+            >
+              <Mail className="h-5 w-5" aria-hidden="true" />
+              {EMAIL}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-brand py-12 md:py-16">
+        <div className="container mx-auto px-4 text-center text-white">
+          <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-3">{t.cta.title}</h2>
+          <p className="text-lg md:text-xl mb-8">{t.cta.subtitle}</p>
+          <a
+            href="#schedule"
+            onClick={scrollTo('schedule')}
+            className="inline-flex items-center justify-center min-h-[52px] px-8 rounded-full bg-white text-brand-dark font-bold hover:bg-brand-soft transition"
           >
             {t.cta.button}
-          </button>
+          </a>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-brand-ink text-white py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <Link to="/">
-                <Logo />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="space-y-3">
+              <Link to="/" aria-label="AirCleanB home">
+                <Logo size={28} />
               </Link>
+              <p className="text-white/85 text-sm">{t.footer.area}</p>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t.nav.services}</h4>
-              <ul className="space-y-2 text-sm md:text-base">
-                <li>{t.services.standard.title}</li>
-                <li>{t.services.postEvent.title}</li>
-                <li>{t.services.express.title}</li>
+              <h3 className="font-bold mb-3">{t.nav.services}</h3>
+              <ul className="space-y-2 text-white/85">
+                {SERVICE_NAMES.map((name) => (
+                  <li key={name}>{name}</li>
+                ))}
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t.nav.howItWorks}</h4>
-              <ul className="space-y-2 text-sm md:text-base">
-                <li>{t.howItWorks.steps.register.title}</li>
-                <li>{t.howItWorks.steps.report.title}</li>
-                <li>{t.howItWorks.steps.cleaning.title}</li>
-                <li>{t.howItWorks.steps.record.title}</li>
-                <li>{t.howItWorks.steps.validation.title}</li>
+              <h3 className="font-bold mb-3">{t.nav.contact}</h3>
+              <ul className="space-y-2 text-white/85">
+                <li><a href={telUrl} data-phone-link onClick={trackCallClick} className="hover:text-white"><span data-phone-text>{PHONE_DISPLAY}</span></a></li>
+                <li><a href={mailtoUrl} className="hover:text-white">{EMAIL}</a></li>
+                <li>{t.footer.hours}</li>
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t.nav.contact}</h4>
-              <ul className="space-y-2 text-sm md:text-base">
-                <li>aircleanb.dc@gmail.com</li>
-                <li data-phone-text>+1 (720) 352-9810</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm md:text-base">
-                <li><a href="/about" className="hover:text-blue-400">About</a></li>
-                <li><a href="/services" className="hover:text-blue-400">Services</a></li>
-                <li><a href="/pricing" className="hover:text-blue-400">Pricing</a></li>
+              <h3 className="font-bold mb-3">AirCleanB</h3>
+              <ul className="space-y-2 text-white/85">
+                <li><Link to="/about" className="hover:text-white">About</Link></li>
+                <li><Link to="/services" className="hover:text-white">Services</Link></li>
+                <li><Link to="/pricing" className="hover:text-white">Pricing</Link></li>
+                <li><Link to="/privacy" className="hover:text-white">{t.footer.privacy}</Link></li>
+                <li><Link to="/terms" className="hover:text-white">{t.footer.terms}</Link></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 mb-4 md:mb-0">
-              <a href="#" className="hover:text-blue-400 text-sm md:text-base">{t.footer.terms}</a>
-              <a href="/privacy" className="hover:text-blue-400 text-sm md:text-base">{t.footer.privacy}</a>
-              <a href="#contact" className="hover:text-blue-400 text-sm md:text-base">{t.footer.contact}</a>
-            </div>
-            <p className="text-gray-400 text-sm md:text-base text-center md:text-right">{t.footer.rights}</p>
+          <div className="border-t border-white/15 mt-10 pt-6 flex flex-col md:flex-row justify-between gap-2 text-sm text-white/75">
+            <span className="flex items-center gap-2"><Check className="h-4 w-4" aria-hidden="true" />English · Português · Español</span>
+            <span>© {new Date().getFullYear()} {t.footer.rights}</span>
           </div>
         </div>
       </footer>
-      <PromotionalModal isOpen={isPromoModalOpen} onClose={closePromoModal} />
+
+      <StickyContactBar label={t.hero.getQuote} />
     </div>
   );
 }

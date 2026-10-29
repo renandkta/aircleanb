@@ -5,7 +5,7 @@ import Logo from './Logo';
 const PricingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-[#008CBA] text-white">
+      <header className="bg-[#00739A] text-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/">
             <Logo />
@@ -26,9 +26,9 @@ const PricingPage: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-6 mb-10">
           <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col">
             <h2 className="text-xl font-semibold mb-2">Standard Turnover</h2>
-            <p className="text-3xl font-bold text-[#008CBA] mb-2">$90–$140</p>
+            <p className="text-3xl font-bold text-[#00739A] mb-2">From $110</p>
             <p className="text-gray-700 text-sm md:text-base mb-3 flex-1">
-              Per visit, for most 1–2 bedroom Airbnb units.
+              Per turnover for a studio or 1 bedroom. 2 bedrooms from $140, 3 bedrooms from $180. Extra full bathroom +$20, half bathroom +$10.
             </p>
             <ul className="list-disc list-inside text-gray-700 text-sm md:text-base space-y-1 mb-4">
               <li>Cleaning between guests</li>
@@ -36,15 +36,15 @@ const PricingPage: React.FC = () => {
               <li>Trash removal and basic restock</li>
             </ul>
             <p className="text-xs text-gray-500">
-              Final price confirmed after a quick walkthrough or Deep Clean Reset.
+              Same-day at no extra cost. 30% off your first turnover, one unit per new client.
             </p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col border-2 border-[#008CBA]">
+          <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col border-2 border-[#00739A]">
             <h2 className="text-xl font-semibold mb-2">Deep Clean Reset</h2>
-            <p className="text-3xl font-bold text-[#008CBA] mb-2">$180–$260</p>
+            <p className="text-3xl font-bold text-[#00739A] mb-2">From $230</p>
             <p className="text-gray-700 text-sm md:text-base mb-3 flex-1">
-              One–time reset to bring your unit back to 5-star condition.
+              Studio or 1 bedroom. 2 bedrooms from $280, 3 bedrooms from $360.
             </p>
             <ul className="list-disc list-inside text-gray-700 text-sm md:text-base space-y-1 mb-4">
               <li>Detailed bathroom &amp; kitchen scrubbing</li>
@@ -55,7 +55,7 @@ const PricingPage: React.FC = () => {
 
           <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col">
             <h2 className="text-xl font-semibold mb-2">Multi–Unit / Custom</h2>
-            <p className="text-3xl font-bold text-[#008CBA] mb-2">Custom</p>
+            <p className="text-3xl font-bold text-[#00739A] mb-2">Custom</p>
             <p className="text-gray-700 text-sm md:text-base mb-3 flex-1">
               For hosts or co–hosts managing several listings in the DMV area.
             </p>
@@ -79,8 +79,8 @@ const PricingPage: React.FC = () => {
           <ul className="list-disc list-inside text-gray-700 text-sm md:text-base space-y-1 mb-2">
             <li>
               Email:{' '}
-              <a href="mailto:aircleanb.dc@gmail.com" className="text-[#008CBA] underline">
-                aircleanb.dc@gmail.com
+              <a href="mailto:debora@aircleanb.com" className="text-[#00739A] underline">
+                debora@aircleanb.com
               </a>
             </li>
             <li>
@@ -89,7 +89,7 @@ const PricingPage: React.FC = () => {
                 href="tel:+17203529810"
                 data-phone-link
                 data-phone-text
-                className="text-[#008CBA] underline"
+                className="text-[#00739A] underline"
               >
                 +1 (720) 352-9810
               </a>

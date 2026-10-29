@@ -1,3 +1,8 @@
+interface Step {
+  title: string;
+  description: string;
+}
+
 interface Translation {
   nav: {
     howItWorks: string;
@@ -7,101 +12,75 @@ interface Translation {
     contact: string;
   };
   hero: {
+    eyebrow: string;
     title: string;
     subtitle: string;
-    scheduleDemo: string;
+    priceFrom: string;
+    getQuote: string;
+    call: string;
+    replyTime: string;
+    offerTitle: string;
+    offerNote: string;
   };
   howItWorks: {
     title: string;
     steps: {
-      register: {
-        title: string;
-        description: string;
-      };
-      report: {
-        title: string;
-        description: string;
-      };
-      cleaning: {
-        title: string;
-        description: string;
-      };
-      record: {
-        title: string;
-        description: string;
-      };
-      validation: {
-        title: string;
-        description: string;
-      };
+      register: Step;
+      report: Step;
+      cleaning: Step;
+      record: Step;
+      validation: Step;
     };
   };
   services: {
     title: string;
-    standard: {
-      title: string;
-      features: string[];
-    };
-    postEvent: {
-      title: string;
-      features: string[];
-    };
-    express: {
-      title: string;
-      features: string[];
-    };
+    standard: { title: string; price: string; features: string[] };
+    postEvent: { title: string; price: string; features: string[] };
+    express: { title: string; price: string; features: string[] };
+    alsoAvailable: string;
+    alsoAvailableList: string;
     button: string;
   };
   benefits: {
     title: string;
     items: {
-      quality: {
-        title: string;
-        description: string;
-      };
-      time: {
-        title: string;
-        description: string;
-      };
-      ratings: {
-        title: string;
-        description: string;
-      };
-      history: {
-        title: string;
-        description: string;
-      };
+      quality: Step;
+      time: Step;
+      ratings: Step;
+      history: Step;
     };
+  };
+  testimonials: {
+    title: string;
   };
   scheduling: {
     title: string;
+    subtitle: string;
     form: {
       name: string;
       email: string;
       phone: string;
-      date: string;
-      time: string;
-      propertyType: string;
+      service: string;
+      city: string;
       notes: string;
+      notesPlaceholder: string;
       button: string;
-    };
-    timeOptions: {
-      morning: string;
-      afternoon: string;
-      evening: string;
-    };
-    propertyOptions: {
-      apartment: string;
-      house: string;
-      flat: string;
-      other: string;
+      sending: string;
+      consent: string;
+      errors: {
+        name: string;
+        email: string;
+        phone: string;
+      };
     };
   };
   directContact: {
     title: string;
+    subtitle: string;
     call: string;
     sms: string;
     whatsapp: string;
+    email: string;
   };
   cta: {
     title: string;
@@ -113,146 +92,175 @@ interface Translation {
     privacy: string;
     contact: string;
     rights: string;
+    hours: string;
+    area: string;
   };
   thankYou: {
     title: string;
     subtitle: string;
+    hurry: string;
     backToHome: string;
   };
 }
+
+// Official service names (business spec RN-3.1) stay in English in every
+// language, so menus, forms and ads always match.
+export const SERVICE_NAMES = [
+  'Airbnb Turnover Cleaning',
+  'Deep Clean Reset',
+  'Office Cleaning',
+  'Post-Renovation Cleaning',
+  'Upholstery & Mattress Cleaning',
+];
 
 export const translations: { [key: string]: Translation } = {
   en: {
     nav: {
       howItWorks: "How It Works",
       services: "Services",
-      benefits: "Benefits",
-      scheduling: "Schedule",
+      benefits: "Why Us",
+      scheduling: "Get a Quote",
       contact: "Contact",
     },
     hero: {
-      title: "Airbnb Turnover Cleaning in DC, MD & VA",
-      subtitle: "Fast, reliable turnovers and deep cleans for Airbnb and short-term rentals across the DMV.",
-      scheduleDemo: "Schedule Demo",
+      eyebrow: "Airbnb turnover cleaning · DC · MD · VA",
+      title: "You see it clean before your guest does.",
+      subtitle: "Done before check-in. Photos of every room, and any problem flagged right away.",
+      priceFrom: "Turnovers from",
+      getQuote: "Get a quote",
+      call: "Call",
+      replyTime: "We reply within 30 minutes, 8am to 8pm, 7 days.",
+      offerTitle: "30% off your first turnover",
+      offerNote: "One unit per new client. Mention it when you message us.",
     },
     howItWorks: {
       title: "How It Works",
       steps: {
         register: {
-          title: "Property Registration",
-          description: "Register your property location and establish cleaning standards for each area.",
+          title: "Send your listing",
+          description: "Bedrooms, city, checkout time and how we get in.",
         },
         report: {
-          title: "Damage Report",
-          description: "Document any damages or issues found during the cleaning process.",
+          title: "Problems flagged",
+          description: "Damage or missing items? We message you with photos right away.",
         },
         cleaning: {
-          title: "Cleaning & Linen Change",
-          description: "Perform thorough cleaning and replace all bed and bath linens.",
+          title: "Clean and restock",
+          description: "Full clean, fresh beds, on-site laundry and supplies refilled.",
         },
         record: {
-          title: "Cleaning Record",
-          description: "Record the cleaning process with photos and videos for validation.",
+          title: "Photo report",
+          description: "Photos of every room, sent as soon as we finish.",
         },
         validation: {
-          title: "Client Validation",
-          description: "Receive client approval and confirmation of cleaning completion.",
+          title: "Guest-ready",
+          description: "Done before check-in, ready for your next guest.",
         },
       },
     },
     services: {
-      title: "Professional Cleaning Services",
+      title: "What We Clean",
       standard: {
-        title: "Standard Cleaning",
+        title: "Airbnb Turnover Cleaning",
+        price: "From $110 per turnover",
         features: [
-          "Complete cleaning of all rooms",
-          "Bed and bath linen change",
-          "AI validation included",
+          "Full clean of every room and fresh beds",
+          "On-site laundry and supplies restocked",
+          "Photo report after every clean",
         ],
       },
       postEvent: {
-        title: "Post-Event Cleaning",
+        title: "Deep Clean Reset",
+        price: "From $230",
         features: [
-          "Specialized deep cleaning",
-          "Stain and odor removal",
-          "Detailed report with photos",
+          "Deep clean after parties or long stays",
+          "Kitchen, bathrooms, inside appliances and baseboards",
+          "Photo report after every clean",
         ],
       },
       express: {
-        title: "Express Cleaning",
+        title: "Office Cleaning",
+        price: "Free walkthrough, flat monthly price",
         features: [
-          "Quick cleaning between guests",
-          "Ready in up to 2 hours",
-          "Essential items verification",
+          "Small offices up to about 3,000 sq ft",
+          "Evening and weekend cleaning",
+          "Same crew every visit",
         ],
       },
-      button: "Book Service",
+      alsoAvailable: "Also available",
+      alsoAvailableList: "Post-Renovation Cleaning · Upholstery & Mattress Cleaning. Text us a photo for a quote.",
+      button: "Get a quote",
     },
     benefits: {
-      title: "Benefits",
+      title: "Why Hosts Choose Us",
       items: {
         quality: {
-          title: "Quality Guarantee",
-          description: "Ensure your property always meets the highest cleaning standards.",
+          title: "Same crew every visit",
+          description: "Our own team cleans your unit, so they already know how you like it.",
         },
         time: {
-          title: "Time Savings",
-          description: "Eliminate the need for in-person inspections with automated validation.",
+          title: "Done before check-in",
+          description: "Same-day turnovers at no extra cost.",
         },
         ratings: {
-          title: "Better Ratings",
-          description: "Maintain high ratings with consistently excellent cleaning.",
+          title: "Photo proof",
+          description: "Photos of every room after each clean, straight to your phone.",
         },
         history: {
-          title: "Complete History",
-          description: "Keep a detailed record of all cleanings and validations.",
+          title: "Problems flagged right away",
+          description: "Damage or missing items reported on the spot. We speak English, Português and Español.",
         },
       },
     },
+    testimonials: {
+      title: "What Airbnb Hosts Say",
+    },
     scheduling: {
-      title: "Schedule an Assessment",
+      title: "Get a Quote",
+      subtitle: "Leave your details and we'll text you within 30 minutes, 8am to 8pm.",
       form: {
         name: "Name",
         email: "Email",
         phone: "Phone",
-        date: "Preferred Date",
-        time: "Preferred Time",
-        propertyType: "Property Type",
-        notes: "Notes",
-        button: "Schedule Assessment",
-      },
-      timeOptions: {
-        morning: "Morning (8am - 12pm)",
-        afternoon: "Afternoon (1pm - 5pm)",
-        evening: "Evening (6pm - 10pm)",
-      },
-      propertyOptions: {
-        apartment: "Apartment",
-        house: "House",
-        flat: "Flat",
-        other: "Other",
+        service: "Service",
+        city: "City (optional)",
+        notes: "Anything else? (optional)",
+        notesPlaceholder: "Bedrooms, checkout time, number of units...",
+        button: "Send request",
+        sending: "Sending...",
+        consent: "By sending, you agree we may text or email you about your quote.",
+        errors: {
+          name: "Please enter your name.",
+          email: "Enter a valid email, like you@email.com.",
+          phone: "Enter a 10-digit US phone number.",
+        },
       },
     },
     directContact: {
-      title: "Or Contact Us Directly",
-      call: "Call Us",
-      sms: "SMS / iMessage",
+      title: "Prefer to Message Us?",
+      subtitle: "Most hosts text us. Pick the app you use.",
+      call: "Call",
+      sms: "iMessage",
       whatsapp: "WhatsApp",
+      email: "Email",
     },
     cta: {
-      title: "Start using AirCleanB today",
-      subtitle: "Transform your Airbnb cleaning management with cutting-edge technology",
-      button: "Schedule Demo",
+      title: "Ready for your next checkout?",
+      subtitle: "Send us your bedrooms, city and checkout time. We reply within 30 minutes.",
+      button: "Get a quote",
     },
     footer: {
       terms: "Terms",
       privacy: "Privacy",
       contact: "Contact",
-      rights: "© 2024 AirCleanB. All rights reserved.",
+      rights: "AirCleanB. All rights reserved.",
+      hours: "8am to 8pm, 7 days",
+      area: "Cleaning for Airbnb hosts and small offices in DC, Maryland & Virginia.",
     },
     thankYou: {
-      title: "Thank you for your scheduling!",
-      subtitle: "We will be in touch soon.",
+      title: "Thanks! We got your request.",
+      subtitle: "We'll text you within 30 minutes, 8am to 8pm, 7 days.",
+      hurry: "In a hurry? Message us now",
       backToHome: "Back to Home",
     },
   },
@@ -260,133 +268,149 @@ export const translations: { [key: string]: Translation } = {
     nav: {
       howItWorks: "Como Funciona",
       services: "Serviços",
-      benefits: "Benefícios",
-      scheduling: "Agendamento",
+      benefits: "Por que nós",
+      scheduling: "Orçamento",
       contact: "Contato",
     },
     hero: {
-      title: "Validação Inteligente de Limpeza para seu Airbnb",
-      subtitle: "Use inteligência artificial para garantir que seu imóvel esteja impecável para o próximo hóspede.",
-      scheduleDemo: "Agendar Demo",
+      eyebrow: "Limpeza de turnover para Airbnb · DC · MD · VA",
+      title: "Você vê tudo limpo antes do seu hóspede.",
+      subtitle: "Pronto antes do check-in. Fotos de cada cômodo e qualquer problema avisado na hora.",
+      priceFrom: "Turnovers a partir de",
+      getQuote: "Pedir orçamento",
+      call: "Ligar",
+      replyTime: "Respondemos em até 30 minutos, das 8h às 20h, 7 dias por semana.",
+      offerTitle: "30% de desconto no seu primeiro turnover",
+      offerNote: "Uma unidade por cliente novo. Mencione ao mandar mensagem.",
     },
     howItWorks: {
       title: "Como Funciona",
       steps: {
         register: {
-          title: "Registro de Propriedade",
-          description: "Registre a localização da sua propriedade e estabeleça padrões de limpeza para cada área.",
+          title: "Envie seu anúncio",
+          description: "Quartos, cidade, horário de checkout e como entramos.",
         },
         report: {
-          title: "Relatório de Danos",
-          description: "Documente quaisquer danos ou problemas encontrados durante o processo de limpeza.",
+          title: "Problemas avisados",
+          description: "Algo danificado ou faltando? Mandamos mensagem com fotos na hora.",
         },
         cleaning: {
-          title: "Limpeza e Troca de Roupa de Cama",
-          description: "Realize uma limpeza completa e troque todas as roupas de cama e banho.",
+          title: "Limpeza e reposição",
+          description: "Limpeza completa, camas feitas, lavanderia no imóvel e itens repostos.",
         },
         record: {
-          title: "Registro de Limpeza",
-          description: "Registre o processo de limpeza com fotos e vídeos para validação.",
+          title: "Relatório de fotos",
+          description: "Fotos de cada cômodo, enviadas assim que terminamos.",
         },
         validation: {
-          title: "Validação do Cliente",
-          description: "Receba a aprovação do cliente e a confirmação da conclusão da limpeza.",
+          title: "Pronto para o hóspede",
+          description: "Pronto antes do check-in, esperando o próximo hóspede.",
         },
       },
     },
     services: {
-      title: "Serviços de Limpeza Profissional",
+      title: "O Que Limpamos",
       standard: {
-        title: "Limpeza Padrão",
+        title: "Airbnb Turnover Cleaning",
+        price: "A partir de $110 por turnover",
         features: [
-          "Limpeza completa de todos os cômodos",
-          "Troca de roupas de cama e banho",
-          "Validação por IA inclusa",
+          "Limpeza completa de todos os cômodos e camas feitas",
+          "Lavanderia no imóvel e itens repostos",
+          "Relatório de fotos após cada limpeza",
         ],
       },
       postEvent: {
-        title: "Limpeza Pós-Evento",
+        title: "Deep Clean Reset",
+        price: "A partir de $230",
         features: [
-          "Limpeza profunda especializada",
-          "Remoção de manchas e odores",
-          "Relatório detalhado com fotos",
+          "Limpeza pesada após festas ou estadias longas",
+          "Cozinha, banheiros, dentro dos eletrodomésticos e rodapés",
+          "Relatório de fotos após cada limpeza",
         ],
       },
       express: {
-        title: "Limpeza Express",
+        title: "Office Cleaning",
+        price: "Visita grátis, preço mensal fixo",
         features: [
-          "Limpeza rápida entre hóspedes",
-          "Pronto em até 2 horas",
-          "Verificação de itens essenciais",
+          "Escritórios pequenos, até cerca de 3.000 sq ft",
+          "Limpeza à noite e nos fins de semana",
+          "Mesma equipe em cada visita",
         ],
       },
-      button: "Contratar Serviço",
+      alsoAvailable: "Também oferecemos",
+      alsoAvailableList: "Post-Renovation Cleaning · Upholstery & Mattress Cleaning. Mande uma foto por mensagem para orçamento.",
+      button: "Pedir orçamento",
     },
     benefits: {
-      title: "Benefícios",
+      title: "Por Que Anfitriões Nos Escolhem",
       items: {
         quality: {
-          title: "Garantia de Qualidade",
-          description: "Tenha certeza que seu imóvel está sempre nos padrões mais altos de limpeza.",
+          title: "Mesma equipe em cada visita",
+          description: "Nossa própria equipe limpa seu imóvel e já sabe como você gosta.",
         },
         time: {
-          title: "Economia de Tempo",
-          description: "Elimine a necessidade de inspeções presenciais com validação automatizada.",
+          title: "Pronto antes do check-in",
+          description: "Turnover no mesmo dia sem custo extra.",
         },
         ratings: {
-          title: "Melhores Avaliações",
-          description: "Mantenha altas classificações com limpeza consistentemente excelente.",
+          title: "Prova com fotos",
+          description: "Fotos de cada cômodo após cada limpeza, direto no seu celular.",
         },
         history: {
-          title: "Histórico Completo",
-          description: "Mantenha um registro detalhado de todas as limpezas e validações.",
+          title: "Problemas avisados na hora",
+          description: "Danos ou itens faltando são avisados na hora. Falamos inglês, português e espanhol.",
         },
       },
     },
+    testimonials: {
+      title: "O Que Dizem os Anfitriões",
+    },
     scheduling: {
-      title: "Agende uma Avaliação",
+      title: "Pedir Orçamento",
+      subtitle: "Deixe seus dados e mandamos mensagem em até 30 minutos, das 8h às 20h.",
       form: {
         name: "Nome",
-        email: "Email",
+        email: "E-mail",
         phone: "Telefone",
-        date: "Data Preferida",
-        time: "Horário Preferido",
-        propertyType: "Tipo de Imóvel",
-        notes: "Observações",
-        button: "Agendar Avaliação",
-      },
-      timeOptions: {
-        morning: "Manhã (8h - 12h)",
-        afternoon: "Tarde (13h - 17h)",
-        evening: "Noite (18h - 22h)",
-      },
-      propertyOptions: {
-        apartment: "Apartamento",
-        house: "Casa",
-        flat: "Flat",
-        other: "Outro",
+        service: "Serviço",
+        city: "Cidade (opcional)",
+        notes: "Algo mais? (opcional)",
+        notesPlaceholder: "Quartos, horário de checkout, número de unidades...",
+        button: "Enviar pedido",
+        sending: "Enviando...",
+        consent: "Ao enviar, você concorda que podemos mandar mensagem ou e-mail sobre seu orçamento.",
+        errors: {
+          name: "Digite seu nome.",
+          email: "Digite um e-mail válido, como voce@email.com.",
+          phone: "Digite um telefone dos EUA com 10 dígitos.",
+        },
       },
     },
     directContact: {
-      title: "Ou Entre em Contato Diretamente",
+      title: "Prefere Mandar Mensagem?",
+      subtitle: "A maioria dos anfitriões manda mensagem. Escolha o app que você usa.",
       call: "Ligar",
-      sms: "SMS / iMessage",
+      sms: "iMessage",
       whatsapp: "WhatsApp",
+      email: "E-mail",
     },
     cta: {
-      title: "Comece a usar AirCleanB hoje mesmo",
-      subtitle: "Transforme a gestão de limpeza do seu Airbnb com tecnologia de ponta",
-      button: "Agendar Demonstração",
+      title: "Pronto para o próximo checkout?",
+      subtitle: "Mande os quartos, a cidade e o horário de checkout. Respondemos em até 30 minutos.",
+      button: "Pedir orçamento",
     },
     footer: {
       terms: "Termos",
       privacy: "Privacidade",
       contact: "Contato",
-      rights: "© 2024 AirCleanB. Todos os direitos reservados.",
+      rights: "AirCleanB. Todos os direitos reservados.",
+      hours: "Das 8h às 20h, 7 dias",
+      area: "Limpeza para anfitriões de Airbnb e escritórios pequenos em DC, Maryland e Virginia.",
     },
     thankYou: {
-      title: "Obrigado pelo seu agendamento!",
-      subtitle: "Entraremos em contato em breve.",
+      title: "Obrigado! Recebemos seu pedido.",
+      subtitle: "Mandamos mensagem em até 30 minutos, das 8h às 20h, 7 dias por semana.",
+      hurry: "Com pressa? Mande mensagem agora",
       backToHome: "Voltar para a página inicial",
     },
   },
@@ -394,134 +418,150 @@ export const translations: { [key: string]: Translation } = {
     nav: {
       howItWorks: "Cómo Funciona",
       services: "Servicios",
-      benefits: "Beneficios",
-      scheduling: "Agendar",
+      benefits: "Por qué nosotros",
+      scheduling: "Cotizar",
       contact: "Contacto",
     },
     hero: {
-      title: "Validación Inteligente de Limpieza para tu Airbnb",
-      subtitle: "Usa inteligencia artificial para asegurar que tu propiedad esté impecable para el próximo huésped.",
-      scheduleDemo: "Agendar Demo",
+      eyebrow: "Limpieza de turnover para Airbnb · DC · MD · VA",
+      title: "Lo ves limpio antes que tu huésped.",
+      subtitle: "Listo antes del check-in. Fotos de cada cuarto y cualquier problema avisado al momento.",
+      priceFrom: "Turnovers desde",
+      getQuote: "Pedir cotización",
+      call: "Llamar",
+      replyTime: "Respondemos en menos de 30 minutos, de 8am a 8pm, 7 días.",
+      offerTitle: "30% de descuento en tu primer turnover",
+      offerNote: "Una unidad por cliente nuevo. Menciónalo al escribirnos.",
     },
     howItWorks: {
       title: "Cómo Funciona",
       steps: {
         register: {
-          title: "Registro de Propiedad",
-          description: "Registre la ubicación de su propiedad y establezca estándares de limpieza para cada área.",
+          title: "Envía tu anuncio",
+          description: "Habitaciones, ciudad, hora de checkout y cómo entramos.",
         },
         report: {
-          title: "Informe de Daños",
-          description: "Documente cualquier daño o problema encontrado durante el proceso de limpieza.",
+          title: "Problemas avisados",
+          description: "¿Algo dañado o faltante? Te escribimos con fotos al momento.",
         },
         cleaning: {
-          title: "Limpieza y Cambio de Ropa de Cama",
-          description: "Realice una limpieza a fondo y cambie toda la ropa de cama y baño.",
+          title: "Limpieza y reposición",
+          description: "Limpieza completa, camas listas, lavandería en el lugar y suministros repuestos.",
         },
         record: {
-          title: "Registro de Limpieza",
-          description: "Registre el proceso de limpieza con fotos y videos para su validación.",
+          title: "Reporte de fotos",
+          description: "Fotos de cada cuarto, enviadas apenas terminamos.",
         },
         validation: {
-          title: "Validación del Cliente",
-          description: "Reciba la aprobación del cliente y la confirmación de la finalización de la limpieza.",
+          title: "Listo para el huésped",
+          description: "Listo antes del check-in para tu próximo huésped.",
         },
       },
     },
     services: {
-      title: "Servicios de Limpieza Profesional",
+      title: "Lo Que Limpiamos",
       standard: {
-        title: "Limpieza Estándar",
+        title: "Airbnb Turnover Cleaning",
+        price: "Desde $110 por turnover",
         features: [
-          "Limpieza completa de todas las habitaciones",
-          "Cambio de ropa de cama y baño",
-          "Validación por IA incluida",
+          "Limpieza completa de cada cuarto y camas listas",
+          "Lavandería en el lugar y suministros repuestos",
+          "Reporte de fotos después de cada limpieza",
         ],
       },
       postEvent: {
-        title: "Limpieza Post-Evento",
+        title: "Deep Clean Reset",
+        price: "Desde $230",
         features: [
-          "Limpieza profunda especializada",
-          "Eliminación de manchas y olores",
-          "Informe detallado con fotos",
+          "Limpieza profunda después de fiestas o estadías largas",
+          "Cocina, baños, dentro de electrodomésticos y zócalos",
+          "Reporte de fotos después de cada limpieza",
         ],
       },
       express: {
-        title: "Limpieza Express",
+        title: "Office Cleaning",
+        price: "Visita gratis, precio mensual fijo",
         features: [
-          "Limpieza rápida entre huéspedes",
-          "Listo en hasta 2 horas",
-          "Verificación de elementos esenciales",
+          "Oficinas pequeñas de hasta unos 3,000 sq ft",
+          "Limpieza por la noche y fines de semana",
+          "El mismo equipo en cada visita",
         ],
       },
-      button: "Contratar Servicio",
+      alsoAvailable: "También ofrecemos",
+      alsoAvailableList: "Post-Renovation Cleaning · Upholstery & Mattress Cleaning. Envíanos una foto para cotizar.",
+      button: "Pedir cotización",
     },
     benefits: {
-      title: "Beneficios",
+      title: "Por Qué Nos Eligen los Anfitriones",
       items: {
         quality: {
-          title: "Garantía de Calidad",
-          description: "Asegúrate de que tu propiedad siempre cumpla con los más altos estándares de limpieza.",
+          title: "El mismo equipo en cada visita",
+          description: "Nuestro propio equipo limpia tu unidad y ya sabe cómo te gusta.",
         },
         time: {
-          title: "Ahorro de Tiempo",
-          description: "Elimina la necesidad de inspecciones presenciales con validación automatizada.",
+          title: "Listo antes del check-in",
+          description: "Turnovers el mismo día sin costo extra.",
         },
         ratings: {
-          title: "Mejores Calificaciones",
-          description: "Mantén altas calificaciones con limpieza consistentemente excelente.",
+          title: "Prueba con fotos",
+          description: "Fotos de cada cuarto después de cada limpieza, directo a tu celular.",
         },
         history: {
-          title: "Historial Completo",
-          description: "Mantén un registro detallado de todas las limpiezas y validaciones.",
+          title: "Problemas avisados al momento",
+          description: "Daños o faltantes reportados al momento. Hablamos inglés, portugués y español.",
         },
       },
     },
+    testimonials: {
+      title: "Lo Que Dicen los Anfitriones",
+    },
     scheduling: {
-      title: "Agenda una Evaluación",
+      title: "Pedir Cotización",
+      subtitle: "Déjanos tus datos y te escribimos en menos de 30 minutos, de 8am a 8pm.",
       form: {
         name: "Nombre",
-        email: "Email",
+        email: "Correo",
         phone: "Teléfono",
-        date: "Fecha Preferida",
-        time: "Horario Preferido",
-        propertyType: "Tipo de Propiedad",
-        notes: "Observaciones",
-        button: "Agendar Evaluación",
-      },
-      timeOptions: {
-        morning: "Mañana (8h - 12h)",
-        afternoon: "Tarde (13h - 17h)",
-        evening: "Noche (18h - 22h)",
-      },
-      propertyOptions: {
-        apartment: "Apartamento",
-        house: "Casa",
-        flat: "Flat",
-        other: "Otro",
+        service: "Servicio",
+        city: "Ciudad (opcional)",
+        notes: "¿Algo más? (opcional)",
+        notesPlaceholder: "Habitaciones, hora de checkout, número de unidades...",
+        button: "Enviar solicitud",
+        sending: "Enviando...",
+        consent: "Al enviar, aceptas que te escribamos por mensaje o correo sobre tu cotización.",
+        errors: {
+          name: "Escribe tu nombre.",
+          email: "Escribe un correo válido, como tu@correo.com.",
+          phone: "Escribe un teléfono de EE. UU. de 10 dígitos.",
+        },
       },
     },
     directContact: {
-      title: "O Contáctenos Directamente",
+      title: "¿Prefieres Escribirnos?",
+      subtitle: "La mayoría de los anfitriones nos escribe. Elige la app que usas.",
       call: "Llamar",
-      sms: "SMS / iMessage",
+      sms: "iMessage",
       whatsapp: "WhatsApp",
+      email: "Correo",
     },
     cta: {
-      title: "Empieza a usar AirCleanB hoy mismo",
-      subtitle: "Transforma la gestión de limpieza de tu Airbnb con tecnología de punta",
-      button: "Agendar Demostración",
+      title: "¿Listo para tu próximo checkout?",
+      subtitle: "Envíanos habitaciones, ciudad y hora de checkout. Respondemos en menos de 30 minutos.",
+      button: "Pedir cotización",
     },
     footer: {
       terms: "Términos",
       privacy: "Privacidad",
       contact: "Contacto",
-      rights: "© 2024 AirCleanB. Todos los derechos reservados.",
+      rights: "AirCleanB. Todos los derechos reservados.",
+      hours: "De 8am a 8pm, 7 días",
+      area: "Limpieza para anfitriones de Airbnb y oficinas pequeñas en DC, Maryland y Virginia.",
     },
     thankYou: {
-      title: "¡Gracias por tu agendamiento!",
-      subtitle: "Nos pondremos en contacto en breve.",
-      backToHome: "Volver a la página principal",
+      title: "¡Gracias! Recibimos tu solicitud.",
+      subtitle: "Te escribimos en menos de 30 minutos, de 8am a 8pm, 7 días.",
+      hurry: "¿Tienes prisa? Escríbenos ahora",
+      backToHome: "Volver al inicio",
     },
   },
 };

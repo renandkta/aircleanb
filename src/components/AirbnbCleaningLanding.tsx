@@ -4,17 +4,11 @@ import { Phone, MessageSquare, Check, X } from 'lucide-react';
 import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
 import LeadForm from './LeadForm';
-import { loadCarouselImages } from '../utils/carouselLoader';
+import { carouselImages } from '../utils/carouselLoader';
+import { trackCallClick, trackWhatsAppClick, whatsappUrl } from '../utils/contact';
 
 const AirbnbCleaningLanding: React.FC = () => {
-  const [carouselImages, setCarouselImages] = useState<Array<{ src: string; alt: string; title?: string }>>([]);
   const [showContactHint, setShowContactHint] = useState(false);
-
-  useEffect(() => {
-    loadCarouselImages().then(setCarouselImages).catch(() => {
-      // Silencia erros de carregamento; a landing continua funcional mesmo sem carrossel.
-    });
-  }, []);
 
   useEffect(() => {
     const showTimer = setTimeout(() => setShowContactHint(true), 1500);
@@ -32,26 +26,11 @@ const AirbnbCleaningLanding: React.FC = () => {
     }
   };
 
-  const trackCallClick = () => {
-    if (window.gtag) {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-17464291569/PBzFCMektOQcEPHhz4dB',
-      });
-    }
-  };
-
-  const trackWhatsAppClick = () => {
-    if (window.gtag) {
-      window.gtag('event', 'conversion', {
-        send_to: 'AW-17464291569/nr1-CMSktOQcEPHhz4dB',
-      });
-    }
-  };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <header className="bg-[#008CBA] text-white">
+      <header className="bg-[#00739A] text-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/">
             <Logo />
@@ -66,7 +45,7 @@ const AirbnbCleaningLanding: React.FC = () => {
 
       {/* Hero + Form above the fold */}
       <main className="flex-1">
-        <section className="bg-[#008CBA] text-white">
+        <section className="bg-[#00739A] text-white">
           <div className="container mx-auto px-4 py-10 md:py-16 grid md:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
@@ -91,7 +70,7 @@ const AirbnbCleaningLanding: React.FC = () => {
               </ul>
               <button
                 onClick={scrollToForm}
-                className="bg-white text-[#008CBA] px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition text-sm md:text-base"
+                className="bg-white text-[#00739A] px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition text-sm md:text-base"
               >
                 Get my cleaning quote
               </button>
@@ -100,13 +79,13 @@ const AirbnbCleaningLanding: React.FC = () => {
                   href="tel:+17203529810"
                   data-phone-link
                   onClick={trackCallClick}
-                  className="flex items-center justify-center px-5 py-3 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#008CBA] transition text-sm md:text-base"
+                  className="flex items-center justify-center px-5 py-3 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#00739A] transition text-sm md:text-base"
                 >
                   <Phone className="h-5 w-5 mr-2" />
                   Call Now
                 </a>
                 <a
-                  href="https://wa.me/17203529810"
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={trackWhatsAppClick}
@@ -207,7 +186,7 @@ const AirbnbCleaningLanding: React.FC = () => {
             <Link to="/privacy" className="hover:text-blue-300">
               Privacy Policy
             </Link>
-            <span className="text-gray-500">© 2024 AirCleanB. All rights reserved.</span>
+            <span className="text-gray-500">© {new Date().getFullYear()} AirCleanB. All rights reserved.</span>
           </div>
         </div>
       </footer>
@@ -237,13 +216,13 @@ const AirbnbCleaningLanding: React.FC = () => {
           href="tel:+17203529810"
           data-phone-link
           onClick={trackCallClick}
-          className="flex items-center justify-center py-4 bg-[#008CBA] text-white font-semibold"
+          className="flex items-center justify-center py-4 bg-[#00739A] text-white font-semibold"
         >
           <Phone className="h-5 w-5 mr-2" />
           Call Now
         </a>
         <a
-          href="https://wa.me/17203529810"
+          href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           onClick={trackWhatsAppClick}

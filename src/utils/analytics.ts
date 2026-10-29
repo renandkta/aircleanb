@@ -3,7 +3,7 @@
 //
 // Leave an ID empty and that tool stays off. Fill it in, merge, and it starts
 // counting on the next deploy.
-export const GA4_ID = ''; // e.g. 'G-ABC123XYZ' (GA4 > Admin > Data streams)
+export const GA4_ID = 'G-4HPTZC7DK7'; // e.g. 'G-ABC123XYZ' (GA4 > Admin > Data streams)
 export const META_PIXEL_ID = ''; // e.g. '1234567890123456' (Meta Events Manager)
 
 // Production domain only, same rule as the Google Ads tag in index.html, so

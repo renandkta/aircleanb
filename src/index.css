@@ -3,32 +3,37 @@
 @tailwind utilities;
 
 body {
-  color: #333;
+  color: #0B2A3A;
 }
 
-/* Botões originais */
+/* Pill buttons are the approved button style (business spec RN-10.6) */
 button {
   border-radius: 9999px;
 }
 
-/* Logo original */
-.logo-text {
-  color: white;
+/* Visible focus for keyboard users on every control */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #1E7B47;
+  outline-offset: 2px;
 }
 
-/* Melhorias de responsividade */
 @media (max-width: 768px) {
-  h1 {
-    font-size: 1.875rem;
-    line-height: 1.2;
-  }
-  
-  p {
-    font-size: 1rem;
-  }
-  
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

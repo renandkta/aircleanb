@@ -10,7 +10,7 @@ const PrivacyPolicy: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-[#008CBA] text-white">
+      <header className="bg-[#00739A] text-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/">
             <Logo />
@@ -20,7 +20,7 @@ const PrivacyPolicy: React.FC = () => {
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as 'en' | 'pt' | 'es')}
-              className="bg-transparent text-white focus:outline-none"
+              className="bg-transparent text-white"
             >
               <option value="en">English</option>
               <option value="pt">Português</option>
@@ -34,6 +34,7 @@ const PrivacyPolicy: React.FC = () => {
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
           {t.footer.privacy} Policy
         </h1>
+        <p className="text-gray-500 mb-4 text-sm">Last updated: October 29, 2026</p>
         <p className="text-gray-600 mb-8 text-sm md:text-base">
           This Privacy Policy explains how AirCleanB collects, uses, and protects your information when you
           use our website and services.
@@ -79,15 +80,24 @@ const PrivacyPolicy: React.FC = () => {
           <p className="text-gray-700 text-sm md:text-base">
             If you would like to review, update, or delete the personal information we hold about you, you can
             contact us at&nbsp;
-            <a href="mailto:aircleanb.dc@gmail.com" className="text-[#008CBA] underline">
-              aircleanb.dc@gmail.com
+            <a href="mailto:debora@aircleanb.com" className="text-[#00739A] underline">
+              debora@aircleanb.com
             </a>
             .
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-3">6. Updates to This Policy</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">6. Text Messages</h2>
+          <p className="text-gray-700 text-sm md:text-base">
+            When you send us a quote request or message us, you agree that we may reply by text message (SMS,
+            iMessage or WhatsApp) or email about your request and your cleanings. We do not send marketing texts.
+            Reply STOP at any time and we will stop texting you. Message and data rates may apply.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">7. Updates to This Policy</h2>
           <p className="text-gray-700 text-sm md:text-base">
             We may update this Privacy Policy from time to time. Any changes will be posted on this page with an
             updated revision date.

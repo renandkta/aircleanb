@@ -2,7 +2,24 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      // Approved palette "Azul AirCleanB + verde" (business spec RN-10.6)
+      colors: {
+        brand: {
+          DEFAULT: '#00739A',
+          dark: '#005A78',
+          ink: '#0B2A3A',
+          soft: '#E3F2F8',
+          line: '#CFE6EF',
+          green: '#1E7B47',
+          muted: '#46606C',
+        },
+      },
+      fontFamily: {
+        sans: ['"Public Sans"', 'system-ui', 'sans-serif'],
+        display: ['Archivo', '"Public Sans"', 'system-ui', 'sans-serif'],
+      },
+    },
   },
   plugins: [
     require('tailwind-scrollbar'),

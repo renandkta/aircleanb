@@ -5,21 +5,22 @@ interface LogoFallbackProps {
   className?: string;
 }
 
+// The mark is white on transparent, so it sits on a blue tile and stays visible
+// on white headers too. Served from /public, not from GitHub.
 const LogoFallback: React.FC<LogoFallbackProps> = ({ size = 32, className = "" }) => {
-  // Atualizando para o novo URL do logo
-  const logoUrl = "https://raw.githubusercontent.com/renandkta/aircleanb/main/src/ChatGPT%20Image%20Apr%202%2C%202025%20at%2012_26_52%20AM.png";
-  
   return (
-    <img 
-      src={logoUrl}
-      alt="AirCleanB Logo" 
-      className={`mr-2 ${className}`}
-      style={{ 
-        height: `${size}px`, 
-        width: `${size}px`,
-        objectFit: 'contain'
-      }}
-    />
+    <span
+      className={`inline-flex items-center justify-center rounded-lg bg-[#00739A] ${className}`}
+      style={{ width: `${size + 8}px`, height: `${size + 8}px` }}
+    >
+      <img
+        src="/images/logo-mark.png"
+        alt=""
+        width={size}
+        height={size}
+        style={{ width: `${size}px`, height: `${size}px`, objectFit: 'contain' }}
+      />
+    </span>
   );
 };
 

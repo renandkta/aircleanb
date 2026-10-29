@@ -5,7 +5,7 @@ import Logo from './Logo';
 const ServicesPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-[#008CBA] text-white">
+      <header className="bg-[#00739A] text-white">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/">
             <Logo />
@@ -73,8 +73,8 @@ const ServicesPage: React.FC = () => {
           </p>
           <p className="text-gray-700 text-sm md:text-base">
             To discuss a custom plan for your property or portfolio, reach out at{' '}
-            <a href="mailto:aircleanb.dc@gmail.com" className="text-[#008CBA] underline">
-              aircleanb.dc@gmail.com
+            <a href="mailto:debora@aircleanb.com" className="text-[#00739A] underline">
+              debora@aircleanb.com
             </a>
             .
           </p>

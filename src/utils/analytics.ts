@@ -3,7 +3,10 @@
 //
 // Leave an ID empty and that tool stays off. Fill it in, merge, and it starts
 // counting on the next deploy.
-export const GA4_ID = 'G-4HPTZC7DK7'; // e.g. 'G-ABC123XYZ' (GA4 > Admin > Data streams)
+// GA4 itself is configured in index.html (the tag has to be in the HTML for
+// Search Console verification); this ID is only used to address its events.
+// Route changes are counted by GA4's enhanced measurement (history events).
+export const GA4_ID = 'G-4HPTZC7DK7';
 export const META_PIXEL_ID = ''; // e.g. '1234567890123456' (Meta Events Manager)
 
 // Production domain only, same rule as the Google Ads tag in index.html, so
@@ -23,13 +26,6 @@ declare global {
 
 export const initAnalytics = () => {
   if (!isProduction) return;
-
-  // GA4 reuses the gtag.js loaded by index.html. Route changes in this
-  // single-page app are counted by GA4's enhanced measurement ("page changes
-  // based on browser history events", on by default).
-  if (GA4_ID && typeof window.gtag === 'function') {
-    window.gtag('config', GA4_ID);
-  }
 
   // Meta Pixel base code. The Pixel also counts route changes on its own
   // (history pushState), so PageView is sent only once here.

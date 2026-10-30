@@ -67,20 +67,22 @@
       }
     </script>
 
-    <!-- Google tag (gtag.js) — production domain only, so deploy previews and
-         localhost never send conversions. Off production window.gtag stays
-         undefined; every call site checks for it before calling. -->
+    <!-- Google tag (gtag.js) for GA4 (G-4HPTZC7DK7) and Google Ads.
+         The script tag is written straight into the HTML (not added by JS) so
+         Search Console can verify the site through Google Analytics. Loading
+         the library alone sends nothing: the config calls below run on the
+         production domain only, so previews and localhost never send visits or
+         conversions. Off production window.gtag stays undefined; every call
+         site checks for it before calling. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4HPTZC7DK7"></script>
     <script>
       (function () {
         var h = location.hostname;
         if (h !== 'aircleanb.com' && !h.endsWith('.aircleanb.com')) return;
-        var s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17464291569';
-        document.head.appendChild(s);
         window.dataLayer = window.dataLayer || [];
         window.gtag = function () { dataLayer.push(arguments); };
         gtag('js', new Date());
+        gtag('config', 'G-4HPTZC7DK7');
         gtag('config', 'AW-17464291569');
       })();
     </script>

@@ -2,9 +2,8 @@ import type { ServiceContent } from './types';
 
 // Facts from the owner (2026-11-02): this service is done by a specialist
 // partner and sold under AirCleanB, so the page never says "our own team".
-// Prices are the owner's "from" prices, set slightly below the average of 7
-// DMV companies' published prices. Sectionals and unusual pieces are quoted
-// from a photo.
+// Prices are the owner's "from" prices: the highest published price found
+// among 7 DMV companies for each piece (owner's choice, 2026-11-02).
 // TODO(owner): confirm the partner's method, drying time and what each clean
 // includes, then add them to "What's included" and the FAQ.
 export const upholsteryMattressCleaning: ServiceContent = {
@@ -15,13 +14,13 @@ export const upholsteryMattressCleaning: ServiceContent = {
   serviceType: 'Upholstery and mattress cleaning',
   metaTitle: 'Upholstery & Mattress Cleaning in DC, MD & VA | AirCleanB',
   metaDescription:
-    'Sofa, chair and mattress cleaning in DC, Maryland and Virginia. Sofas from $135, queen mattresses from $115. Text us a photo for your price.',
+    'Sofa, chair and mattress cleaning in DC, Maryland and Virginia. Sofas from $160, queen mattresses from $160. Text us a photo for your price.',
   eyebrow: 'Sofas, chairs and mattresses',
   h1: 'Upholstery & Mattress Cleaning in DC, MD & VA',
   intro:
     'Sofas, chairs and mattresses for homes and short-term rentals. Text us a photo and we confirm the price and a date within 30 minutes.',
-  priceLine: 'Sofas from $135 · mattresses from $89',
-  minPrice: 15,
+  priceLine: 'Sofas from $160 · mattresses from $130',
+  minPrice: 20,
   included: {
     title: 'What we clean',
     intro: 'Send a photo of each piece and we tell you the price before we book.',
@@ -29,7 +28,7 @@ export const upholsteryMattressCleaning: ServiceContent = {
       {
         heading: 'Sofas and chairs',
         icon: 'spray',
-        items: ['Sofas and loveseats', 'Armchairs and dining chairs', 'Sectionals and large pieces, quoted from a photo'],
+        items: ['Sofas and loveseats', 'Armchairs and dining chairs', 'Sectionals and large pieces'],
       },
       {
         heading: 'Mattresses',
@@ -55,15 +54,15 @@ export const upholsteryMattressCleaning: ServiceContent = {
     title: 'Prices',
     intro: 'Prices for each piece. We confirm the final price from your photo.',
     rows: [
-      { label: 'Sofa (3 seats)', price: 'from $135' },
-      { label: 'Loveseat (2 seats)', price: 'from $105' },
-      { label: 'Armchair', price: 'from $65' },
-      { label: 'Dining chair', price: 'from $15' },
-      { label: 'Sectional or large piece', price: 'quote from a photo' },
-      { label: 'Twin mattress', price: 'from $89' },
-      { label: 'Full mattress', price: 'from $99' },
-      { label: 'Queen mattress', price: 'from $115' },
-      { label: 'King mattress', price: 'from $129' },
+      { label: 'Sofa (3 seats)', price: 'from $160' },
+      { label: 'Loveseat (2 seats)', price: 'from $125' },
+      { label: 'Armchair', price: 'from $80' },
+      { label: 'Dining chair', price: 'from $20' },
+      { label: 'Sectional', price: 'from $249' },
+      { label: 'Twin mattress', price: 'from $130' },
+      { label: 'Full mattress', price: 'from $150' },
+      { label: 'Queen mattress', price: 'from $160' },
+      { label: 'King mattress', price: 'from $170' },
     ],
     notes: [
       'Size, fabric and stains can change the price. We always tell you the final price before we book.',
@@ -78,11 +77,11 @@ export const upholsteryMattressCleaning: ServiceContent = {
   faqs: [
     {
       q: 'How much does it cost to clean a sofa?',
-      a: 'A 3-seat sofa starts at $135 and a loveseat at $105. Text us a photo and we confirm the final price, which depends on size, fabric and stains.',
+      a: 'A 3-seat sofa starts at $160 and a loveseat at $125. Text us a photo and we confirm the final price, which depends on size, fabric and stains.',
     },
     {
       q: 'How much does mattress cleaning cost?',
-      a: 'From $89 for a twin, $99 for a full, $115 for a queen and $129 for a king.',
+      a: 'From $130 for a twin, $150 for a full, $160 for a queen and $170 for a king.',
     },
     {
       q: 'Who does the cleaning?',

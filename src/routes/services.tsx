@@ -53,8 +53,10 @@ const CARDS: Card[] = [
   },
   {
     title: 'Upholstery & Mattress Cleaning',
-    price: 'Text us a photo for a quote',
+    price: 'Sofas from $135, mattresses from $89',
     text: 'Sofas, chairs and mattresses, for homes and short-term rentals.',
+    to: '/upholstery-mattress-cleaning',
+    linkLabel: 'See upholstery & mattress',
   },
 ];
 

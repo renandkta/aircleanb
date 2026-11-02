@@ -22,7 +22,8 @@ const ROWS = [
   { service: 'Deep Clean Reset (studio / 2BR / 3BR)', price: 'from $230 / $280 / $360', to: '/airbnb-cleaning#deep-clean' },
   { service: 'Office cleaning', price: 'flat monthly price after a free walkthrough', to: '/office-cleaning' },
   { service: 'Post-construction / post-renovation cleaning', price: 'quote from photos', to: '/post-construction-cleaning' },
-  { service: 'Upholstery & mattress cleaning', price: 'quote from photos', to: '/services' },
+  { service: 'Sofa (3 seats) / loveseat / armchair', price: 'from $135 / $105 / $65', to: '/upholstery-mattress-cleaning' },
+  { service: 'Mattress (twin / full / queen / king)', price: 'from $89 / $99 / $115 / $129', to: '/upholstery-mattress-cleaning' },
 ];
 
 export default function Pricing() {

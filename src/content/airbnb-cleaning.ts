@@ -23,14 +23,17 @@ export const airbnbCleaning: ServiceContent = {
     groups: [
       {
         heading: 'Kitchen and bathrooms',
+        icon: 'spray',
         items: ['Full kitchen and bathroom cleaning', 'Surfaces wiped down', 'Trash taken out'],
       },
       {
         heading: 'Beds and laundry',
+        icon: 'bed',
         items: ['Beds made with fresh linens', 'On-site laundry'],
       },
       {
         heading: 'Restock and report',
+        icon: 'restock',
         items: [
           'Agreed essentials restocked',
           'Photos of every room when we finish',

@@ -3,14 +3,15 @@ import { Link } from 'react-router';
 import ServicePage from '../components/service/ServicePage';
 import { serviceMeta } from '../components/service/serviceMeta';
 import { postConstructionCleaning } from '../content/post-construction-cleaning';
+import PostConstructionIllustration from '../components/illustrations/PostConstructionIllustration';
 
 export const meta: MetaFunction = () => serviceMeta(postConstructionCleaning);
 
-// No before/after photos yet: the hero stays text-only until we have real ones
-// (no stock photos). When they arrive, pass them as heroMedia.
+// No before/after photos yet: the hero uses a drawn illustration (clearly
+// labeled, no stock photos). When real photos arrive, pass them as heroMedia.
 export default function PostConstructionCleaning() {
   return (
-    <ServicePage content={postConstructionCleaning}>
+    <ServicePage content={postConstructionCleaning} heroMedia={<PostConstructionIllustration />}>
       <section id="who-its-for" className="bg-brand-ink text-white py-14 md:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-6">Who we clean for</h2>

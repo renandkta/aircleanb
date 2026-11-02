@@ -25,14 +25,17 @@ export const officeCleaning: ServiceContent = {
     groups: [
       {
         heading: 'Work areas',
+        icon: 'desk',
         items: ['Desks and shared surfaces wiped', 'Trash and recycling emptied', 'Floors vacuumed and mopped'],
       },
       {
         heading: 'Kitchen and break room',
+        icon: 'kitchen',
         items: ['Counters, sink and table cleaned', 'Microwave and fridge handles wiped', 'Trash taken out'],
       },
       {
         heading: 'Restrooms',
+        icon: 'bath',
         items: ['Toilets, sinks and mirrors cleaned', 'Floors mopped', 'Paper and soap refilled from your supplies'],
       },
     ],

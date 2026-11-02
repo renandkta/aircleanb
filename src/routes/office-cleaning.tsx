@@ -3,14 +3,15 @@ import { Link } from 'react-router';
 import ServicePage from '../components/service/ServicePage';
 import { serviceMeta } from '../components/service/serviceMeta';
 import { officeCleaning } from '../content/office-cleaning';
+import OfficeIllustration from '../components/illustrations/OfficeIllustration';
 
 export const meta: MetaFunction = () => serviceMeta(officeCleaning);
 
-// No office photos yet: the hero stays text-only until we have real ones
-// (no stock photos).
+// No office photos yet: the hero uses a drawn illustration (clearly labeled,
+// no stock photos) until we have real ones.
 export default function OfficeCleaning() {
   return (
-    <ServicePage content={officeCleaning}>
+    <ServicePage content={officeCleaning} heroMedia={<OfficeIllustration />}>
       <section id="who-its-for" className="bg-brand-ink text-white py-14 md:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-6">Who we clean for</h2>

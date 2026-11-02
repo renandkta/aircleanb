@@ -25,14 +25,17 @@ export const postConstructionCleaning: ServiceContent = {
     groups: [
       {
         heading: 'Dust',
+        icon: 'dust',
         items: ['Construction dust removed from surfaces', 'Baseboards, doors and frames wiped', 'Vents and light fixtures dusted'],
       },
       {
         heading: 'Kitchen and bathrooms',
+        icon: 'kitchen',
         items: ['Cabinets cleaned inside and out', 'Counters, sinks and fixtures cleaned', 'Appliances wiped inside and out'],
       },
       {
         heading: 'Floors and windows',
+        icon: 'floor',
         items: ['Floors vacuumed and mopped', 'Interior windows and sills cleaned', 'Photos of every room when we finish'],
       },
     ],

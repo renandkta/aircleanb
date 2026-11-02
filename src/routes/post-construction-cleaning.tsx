@@ -3,15 +3,21 @@ import { Link } from 'react-router';
 import ServicePage from '../components/service/ServicePage';
 import { serviceMeta } from '../components/service/serviceMeta';
 import { postConstructionCleaning } from '../content/post-construction-cleaning';
-import PostConstructionIllustration from '../components/illustrations/PostConstructionIllustration';
+import HeroPhoto from '../components/HeroPhoto';
 
 export const meta: MetaFunction = () => serviceMeta(postConstructionCleaning);
 
-// No before/after photos yet: the hero uses a drawn illustration (clearly
-// labeled, no stock photos). When real photos arrive, pass them as heroMedia.
+// Free Pexels photo until we have before/after photos of our own jobs.
 export default function PostConstructionCleaning() {
   return (
-    <ServicePage content={postConstructionCleaning} heroMedia={<PostConstructionIllustration />}>
+    <ServicePage content={postConstructionCleaning} heroMedia={
+        <HeroPhoto
+          pexelsId={3616735}
+          alt="Vacuum cleaner in a newly renovated apartment"
+          credit="La Miko"
+          creditUrl="https://www.pexels.com/photo/cleaning-supplies-3616735/"
+        />
+      }>
       <section id="who-its-for" className="bg-brand-ink text-white py-14 md:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-6">Who we clean for</h2>

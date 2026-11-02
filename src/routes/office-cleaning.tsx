@@ -3,15 +3,21 @@ import { Link } from 'react-router';
 import ServicePage from '../components/service/ServicePage';
 import { serviceMeta } from '../components/service/serviceMeta';
 import { officeCleaning } from '../content/office-cleaning';
-import OfficeIllustration from '../components/illustrations/OfficeIllustration';
+import HeroPhoto from '../components/HeroPhoto';
 
 export const meta: MetaFunction = () => serviceMeta(officeCleaning);
 
-// No office photos yet: the hero uses a drawn illustration (clearly labeled,
-// no stock photos) until we have real ones.
+// Free Pexels photo until we have photos of offices we clean.
 export default function OfficeCleaning() {
   return (
-    <ServicePage content={officeCleaning} heroMedia={<OfficeIllustration />}>
+    <ServicePage content={officeCleaning} heroMedia={
+        <HeroPhoto
+          pexelsId={10567271}
+          alt="Person cleaning a wooden desk with a spray bottle and cloth"
+          credit="Ron Lach"
+          creditUrl="https://www.pexels.com/photo/man-cleaning-desk-10567271/"
+        />
+      }>
       <section id="who-its-for" className="bg-brand-ink text-white py-14 md:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-6">Who we clean for</h2>

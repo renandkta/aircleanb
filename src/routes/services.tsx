@@ -45,9 +45,11 @@ const CARDS: Card[] = [
     linkLabel: 'See office cleaning',
   },
   {
-    title: 'Post-Renovation Cleaning',
+    title: 'Post-Construction Cleaning',
     price: 'Text us photos for a quote',
     text: 'Dust and debris cleanup after construction or a renovation, before move-in or listing photos.',
+    to: '/post-construction-cleaning',
+    linkLabel: 'See post-construction cleaning',
   },
   {
     title: 'Upholstery & Mattress Cleaning',

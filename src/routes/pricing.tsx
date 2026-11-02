@@ -21,7 +21,8 @@ const ROWS = [
   { service: 'Extra full bathroom / half bathroom', price: '+$20 / +$10', to: '/airbnb-cleaning' },
   { service: 'Deep Clean Reset (studio / 2BR / 3BR)', price: 'from $230 / $280 / $360', to: '/airbnb-cleaning#deep-clean' },
   { service: 'Office cleaning', price: 'flat monthly price after a free walkthrough', to: '/office-cleaning' },
-  { service: 'Post-renovation, upholstery & mattress', price: 'quote from photos', to: '/services' },
+  { service: 'Post-construction / post-renovation cleaning', price: 'quote from photos', to: '/post-construction-cleaning' },
+  { service: 'Upholstery & mattress cleaning', price: 'quote from photos', to: '/services' },
 ];
 
 export default function Pricing() {

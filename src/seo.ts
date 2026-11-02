@@ -84,7 +84,7 @@ export const localBusinessSchema = () => ({
     { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Airbnb Turnover Cleaning', url: `${SITE_URL}/airbnb-cleaning` } },
     { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Deep Clean Reset', url: `${SITE_URL}/airbnb-cleaning` } },
     { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Office Cleaning', url: `${SITE_URL}/office-cleaning` } },
-    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Post-Renovation Cleaning' } },
+    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Post-Renovation Cleaning', url: `${SITE_URL}/post-construction-cleaning` } },
     { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Upholstery & Mattress Cleaning' } },
   ],
 });

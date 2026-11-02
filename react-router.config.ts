@@ -8,6 +8,7 @@ const PRERENDER_PATHS = [
   '/',
   '/airbnb-cleaning',
   '/office-cleaning',
+  '/post-construction-cleaning',
   '/services',
   '/pricing',
   '/about',

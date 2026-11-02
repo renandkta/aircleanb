@@ -22,7 +22,7 @@ export default function OfficeCleaning() {
           </ul>
           <p className="mt-6 text-white/85">
             Moving into a new or renovated space? We also do{' '}
-            <Link to="/services" className="underline font-semibold text-white">post-renovation cleaning</Link>.
+            <Link to="/post-construction-cleaning" className="underline font-semibold text-white">post-construction cleaning</Link>.
           </p>
         </div>
       </section>

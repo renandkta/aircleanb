@@ -12,10 +12,10 @@ export default function PostConstructionCleaning() {
   return (
     <ServicePage content={postConstructionCleaning} heroMedia={
         <HeroPhoto
-          pexelsId={3616746}
-          alt="Vacuum cleaner and tools in a room during renovation"
-          credit="La Miko"
-          creditUrl="https://www.pexels.com/photo/photo-of-vacuum-cleaner-on-floor-3616746/"
+          pexelsId={6197108}
+          alt="Cleaners mopping the floor and wiping glass in a modern dining room"
+          credit="Tima Miroshnichenko"
+          creditUrl="https://www.pexels.com/photo/group-of-people-cleaning-a-dining-room-6197108/"
         />
       }>
       <section id="who-its-for" className="bg-brand-ink text-white py-14 md:py-20">

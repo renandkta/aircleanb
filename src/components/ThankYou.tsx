@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Globe, MessageSquare } from 'lucide-react';
 import { translations } from '../translations';
-import { prefersIMessage, smsUrl, trackIMessageClick, trackWhatsAppClick, whatsappUrl } from '../utils/contact';
+import { smsUrlFor, trackSmsClick, trackWhatsAppClick, usePrefersIMessage, whatsappUrlFor } from '../utils/contact';
+
+const ctx = { service: 'general', placement: 'thank_you' } as const;
 
 export default function ThankYou() {
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
-  const useIMessage = prefersIMessage();
+  const useIMessage = usePrefersIMessage();
 
-  // The lead conversion fires once in the form success callback (LeadForm /
+  // The lead conversion fires once in the form success callback (QuoteForm /
   // MainPage). It is intentionally NOT fired here: /thank-you would also count
   // refreshes, back-button hits and direct visits, inflating the numbers.
 
@@ -19,10 +21,10 @@ export default function ThankYou() {
         <h1 className="font-display text-4xl font-extrabold text-brand-ink">{t.thankYou.title}</h1>
         <p className="text-lg text-brand-muted">{t.thankYou.subtitle}</p>
         <a
-          href={useIMessage ? smsUrl : whatsappUrl}
+          href={useIMessage ? smsUrlFor('general') : whatsappUrlFor('general')}
           target={useIMessage ? undefined : '_blank'}
           rel={useIMessage ? undefined : 'noopener noreferrer'}
-          onClick={useIMessage ? trackIMessageClick : trackWhatsAppClick}
+          onClick={() => (useIMessage ? trackSmsClick(ctx) : trackWhatsAppClick(ctx))}
           className="inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand text-white font-bold hover:bg-brand-dark transition"
         >
           <MessageSquare className="h-5 w-5" aria-hidden="true" />

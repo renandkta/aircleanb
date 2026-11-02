@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { IMaskInput } from 'react-imask';
 import { useForm } from '@formspree/react';
 import { Check, CheckCircle, Users, Clock, Camera, AlertTriangle, Globe, MapPin, WashingMachine, ThumbsUp, Mail, Phone, MessageSquare, Send, ArrowRight } from 'lucide-react';
@@ -8,19 +8,33 @@ import Logo from './Logo';
 import ImageCarousel from './ImageCarousel';
 import StickyContactBar from './StickyContactBar';
 import { carouselImages } from '../utils/carouselLoader';
+import { testimonials } from '../content/testimonials';
 import {
   EMAIL,
   PHONE_DISPLAY,
+  SERVING_LINE,
   mailtoUrl,
-  prefersIMessage,
-  smsUrl,
+  smsUrlFor,
   telUrl,
   trackCallClick,
+  trackEmailClick,
   trackFormLead,
-  trackIMessageClick,
+  trackSmsClick,
   trackWhatsAppClick,
-  whatsappUrl,
+  usePrefersIMessage,
+  whatsappUrlFor,
 } from '../utils/contact';
+import type { ContactContext } from '../utils/analytics';
+
+// The home sells mostly Airbnb turnovers, but the message stays generic so
+// office leads can use it too.
+const HOME_SERVICE = 'general' as const;
+const at = (placement: ContactContext['placement']): ContactContext => ({ service: HOME_SERVICE, placement });
+const smsUrl = smsUrlFor(HOME_SERVICE);
+const whatsappUrl = whatsappUrlFor(HOME_SERVICE);
+
+// Service cards on the home link to their own pages (same order as t.services).
+const SERVICE_LINKS = ['/airbnb-cleaning', '/airbnb-cleaning#deep-clean', '/office-cleaning'];
 
 type FieldErrors = Partial<Record<'name' | 'email' | 'phone', string>>;
 
@@ -35,35 +49,13 @@ const validatePhone = (phone: string) => {
   return local.length === 10;
 };
 
-const testimonials = [
-  {
-    quote: "The Deep Clean Reset was worth every penny. My place looked brand new and my guest ratings went up immediately.",
-    name: "Mark T.",
-    place: "Arlington, VA",
-  },
-  {
-    quote: "Finally, a reliable team in DC! They handle the turnover seamlessly, and the photo reports give me total peace of mind.",
-    name: "Emily R.",
-    place: "Capitol Hill, Washington DC",
-  },
-  {
-    quote: "I manage 3 units in Baltimore and AirCleanB is the only partner I trust. Consistent quality every single time.",
-    name: "David K.",
-    place: "Fells Point, Baltimore",
-  },
-  {
-    quote: "Super professional service. They arrived on time in Silver Spring and the cleaning was spotless. Highly recommend!",
-    name: "Sarah L.",
-    place: "Silver Spring, MD",
-  },
-];
 
 export default function MainPage() {
   const navigate = useNavigate();
   const [language, setLanguage] = useState<'en' | 'pt' | 'es'>('en');
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const useIMessage = prefersIMessage();
+  const useIMessage = usePrefersIMessage();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -81,7 +73,7 @@ export default function MainPage() {
 
   useEffect(() => {
     if (state.succeeded) {
-      trackFormLead();
+      trackFormLead(at('form'));
       navigate('/thank-you');
     }
   }, [state.succeeded, navigate]);
@@ -136,10 +128,14 @@ export default function MainPage() {
     setMobileMenuOpen(false);
   };
 
+  // Service pages first, so Google and visitors find them from the home.
+  const pageLinks = [
+    { to: '/airbnb-cleaning', label: 'Airbnb Cleaning' },
+    { to: '/office-cleaning', label: 'Office Cleaning' },
+  ];
   const navLinks = [
     { id: 'how-it-works', label: t.nav.howItWorks },
     { id: 'services', label: t.nav.services },
-    { id: 'benefits', label: t.nav.benefits },
     { id: 'contact', label: t.nav.contact },
   ];
 
@@ -159,14 +155,14 @@ export default function MainPage() {
     </label>
   );
 
-  const imessageButton = (className: string) => (
-    <a key="imessage" href={smsUrl} onClick={trackIMessageClick} className={className}>
+  const imessageButton = (className: string, placement: ContactContext['placement']) => (
+    <a key="imessage" href={smsUrl} onClick={() => trackSmsClick(at(placement))} className={className}>
       <MessageSquare className="h-5 w-5" aria-hidden="true" />
       {t.directContact.sms}
     </a>
   );
-  const whatsappButton = (className: string) => (
-    <a key="whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={trackWhatsAppClick} className={className}>
+  const whatsappButton = (className: string, placement: ContactContext['placement']) => (
+    <a key="whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick(at(placement))} className={className}>
       <MessageSquare className="h-5 w-5" aria-hidden="true" />
       {t.directContact.whatsapp}
     </a>
@@ -174,9 +170,10 @@ export default function MainPage() {
   const primaryBtn = "flex-1 inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand text-white font-bold hover:bg-brand-dark transition";
   const outlineBtn = "flex-1 inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-white text-brand-dark font-bold border-2 border-brand hover:bg-brand-soft transition";
   // Apple devices see iMessage first, everyone else WhatsApp first.
-  const messageButtons = useIMessage
-    ? [imessageButton(primaryBtn), whatsappButton(outlineBtn)]
-    : [whatsappButton(primaryBtn), imessageButton(outlineBtn)];
+  const messageButtons = (placement: ContactContext['placement']) =>
+    useIMessage
+      ? [imessageButton(primaryBtn, placement), whatsappButton(outlineBtn, placement)]
+      : [whatsappButton(primaryBtn, placement), imessageButton(outlineBtn, placement)];
 
   const inputClass = (hasError: boolean) =>
     `w-full min-h-[48px] px-4 py-2 bg-white border rounded-lg text-base text-brand-ink ${hasError ? 'border-2 border-red-700' : 'border-gray-400'}`;
@@ -213,6 +210,11 @@ export default function MainPage() {
             </Link>
 
             <div className="hidden md:flex items-center gap-6">
+              {pageLinks.map((link) => (
+                <Link key={link.to} to={link.to} className="text-brand-ink font-semibold hover:text-brand py-2">
+                  {link.label}
+                </Link>
+              ))}
               {navLinks.map((link) => (
                 <a key={link.id} href={`#${link.id}`} onClick={scrollTo(link.id)} className="text-brand-ink font-semibold hover:text-brand py-2">
                   {link.label}
@@ -247,6 +249,11 @@ export default function MainPage() {
 
           {mobileMenuOpen && (
             <div id="mobile-menu" className="md:hidden mt-3 pb-2 flex flex-col">
+              {pageLinks.map((link) => (
+                <Link key={link.to} to={link.to} className="text-brand-ink font-semibold py-3 border-t border-brand-line">
+                  {link.label}
+                </Link>
+              ))}
               {navLinks.map((link) => (
                 <a key={link.id} href={`#${link.id}`} onClick={scrollTo(link.id)} className="text-brand-ink font-semibold py-3 border-t border-brand-line">
                   {link.label}
@@ -281,16 +288,16 @@ export default function MainPage() {
             <a
               href={telUrl}
               data-phone-link
-              onClick={trackCallClick}
+              onClick={() => trackCallClick(at('hero'))}
               className="order-1 md:order-2 inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-white text-brand-ink font-bold hover:bg-brand-line transition"
             >
               <Phone className="h-5 w-5" aria-hidden="true" />
               {t.hero.call} <span data-phone-text>{PHONE_DISPLAY}</span>
             </a>
             <div className="order-2 md:order-1 flex flex-row gap-3">
-              {messageButtons}
+              {messageButtons('hero')}
             </div>
-            <p className="order-3 text-sm text-brand-muted">{t.hero.replyTime}</p>
+            <p className="order-3 text-sm text-brand-muted">{t.hero.replyTime} {SERVING_LINE}</p>
           </div>
         </div>
       </section>
@@ -343,7 +350,7 @@ export default function MainPage() {
         <div className="container mx-auto px-4">
           <h2 className="font-display text-3xl md:text-4xl font-extrabold text-center mb-10 md:mb-14">{t.services.title}</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            {services.map((service) => (
+            {services.map((service, i) => (
               <div key={service.title} className="bg-white rounded-2xl border border-brand-line p-6 md:p-8 flex flex-col">
                 <h3 className="font-display text-xl font-extrabold mb-1">{service.title}</h3>
                 <p className="font-bold text-brand-dark mb-4">{service.price}</p>
@@ -355,19 +362,19 @@ export default function MainPage() {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="#schedule"
-                  onClick={scrollTo('schedule')}
+                <Link
+                  to={SERVICE_LINKS[i]}
                   className="mt-6 inline-flex items-center justify-center gap-2 min-h-[48px] rounded-full bg-brand text-white font-bold hover:bg-brand-dark transition"
                 >
                   {t.services.button}
                   <ArrowRight className="h-5 w-5" aria-hidden="true" />
-                </a>
+                </Link>
               </div>
             ))}
           </div>
           <p className="mt-8 text-center text-brand-muted max-w-2xl mx-auto">
-            <strong className="text-brand-ink">{t.services.alsoAvailable}:</strong> {t.services.alsoAvailableList}
+            <strong className="text-brand-ink">{t.services.alsoAvailable}:</strong> {t.services.alsoAvailableList}{' '}
+            <Link to="/services" className="underline text-brand-dark font-semibold">All services</Link>
           </p>
         </div>
       </section>
@@ -529,11 +536,11 @@ export default function MainPage() {
           <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-3">{t.directContact.title}</h2>
           <p className="text-brand-muted max-w-2xl mx-auto mb-8">{t.directContact.subtitle}</p>
           <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {messageButtons}
+            {messageButtons('contact')}
             <a
               href={telUrl}
               data-phone-link
-              onClick={trackCallClick}
+              onClick={() => trackCallClick(at('contact'))}
               className="inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand-soft text-brand-ink font-bold hover:bg-brand-line transition"
             >
               <Phone className="h-5 w-5" aria-hidden="true" />
@@ -541,6 +548,7 @@ export default function MainPage() {
             </a>
             <a
               href={mailtoUrl}
+              onClick={() => trackEmailClick(at('contact'))}
               className="inline-flex items-center justify-center gap-2 min-h-[52px] px-6 rounded-full bg-brand-soft text-brand-ink font-bold hover:bg-brand-line transition"
             >
               <Mail className="h-5 w-5" aria-hidden="true" />
@@ -578,17 +586,20 @@ export default function MainPage() {
             <div>
               <h3 className="font-bold mb-3">{t.nav.services}</h3>
               <ul className="space-y-2 text-white/85">
-                {SERVICE_NAMES.map((name) => (
-                  <li key={name}>{name}</li>
-                ))}
+                <li><Link to="/airbnb-cleaning" className="hover:text-white">Airbnb Turnover Cleaning</Link></li>
+                <li><Link to="/airbnb-cleaning#deep-clean" className="hover:text-white">Deep Clean Reset</Link></li>
+                <li><Link to="/office-cleaning" className="hover:text-white">Office Cleaning</Link></li>
+                <li><Link to="/services" className="hover:text-white">Post-Renovation Cleaning</Link></li>
+                <li><Link to="/services" className="hover:text-white">Upholstery &amp; Mattress Cleaning</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold mb-3">{t.nav.contact}</h3>
               <ul className="space-y-2 text-white/85">
-                <li><a href={telUrl} data-phone-link onClick={trackCallClick} className="hover:text-white"><span data-phone-text>{PHONE_DISPLAY}</span></a></li>
-                <li><a href={mailtoUrl} className="hover:text-white">{EMAIL}</a></li>
+                <li><a href={telUrl} data-phone-link onClick={() => trackCallClick(at('footer'))} className="hover:text-white"><span data-phone-text>{PHONE_DISPLAY}</span></a></li>
+                <li><a href={mailtoUrl} onClick={() => trackEmailClick(at('footer'))} className="hover:text-white">{EMAIL}</a></li>
                 <li>{t.footer.hours}</li>
+                <li className="text-sm">{SERVING_LINE}</li>
               </ul>
             </div>
             <div>
@@ -609,7 +620,7 @@ export default function MainPage() {
         </div>
       </footer>
 
-      <StickyContactBar label={t.hero.getQuote} />
+      <StickyContactBar label={t.hero.getQuote} service={HOME_SERVICE} />
     </div>
   );
 }

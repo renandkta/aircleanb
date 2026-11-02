@@ -8,7 +8,8 @@ This is the official repository for the AirCleanB website, a platform for an Air
 - **Build Tool:** Vite
 - **Styling:** Tailwind CSS
 - **Icons:** Lucide React
-- **Deployment:** GitHub Pages
+- **Rendering:** React Router 7 (framework mode) with every page prerendered to static HTML (`react-router.config.ts`)
+- **Deployment:** static files in `build/client` (Vercel via `vercel.json`; GitHub Pages workflow also builds the same folder)
 
 ---
 

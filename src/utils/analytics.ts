@@ -1,31 +1,50 @@
 // Visit and contact measurement: Google Analytics 4 and Meta Pixel, on top of
-// the Google Ads tag that index.html already loads.
+// the Google Ads tag that root.tsx loads.
 //
 // Leave an ID empty and that tool stays off. Fill it in, merge, and it starts
 // counting on the next deploy.
-// GA4 itself is configured in index.html (the tag has to be in the HTML for
-// Search Console verification); this ID is only used to address its events.
-// Route changes are counted by GA4's enhanced measurement (history events).
+// GA4 itself is configured in the <head> written by root.tsx (the tag has to be
+// in the HTML for Search Console verification); this ID is only used to address
+// its events. Route changes are counted by GA4's enhanced measurement (history
+// events).
 export const GA4_ID = 'G-4HPTZC7DK7';
 export const META_PIXEL_ID = ''; // e.g. '1234567890123456' (Meta Events Manager)
 
-// Production domain only, same rule as the Google Ads tag in index.html, so
+// Production domain only, same rule as the Google tag in root.tsx, so
 // localhost and previews never pollute the numbers.
-export const isProduction =
+export const isProduction = () =>
   typeof location !== 'undefined' &&
   (location.hostname === 'aircleanb.com' || location.hostname.endsWith('.aircleanb.com'));
 
-export type ContactChannel = 'whatsapp' | 'imessage' | 'call' | 'form';
+export type ContactChannel = 'whatsapp' | 'sms' | 'call' | 'email' | 'form';
+
+// Where the tap happened, so GA4 shows which page and which button bring contacts.
+// Register "service" and "placement" as custom dimensions in GA4 to see them.
+export interface ContactContext {
+  service: 'airbnb' | 'office' | 'post_construction' | 'upholstery_mattress' | 'general';
+  placement: 'header' | 'hero' | 'sticky_bar' | 'cta_band' | 'contact' | 'pricing' | 'footer' | 'thank_you' | 'form';
+}
+
+// GA4 event per channel. whatsapp_click, sms_click, call_click and quote_submit
+// are the ones to mark as key events in GA4 (Admin > Events).
+const GA4_EVENT: Record<ContactChannel, string> = {
+  whatsapp: 'whatsapp_click',
+  sms: 'sms_click',
+  call: 'call_click',
+  email: 'email_click',
+  form: 'quote_submit',
+};
 
 declare global {
   interface Window {
+    gtag?: (...args: unknown[]) => void;
     fbq?: ((...args: unknown[]) => void) & { queue?: unknown[]; loaded?: boolean; version?: string; push?: unknown; callMethod?: (...args: unknown[]) => void };
     _fbq?: unknown;
   }
 }
 
 export const initAnalytics = () => {
-  if (!isProduction) return;
+  if (!isProduction()) return;
 
   // Meta Pixel base code. The Pixel also counts route changes on its own
   // (history pushState), so PageView is sent only once here.
@@ -49,19 +68,17 @@ export const initAnalytics = () => {
   }
 };
 
-// One contact attempt: a tap on WhatsApp, iMessage or Call, or a form sent.
-// GA4 gets "contact_click" (taps) or "generate_lead" (form) with the channel;
-// Meta gets "Contact" (taps) or "Lead" (form).
-export const trackContact = (channel: ContactChannel) => {
-  if (!isProduction) return;
+// One contact attempt: a tap on WhatsApp, iMessage/SMS, Call or email, or a form sent.
+export const trackContact = (channel: ContactChannel, ctx: ContactContext) => {
+  if (!isProduction()) return;
   if (GA4_ID && typeof window.gtag === 'function') {
-    if (channel === 'form') {
-      window.gtag('event', 'generate_lead', { send_to: GA4_ID, method: 'form' });
-    } else {
-      window.gtag('event', 'contact_click', { send_to: GA4_ID, method: channel });
-    }
+    window.gtag('event', GA4_EVENT[channel], {
+      send_to: GA4_ID,
+      service: ctx.service,
+      placement: ctx.placement,
+    });
   }
-  if (META_PIXEL_ID && window.fbq) {
+  if (META_PIXEL_ID && window.fbq && channel !== 'email') {
     window.fbq('track', channel === 'form' ? 'Lead' : 'Contact', { content_name: channel });
   }
 };

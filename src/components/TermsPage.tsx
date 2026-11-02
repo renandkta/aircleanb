@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import Logo from './Logo';
 import { EMAIL, PHONE_DISPLAY, mailtoUrl } from '../utils/contact';
 

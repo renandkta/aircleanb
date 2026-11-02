@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Globe } from 'lucide-react';
 import { translations } from '../translations';
 import Logo from './Logo';

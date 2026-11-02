@@ -12,10 +12,10 @@ export default function OfficeCleaning() {
   return (
     <ServicePage content={officeCleaning} heroMedia={
         <HeroPhoto
-          pexelsId={10567271}
-          alt="Person cleaning a wooden desk with a spray bottle and cloth"
-          credit="Ron Lach"
-          creditUrl="https://www.pexels.com/photo/man-cleaning-desk-10567271/"
+          pexelsId={36631699}
+          alt="Bright open-plan office with cubicles and ceiling lights"
+          credit="DOAN THANH BINH"
+          creditUrl="https://www.pexels.com/photo/spacious-modern-office-interior-with-open-cubicles-36631699/"
         />
       }>
       <section id="who-its-for" className="bg-brand-ink text-white py-14 md:py-20">

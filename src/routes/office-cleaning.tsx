@@ -3,14 +3,21 @@ import { Link } from 'react-router';
 import ServicePage from '../components/service/ServicePage';
 import { serviceMeta } from '../components/service/serviceMeta';
 import { officeCleaning } from '../content/office-cleaning';
+import HeroPhoto from '../components/HeroPhoto';
 
 export const meta: MetaFunction = () => serviceMeta(officeCleaning);
 
-// No office photos yet: the hero stays text-only until we have real ones
-// (no stock photos).
+// Free Pexels photo until we have photos of offices we clean.
 export default function OfficeCleaning() {
   return (
-    <ServicePage content={officeCleaning}>
+    <ServicePage content={officeCleaning} heroMedia={
+        <HeroPhoto
+          pexelsId={36631699}
+          alt="Bright open-plan office with cubicles and ceiling lights"
+          credit="DOAN THANH BINH"
+          creditUrl="https://www.pexels.com/photo/spacious-modern-office-interior-with-open-cubicles-36631699/"
+        />
+      }>
       <section id="who-its-for" className="bg-brand-ink text-white py-14 md:py-20">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="font-display text-3xl md:text-4xl font-extrabold mb-6">Who we clean for</h2>
@@ -22,7 +29,7 @@ export default function OfficeCleaning() {
           </ul>
           <p className="mt-6 text-white/85">
             Moving into a new or renovated space? We also do{' '}
-            <Link to="/services" className="underline font-semibold text-white">post-renovation cleaning</Link>.
+            <Link to="/post-construction-cleaning" className="underline font-semibold text-white">post-construction cleaning</Link>.
           </p>
         </div>
       </section>

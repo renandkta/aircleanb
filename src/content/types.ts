@@ -1,5 +1,8 @@
 import type { ServiceKey } from '../utils/contact';
 
+// Small icon shown next to each "What's included" group.
+export type IncludedIcon = 'desk' | 'kitchen' | 'bath' | 'dust' | 'floor' | 'bed' | 'restock' | 'spray';
+
 export interface Faq {
   q: string;
   a: string;
@@ -28,7 +31,7 @@ export interface ServiceContent {
   included: {
     title: string;
     intro?: string;
-    groups: { heading: string; items: string[] }[];
+    groups: { heading: string; icon?: IncludedIcon; items: string[] }[];
   };
   process: {
     title: string;

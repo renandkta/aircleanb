@@ -1,8 +1,19 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { CheckCircle, ChevronRight } from 'lucide-react';
+import { Bath, BedDouble, CheckCircle, ChevronRight, Grid3x3, Monitor, PackageCheck, SprayCan, UtensilsCrossed, Wind } from 'lucide-react';
 import type { Crumb } from '../../seo';
-import type { Faq, ServiceContent } from '../../content/types';
+import type { Faq, IncludedIcon, ServiceContent } from '../../content/types';
+
+const INCLUDED_ICONS: Record<IncludedIcon, typeof Bath> = {
+  desk: Monitor,
+  kitchen: UtensilsCrossed,
+  bath: Bath,
+  dust: Wind,
+  floor: Grid3x3,
+  bed: BedDouble,
+  restock: PackageCheck,
+  spray: SprayCan,
+};
 import { SERVICE_AREA } from '../../seo';
 import ContactButtons from '../ContactButtons';
 import type { ServiceKey } from '../../utils/contact';
@@ -56,7 +67,17 @@ export function IncludedList({ included }: { included: ServiceContent['included'
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           {included.groups.map((g) => (
             <div key={g.heading} className="rounded-2xl border border-brand-line p-6">
-              <h3 className="font-bold text-lg mb-3">{g.heading}</h3>
+              <h3 className="font-bold text-lg mb-3 flex items-center gap-3">
+                {g.icon && (() => {
+                  const Icon = INCLUDED_ICONS[g.icon];
+                  return (
+                    <span className="w-10 h-10 flex-none flex items-center justify-center rounded-full bg-brand-soft">
+                      <Icon className="h-5 w-5 text-brand" aria-hidden="true" />
+                    </span>
+                  );
+                })()}
+                {g.heading}
+              </h3>
               <ul className="space-y-2">
                 {g.items.map((item) => (
                   <li key={item} className="flex items-start gap-2">

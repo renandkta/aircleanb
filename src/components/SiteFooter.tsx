@@ -27,7 +27,8 @@ export default function SiteFooter({ service = 'general' }: SiteFooterProps) {
               <li><Link to="/airbnb-cleaning" className="hover:text-white">Airbnb turnover cleaning</Link></li>
               <li><Link to="/airbnb-cleaning#deep-clean" className="hover:text-white">Deep Clean Reset</Link></li>
               <li><Link to="/office-cleaning" className="hover:text-white">Office cleaning</Link></li>
-              <li><Link to="/services" className="hover:text-white">Post-renovation, upholstery &amp; mattress</Link></li>
+              <li><Link to="/post-construction-cleaning" className="hover:text-white">Post-construction cleaning</Link></li>
+              <li><Link to="/services" className="hover:text-white">Upholstery &amp; mattress</Link></li>
             </ul>
           </div>
           <div>

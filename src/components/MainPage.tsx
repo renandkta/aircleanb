@@ -590,7 +590,7 @@ export default function MainPage() {
                 <li><Link to="/airbnb-cleaning#deep-clean" className="hover:text-white">Deep Clean Reset</Link></li>
                 <li><Link to="/office-cleaning" className="hover:text-white">Office Cleaning</Link></li>
                 <li><Link to="/post-construction-cleaning" className="hover:text-white">Post-Renovation Cleaning</Link></li>
-                <li><Link to="/services" className="hover:text-white">Upholstery &amp; Mattress Cleaning</Link></li>
+                <li><Link to="/upholstery-mattress-cleaning" className="hover:text-white">Upholstery &amp; Mattress Cleaning</Link></li>
               </ul>
             </div>
             <div>

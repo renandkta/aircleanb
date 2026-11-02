@@ -45,7 +45,7 @@ export default function AirbnbCleaning() {
             ))}
           </div>
           <p className="text-center text-brand-muted mt-8">
-            Also for hosts: <Link to="/services" className="underline text-brand-dark font-semibold">upholstery and mattress cleaning</Link>.
+            Also for hosts: <Link to="/upholstery-mattress-cleaning" className="underline text-brand-dark font-semibold">upholstery and mattress cleaning</Link>.
             {' '}Manage an office too? See <Link to="/office-cleaning" className="underline text-brand-dark font-semibold">office cleaning</Link>.
           </p>
         </div>

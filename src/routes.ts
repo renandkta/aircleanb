@@ -7,6 +7,8 @@ export default [
   route('post-construction-cleaning', 'routes/post-construction-cleaning.tsx'),
   route('upholstery-mattress-cleaning', 'routes/upholstery-mattress-cleaning.tsx'),
   route('services', 'routes/services.tsx'),
+  route('guides', 'routes/guides.tsx'),
+  route('guides/airbnb-cleaning-cost', 'routes/guide-airbnb-cleaning-cost.tsx'),
   route('pricing', 'routes/pricing.tsx'),
   route('about', 'routes/about.tsx'),
   route('privacy', 'routes/privacy.tsx'),

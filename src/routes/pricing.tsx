@@ -59,6 +59,10 @@ export default function Pricing() {
             <li>30% off your first turnover, one unit per new client.</li>
             <li>Free cancellation up to 24 hours before the clean; 50% after that.</li>
           </ul>
+          <p className="mt-6 text-brand-muted">
+            Setting your Airbnb cleaning fee? See our guide:{' '}
+            <Link to="/guides/airbnb-cleaning-cost" className="underline text-brand-dark font-semibold">how much Airbnb cleaning costs in DC, MD &amp; VA</Link>.
+          </p>
         </div>
         <ContactButtons service="general" placement="pricing" />
       </main>

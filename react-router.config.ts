@@ -10,6 +10,8 @@ const PRERENDER_PATHS = [
   '/office-cleaning',
   '/post-construction-cleaning', '/upholstery-mattress-cleaning',
   '/services',
+  '/guides',
+  '/guides/airbnb-cleaning-cost',
   '/pricing',
   '/about',
   '/privacy',

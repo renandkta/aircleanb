@@ -22,7 +22,7 @@ export type ContactChannel = 'whatsapp' | 'sms' | 'call' | 'email' | 'form';
 // Register "service" and "placement" as custom dimensions in GA4 to see them.
 export interface ContactContext {
   service: 'airbnb' | 'office' | 'post_construction' | 'upholstery_mattress' | 'general';
-  placement: 'header' | 'hero' | 'sticky_bar' | 'cta_band' | 'contact' | 'pricing' | 'footer' | 'thank_you' | 'form';
+  placement: 'header' | 'hero' | 'sticky_bar' | 'cta_band' | 'contact' | 'pricing' | 'footer' | 'thank_you' | 'form' | 'guide';
 }
 
 // GA4 event per channel. whatsapp_click, sms_click, call_click and quote_submit

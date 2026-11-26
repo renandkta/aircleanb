@@ -27,7 +27,7 @@ const GOOGLE_TAG_INIT = `(function () {
   window.gtag = function () { dataLayer.push(arguments); };
   gtag('js', new Date());
   gtag('config', 'G-4HPTZC7DK7');
-  gtag('config', 'AW-17464291569');
+  gtag('config', 'AW-18597682707');
 })();`;
 
 export function Layout({ children }: { children: ReactNode }) {

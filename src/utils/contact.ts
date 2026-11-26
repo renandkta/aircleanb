@@ -59,20 +59,21 @@ const adsConversion = (sendTo: string) => {
   }
 };
 
+// Google Ads account 431-179-3207 (tag AW-18597682707). "Call click" is a
+// secondary conversion (tracked, not bid on); the other three are primary.
 export const trackCallClick = (ctx: ContactContext) => {
   trackContact('call', ctx);
-  adsConversion('AW-17464291569/PBzFCMektOQcEPHhz4dB');
+  adsConversion('AW-18597682707/FAHSCJi_lMAdEJO8iKRF');
 };
 
 export const trackWhatsAppClick = (ctx: ContactContext) => {
   trackContact('whatsapp', ctx);
-  adsConversion('AW-17464291569/nr1-CMSktOQcEPHhz4dB');
+  adsConversion('AW-18597682707/XclPCJq-lMAdEJO8iKRF');
 };
 
-// No Google Ads conversion action for iMessage/SMS yet: it is counted in GA4
-// (sms_click) and can be imported into Google Ads from there.
 export const trackSmsClick = (ctx: ContactContext) => {
   trackContact('sms', ctx);
+  adsConversion('AW-18597682707/kmC9CJ2-lMAdEJO8iKRF');
 };
 
 export const trackEmailClick = (ctx: ContactContext) => {
@@ -82,5 +83,5 @@ export const trackEmailClick = (ctx: ContactContext) => {
 // Form sent successfully (call from the Formspree success callback only).
 export const trackFormLead = (ctx: ContactContext) => {
   trackContact('form', ctx);
-  adsConversion('AW-17464291569/dcJFCJeJ9OgcEPHhz4dB');
+  adsConversion('AW-18597682707/Zn67CJnojsAdEJO8iKRF');
 };
